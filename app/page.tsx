@@ -73,184 +73,146 @@ export default async function Home() {
       <Navbar />
 
       {/* ── Hero ─────────────────────────────────────── */}
-      <section className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center">
+      <section className="relative h-screen w-full overflow-hidden">
 
-        {/* Pure black base */}
-        <div className="absolute inset-0" style={{ background: '#06060a' }} />
+        {/* Near-black base */}
+        <div className="absolute inset-0" style={{ background: '#08090e' }} />
 
-        {/* Subtle dark vignette corners */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(0,0,0,0.55) 100%)',
-        }} />
-
-        {/* ── Chromatic aberration wave arc (SVG) ─────────
-            SVG ellipse clip path gives a true arc shape.
-            3 layers: warm left glow + blue right atmosphere + sweeping
-            chromatic prismatic bands (cyan→green→white→red→blue→violet).  */}
-        <svg
-          viewBox="0 0 1440 420"
-          preserveAspectRatio="none"
-          className="absolute bottom-0 inset-x-0 w-full pointer-events-none"
-          style={{ height: '52vh', zIndex: 1 }}
-        >
-          <defs>
-            {/* Arc clip — large ellipse with centre well below viewBox */}
-            <clipPath id="wave-arc">
-              <ellipse cx="720" cy="820" rx="1260" ry="780" />
-            </clipPath>
-
-            {/* Warm golden atmospheric glow — left hot-spot */}
-            <radialGradient id="g-warm" cx="400" cy="220" r="680" gradientUnits="userSpaceOnUse">
-              <stop offset="0%"   stopColor="#ffd246" stopOpacity="1"   />
-              <stop offset="10%"  stopColor="#ff9c18" stopOpacity="0.88"/>
-              <stop offset="24%"  stopColor="#e03800" stopOpacity="0.55"/>
-              <stop offset="46%"  stopColor="#640c00" stopOpacity="0.14"/>
-              <stop offset="100%" stopColor="#000000" stopOpacity="0"   />
-            </radialGradient>
-
-            {/* Cool blue atmospheric glow — right side */}
-            <radialGradient id="g-blue-atm" cx="1060" cy="140" r="520" gradientUnits="userSpaceOnUse">
-              <stop offset="0%"   stopColor="#003cff" stopOpacity="0.45"/>
-              <stop offset="35%"  stopColor="#0011bb" stopOpacity="0.18"/>
-              <stop offset="100%" stopColor="#000000" stopOpacity="0"   />
-            </radialGradient>
-
-            {/* Chromatic prismatic bands — wide spectrum, blue-heavy */}
-            <linearGradient id="g-bands" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stopColor="#000000" stopOpacity="0"   />
-              <stop offset="20%"  stopColor="#000000" stopOpacity="0"   />
-              <stop offset="30%"  stopColor="#00eeff" stopOpacity="0.85"/> {/* cyan      */}
-              <stop offset="37%"  stopColor="#00ff66" stopOpacity="0.88"/> {/* green     */}
-              <stop offset="43%"  stopColor="#ffffff" stopOpacity="0.70"/> {/* white hot */}
-              <stop offset="49%"  stopColor="#ff2200" stopOpacity="0.90"/> {/* red       */}
-              <stop offset="55%"  stopColor="#1a2fff" stopOpacity="0.95"/> {/* blue      */}
-              <stop offset="61%"  stopColor="#7700ee" stopOpacity="0.80"/> {/* violet    */}
-              <stop offset="67%"  stopColor="#0000cc" stopOpacity="0.60"/> {/* deep blue */}
-              <stop offset="75%"  stopColor="#000022" stopOpacity="0.15"/> {/* fade      */}
-              <stop offset="100%" stopColor="#000000" stopOpacity="0"   />
-            </linearGradient>
-
-            {/* Thin bright rim at the very edge of the arc */}
-            <radialGradient id="g-rim" cx="720" cy="40" r="900" gradientUnits="userSpaceOnUse">
-              <stop offset="0%"   stopColor="#ffffff" stopOpacity="0"   />
-              <stop offset="88%"  stopColor="#ffffff" stopOpacity="0"   />
-              <stop offset="94%"  stopColor="#ffe8b0" stopOpacity="0.45"/>
-              <stop offset="97%"  stopColor="#ffffff" stopOpacity="0.22"/>
-              <stop offset="100%" stopColor="#ffffff" stopOpacity="0"   />
-            </radialGradient>
-          </defs>
-
-          <g clipPath="url(#wave-arc)">
-            {/* Layer 1 — warm left glow (pulses) */}
-            <rect width="1440" height="1200" fill="url(#g-warm)">
-              <animate attributeName="opacity"
-                values="0.82;1.0;0.82" dur="7s" calcMode="ease" repeatCount="indefinite" />
-            </rect>
-
-            {/* Layer 2 — blue right atmosphere */}
-            <rect width="1440" height="1200" fill="url(#g-blue-atm)" />
-
-            {/* Layer 3 — chromatic bands sweeping left↔right */}
-            <rect width="1440" height="1200" fill="url(#g-bands)">
-              <animateTransform
-                attributeName="transform" type="translate"
-                values="420,0;-420,0;420,0"
-                dur="18s"
-                calcMode="spline"
-                keySplines="0.42 0 0.58 1; 0.42 0 0.58 1"
-                repeatCount="indefinite"
-              />
-            </rect>
-
-            {/* Layer 4 — slow hue-cycling on the bands via a second offset pass */}
-            <rect width="1440" height="1200" fill="url(#g-bands)" opacity="0.45">
-              <animateTransform
-                attributeName="transform" type="translate"
-                values="-600,0;600,0;-600,0"
-                dur="26s"
-                calcMode="spline"
-                keySplines="0.42 0 0.58 1; 0.42 0 0.58 1"
-                repeatCount="indefinite"
-              />
-            </rect>
-
-            {/* Layer 5 — rim highlight at arc edge */}
-            <rect width="1440" height="1200" fill="url(#g-rim)" />
-          </g>
-        </svg>
-
-        {/* Soft ambient halo above the arc — bleeds into hero bg */}
+        {/* ── Fluid aurora blob — right side ─────────────
+            Unblurred coloured ellipses inside a heavily-blurred container
+            produce a smooth organic light-leak similar to the reference.   */}
         <div
-          className="absolute inset-x-0 pointer-events-none"
+          className="absolute pointer-events-none"
           style={{
-            bottom: '22vh',
-            height: '18vh',
-            background: 'radial-gradient(ellipse at 32% 60%, rgba(255,160,40,0.22) 0%, transparent 55%), radial-gradient(ellipse at 72% 50%, rgba(0,60,255,0.14) 0%, transparent 50%)',
-            filter: 'blur(28px)',
+            top: '-10%',
+            right: '-8%',
+            width: '62%',
+            height: '120%',
+            filter: 'blur(72px) saturate(1.4)',
             zIndex: 1,
+          }}
+        >
+          {/* Orange */}
+          <div style={{
+            position: 'absolute', top: '18%', left: '30%', width: '55%', height: '45%',
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse, #ff6820 0%, transparent 70%)',
+            opacity: 0.9,
+            animation: 'blob-a 11s ease-in-out infinite',
+          }} />
+          {/* Deep red */}
+          <div style={{
+            position: 'absolute', top: '38%', left: '10%', width: '50%', height: '42%',
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse, #cc1450 0%, transparent 70%)',
+            opacity: 0.85,
+            animation: 'blob-b 14s ease-in-out infinite',
+          }} />
+          {/* Electric blue */}
+          <div style={{
+            position: 'absolute', top: '5%', left: '55%', width: '48%', height: '50%',
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse, #1a2fff 0%, transparent 70%)',
+            opacity: 0.8,
+            animation: 'blob-c 10s ease-in-out infinite',
+          }} />
+          {/* Purple */}
+          <div style={{
+            position: 'absolute', top: '55%', left: '40%', width: '52%', height: '44%',
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse, #7a10cc 0%, transparent 70%)',
+            opacity: 0.75,
+            animation: 'blob-d 13s ease-in-out infinite',
+          }} />
+          {/* Cyan accent */}
+          <div style={{
+            position: 'absolute', top: '0%', left: '20%', width: '40%', height: '35%',
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse, #00c8ff 0%, transparent 70%)',
+            opacity: 0.55,
+            animation: 'blob-a 16s ease-in-out infinite reverse',
+          }} />
+        </div>
+
+        {/* Left-edge fade so text always reads cleanly */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to right, #08090e 28%, rgba(8,9,14,0.7) 52%, transparent 75%)',
+            zIndex: 2,
           }}
         />
 
-        {/* Bottom page-bg fade so the wave blends into sections below */}
-        <div className="absolute bottom-0 inset-x-0 h-32 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, #06060a, transparent)', zIndex: 2 }} />
+        {/* Bottom fade into next section */}
+        <div
+          className="absolute bottom-0 inset-x-0 h-40 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, #08090e, transparent)', zIndex: 2 }}
+        />
 
-        {/* ── Hero content ──────────────────────────── */}
-        <div className="relative text-center px-6 max-w-4xl" style={{ zIndex: 3 }}>
+        {/* ── Hero content — left-aligned ───────────── */}
+        <div
+          className="absolute inset-0 flex flex-col justify-center px-8 md:px-16 lg:px-24"
+          style={{ zIndex: 3 }}
+        >
+          <div className="max-w-2xl">
+            {/* Eyebrow */}
+            <p
+              className="text-[11px] font-semibold uppercase tracking-[0.35em] mb-7"
+              style={{ color: 'rgba(255,255,255,0.35)' }}
+            >
+              Photography Portfolio
+            </p>
 
-          {/* Eyebrow */}
-          <p className="text-[11px] font-semibold uppercase tracking-[0.35em] mb-7"
-            style={{ color: 'rgba(255,255,255,0.35)' }}>
-            Photography Portfolio
-          </p>
-
-          {/* Main title — Satoshi font, subtle chromatic aberration only here */}
-          <h1
-            className="leading-[1.0] tracking-tight mb-6"
-            style={{
-              fontFamily: "'Satoshi', 'Inter', sans-serif",
-              fontWeight: 800,
-              fontSize: 'clamp(4rem, 10vw, 8.5rem)',
-              letterSpacing: '-0.03em',
-            }}
-          >
-            <ChromaticText text={NAME} animate />
-          </h1>
-
-          {/* Tagline */}
-          <p className="text-[16px] md:text-[18px] font-light mb-10 tracking-wide"
-            style={{ color: 'rgba(255,255,255,0.45)' }}>
-            Capturing light. Telling stories.
-          </p>
-
-          {/* CTA buttons — pill glass style like reference */}
-          <div className="flex items-center justify-center gap-4 flex-wrap">
-            <a
-              href="#work"
-              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full text-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
+            {/* Main title */}
+            <h1
+              className="leading-[1.0] tracking-tight mb-6"
               style={{
-                background: 'rgba(255,255,255,0.10)',
-                backdropFilter: 'blur(20px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                border: '1px solid rgba(255,255,255,0.22)',
-                boxShadow: '0 1px 0 rgba(255,255,255,0.12) inset',
+                fontFamily: "'Satoshi', 'Inter', sans-serif",
+                fontWeight: 800,
+                fontSize: 'clamp(3.8rem, 9vw, 8rem)',
+                letterSpacing: '-0.03em',
               }}
             >
-              <Camera size={13} />
-              View Work
-            </a>
+              <ChromaticText text={NAME} animate />
+            </h1>
 
-            <a
-              href="#about"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
-              style={{
-                background: 'transparent',
-                border: '1px solid rgba(255,255,255,0.18)',
-                color: 'rgba(255,255,255,0.55)',
-              }}
+            {/* Tagline */}
+            <p
+              className="text-[16px] md:text-[18px] font-light mb-10 tracking-wide"
+              style={{ color: 'rgba(255,255,255,0.45)' }}
             >
-              About me
-            </a>
+              Capturing light. Telling stories.
+            </p>
+
+            {/* CTA buttons */}
+            <div className="flex items-center gap-4 flex-wrap">
+              <a
+                href="#work"
+                className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full text-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
+                style={{
+                  background: 'rgba(255,255,255,0.10)',
+                  backdropFilter: 'blur(20px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                  border: '1px solid rgba(255,255,255,0.22)',
+                  boxShadow: '0 1px 0 rgba(255,255,255,0.12) inset',
+                }}
+              >
+                <Camera size={13} />
+                View Work
+              </a>
+
+              <a
+                href="#about"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
+                style={{
+                  background: 'transparent',
+                  border: '1px solid rgba(255,255,255,0.18)',
+                  color: 'rgba(255,255,255,0.55)',
+                }}
+              >
+                About me
+              </a>
+            </div>
           </div>
         </div>
 
