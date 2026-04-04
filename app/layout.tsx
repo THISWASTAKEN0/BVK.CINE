@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+// Satoshi — closest free alternative to Proxima Nova (geometric humanist, same feel)
 
 const inter = Inter({
   subsets: ['latin'],
@@ -32,6 +33,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=satoshi@700,800,900&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="font-sans bg-bg text-text-primary antialiased">
         {children}
       </body>

@@ -4,7 +4,6 @@ import { createServerClient } from '@/lib/supabase-server';
 import Navbar from '@/components/public/Navbar';
 import CollectionGrid from '@/components/public/CollectionGrid';
 import ChromaticText from '@/components/public/ChromaticText';
-import ChromaticStar from '@/components/public/ChromaticStar';
 import type { Collection } from '@/lib/types';
 
 export const revalidate = 30;
@@ -74,120 +73,150 @@ export default async function Home() {
       <Navbar />
 
       {/* ── Hero ─────────────────────────────────────── */}
-      <section className="relative h-screen w-full overflow-hidden">
-        {/* Deep mesh gradient bg */}
-        <div className="absolute inset-0" style={{
-          background: '#080910',
-          backgroundImage: `
-            radial-gradient(ellipse at 15% 55%, rgba(80, 40, 220, 0.42) 0%, transparent 52%),
-            radial-gradient(ellipse at 78% 12%, rgba(20, 70, 200, 0.45) 0%, transparent 48%),
-            radial-gradient(ellipse at 55% 88%, rgba(10, 110, 180, 0.3) 0%, transparent 48%),
-            radial-gradient(ellipse at 95% 60%, rgba(140, 20, 200, 0.22) 0%, transparent 42%),
-            radial-gradient(ellipse at 5%  10%, rgba(160, 30, 120, 0.2) 0%, transparent 40%)
-          `,
+      <section className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center">
+
+        {/* Pure black base */}
+        <div className="absolute inset-0" style={{ background: '#06060a' }} />
+
+        {/* Subtle dark vignette corners */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(0,0,0,0.55) 100%)',
         }} />
 
-        {/* Subtle film grain */}
-        <div className="absolute inset-0 opacity-[0.04]" style={{
-          backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")',
-        }} />
-
-        {/* Large decorative iridescent orb — top right */}
+        {/* ── Chromatic aberration wave ─────────────────
+            Mimics the reference: a large glowing arc rising from the bottom
+            with a warm golden hot-spot on the left bleeding into sharp
+            prismatic R/G/B bands on the right. Two-layer approach:
+            Layer 1 = warm atmospheric glow (pulsing)
+            Layer 2 = sharp rainbow bands (sweeping left←right)          */}
         <div
-          className="absolute -top-32 -right-32 w-[580px] h-[580px] rounded-full pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse at 38% 35%, rgba(255,255,255,0.06) 0%, rgba(120,80,255,0.08) 40%, rgba(30,60,180,0.04) 70%, transparent 100%)',
-            boxShadow: `
-              0 0 0 1px rgba(255,255,255,0.07) inset,
-              0 0 120px rgba(100,80,255,0.15),
-              0 0 0 1px rgba(80,120,255,0.12)
-            `,
-            backdropFilter: 'blur(1px)',
-            border: '1px solid transparent',
-            backgroundClip: 'padding-box',
-          }}
+          className="absolute bottom-0 inset-x-0 pointer-events-none"
+          style={{ height: '58vh', zIndex: 1, overflow: 'hidden' }}
         >
-          {/* Iridescent ring */}
-          <div className="absolute inset-0 rounded-full" style={{
-            background: 'conic-gradient(from 180deg, rgba(255,80,160,0.4), rgba(80,180,255,0.35), rgba(80,255,200,0.3), rgba(255,180,80,0.3), rgba(200,80,255,0.4), rgba(255,80,160,0.4))',
-            mask: 'radial-gradient(farthest-side, transparent calc(100% - 2px), white calc(100% - 2px))',
-            WebkitMask: 'radial-gradient(farthest-side, transparent calc(100% - 2px), white calc(100% - 2px))',
-            animation: 'spin 20s linear infinite',
-          }} />
-        </div>
+          {/* The arc is a giant circle clipped by the container */}
+          <div style={{
+            position: 'absolute',
+            bottom: '-62%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '190vw',
+            height: '130vh',
+            borderRadius: '50%',
+            overflow: 'hidden',
+          }}>
+            {/* Layer 1 — warm golden atmosphere (left hot-spot) */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              background: `
+                radial-gradient(ellipse at 32% 48%, rgba(255,210,70,1)    0%,
+                                                     rgba(255,140,20,0.85) 10%,
+                                                     rgba(220,55,0,0.5)    22%,
+                                                     rgba(100,18,0,0.18)   40%,
+                                                     transparent           58%),
+                radial-gradient(ellipse at 20% 55%, rgba(255,160,40,0.4) 0%, transparent 35%)
+              `,
+              animation: 'wave-glow-pulse 6s ease-in-out infinite',
+            }} />
 
-        {/* Smaller orb — bottom left */}
-        <div
-          className="absolute -bottom-20 -left-20 w-[320px] h-[320px] rounded-full pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse at 42% 42%, rgba(255,255,255,0.04) 0%, rgba(80,200,180,0.06) 50%, transparent 100%)',
-            boxShadow: '0 0 80px rgba(80,200,180,0.1)',
-            border: '1px solid rgba(80,200,180,0.1)',
-          }}
-        >
-          <div className="absolute inset-0 rounded-full" style={{
-            background: 'conic-gradient(from 0deg, rgba(80,200,180,0.3), rgba(80,160,255,0.3), rgba(255,80,160,0.25), rgba(80,200,180,0.3))',
-            mask: 'radial-gradient(farthest-side, transparent calc(100% - 2px), white calc(100% - 2px))',
-            WebkitMask: 'radial-gradient(farthest-side, transparent calc(100% - 2px), white calc(100% - 2px))',
-            animation: 'spin 28s linear infinite reverse',
-          }} />
-        </div>
+            {/* Layer 2 — sharp chromatic prismatic bands (sweep) */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              background: `linear-gradient(
+                90deg,
+                transparent                   0%,
+                transparent                  38%,
+                rgba(0,   255,  80, 0.92)    46%,
+                rgba(255,  18,  18, 0.92)    52%,
+                rgba( 18,  45, 255, 0.92)    58%,
+                rgba(180,   0, 255, 0.60)    62%,
+                transparent                  68%,
+                transparent                 100%
+              )`,
+              backgroundSize: '280% 100%',
+              animation: 'wave-bands-sweep 14s ease-in-out infinite, wave-bands-hue 18s ease-in-out infinite',
+            }} />
 
-        {/* Bottom fade */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#080910]" />
-
-        {/* ── Chromatic star statement piece ── */}
-        <ChromaticStar />
-
-        {/* Hero content — sits above the chromatic blobs */}
-        <div className="absolute bottom-24 left-6 md:left-14 lg:left-24 max-w-2xl" style={{ zIndex: 2 }}>
-          {/* Eyebrow label */}
-          <div className="flex items-center gap-2.5 mb-6">
-            <div className="w-1 h-5 rounded-full" style={{ background: 'linear-gradient(180deg, #5c8aff, #b06aff)' }} />
-            <p className="text-[11px] font-semibold uppercase tracking-[0.3em]" style={{ color: 'rgba(200,200,240,0.5)' }}>
-              Photography Portfolio
-            </p>
+            {/* Layer 3 — edge shimmer line at the very top of the arc */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'radial-gradient(ellipse at 50% 0%, rgba(255,240,200,0.55) 0%, rgba(255,180,60,0.2) 8%, transparent 22%)',
+            }} />
           </div>
 
-          {/* Main heading */}
-          <h1 className="text-display font-extralight text-white tracking-tight">
-            <ChromaticText text={NAME.toUpperCase()} animate />
+          {/* Soft glow that bleeds above the arc edge */}
+          <div style={{
+            position: 'absolute',
+            bottom: '25%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '80vw',
+            height: '18vh',
+            background: 'radial-gradient(ellipse at 35% 50%, rgba(255,160,40,0.28) 0%, transparent 60%)',
+            filter: 'blur(24px)',
+            pointerEvents: 'none',
+          }} />
+        </div>
+
+        {/* Bottom page-bg fade so the wave blends into sections below */}
+        <div className="absolute bottom-0 inset-x-0 h-32 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, #06060a, transparent)', zIndex: 2 }} />
+
+        {/* ── Hero content ──────────────────────────── */}
+        <div className="relative text-center px-6 max-w-4xl" style={{ zIndex: 3 }}>
+
+          {/* Eyebrow */}
+          <p className="text-[11px] font-semibold uppercase tracking-[0.35em] mb-7"
+            style={{ color: 'rgba(255,255,255,0.35)' }}>
+            Photography Portfolio
+          </p>
+
+          {/* Main title — Satoshi (Proxima Nova equivalent), clean white, no blur */}
+          <h1
+            className="text-white leading-[1.0] tracking-tight mb-6"
+            style={{
+              fontFamily: "'Satoshi', 'Inter', sans-serif",
+              fontWeight: 800,
+              fontSize: 'clamp(4rem, 10vw, 8.5rem)',
+              letterSpacing: '-0.03em',
+              textShadow: '0 2px 40px rgba(0,0,0,0.5)',
+            }}
+          >
+            {NAME}
           </h1>
 
           {/* Tagline */}
-          <p className="mt-5 text-[16px] md:text-[18px] font-light tracking-wide" style={{ color: 'rgba(200,200,240,0.5)' }}>
+          <p className="text-[16px] md:text-[18px] font-light mb-10 tracking-wide"
+            style={{ color: 'rgba(255,255,255,0.45)' }}>
             Capturing light. Telling stories.
           </p>
 
-          {/* CTA row — both fully liquid glass so chromatic blobs bleed through */}
-          <div className="mt-9 flex items-center gap-4">
-            {/* Primary — blue-tinted glass with glow */}
+          {/* CTA buttons — pill glass style like reference */}
+          <div className="flex items-center justify-center gap-4 flex-wrap">
             <a
               href="#work"
-              className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl text-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
+              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full text-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
               style={{
-                background: 'rgba(80, 120, 255, 0.18)',
-                backdropFilter: 'blur(24px) saturate(200%) brightness(1.2)',
-                WebkitBackdropFilter: 'blur(24px) saturate(200%) brightness(1.2)',
-                border: '1px solid rgba(120, 160, 255, 0.45)',
-                boxShadow: '0 1px 0 rgba(255,255,255,0.18) inset, 0 8px 40px rgba(80,120,255,0.3)',
+                background: 'rgba(255,255,255,0.10)',
+                backdropFilter: 'blur(20px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                border: '1px solid rgba(255,255,255,0.22)',
+                boxShadow: '0 1px 0 rgba(255,255,255,0.12) inset',
               }}
             >
-              <Camera size={14} />
+              <Camera size={13} />
               View Work
             </a>
 
-            {/* Secondary — pure glass */}
             <a
               href="#about"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl text-[14px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
               style={{
-                background: 'rgba(255,255,255,0.07)',
-                backdropFilter: 'blur(24px) saturate(180%) brightness(1.1)',
-                WebkitBackdropFilter: 'blur(24px) saturate(180%) brightness(1.1)',
-                border: '1px solid rgba(255,255,255,0.14)',
-                color: 'rgba(255,255,255,0.75)',
-                boxShadow: '0 1px 0 rgba(255,255,255,0.1) inset',
+                background: 'transparent',
+                border: '1px solid rgba(255,255,255,0.18)',
+                color: 'rgba(255,255,255,0.55)',
               }}
             >
               About me
@@ -196,8 +225,8 @@ export default async function Home() {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 animate-bounce">
-          <ChevronDown size={18} className="text-white/25" />
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce" style={{ zIndex: 3 }}>
+          <ChevronDown size={18} className="text-white/20" />
         </div>
       </section>
 

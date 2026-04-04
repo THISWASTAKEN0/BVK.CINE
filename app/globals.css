@@ -470,6 +470,22 @@ body {
     -3px  2px 5px rgba(20,  70,  255, 0.8);
 }
 
+/* ── Chromatic wave ─────────────────────────────────── */
+@keyframes wave-glow-pulse {
+  0%, 100% { opacity: 0.88; transform: translateX(-50%) scale(1);    }
+  50%       { opacity: 1.00; transform: translateX(-50%) scale(1.02); }
+}
+@keyframes wave-bands-sweep {
+  0%   { background-position: 140% 0; }
+  50%  { background-position:  -20% 0; }
+  100% { background-position: 140% 0; }
+}
+@keyframes wave-bands-hue {
+  0%   { filter: hue-rotate(0deg)   brightness(1.0); }
+  50%  { filter: hue-rotate(25deg)  brightness(1.12); }
+  100% { filter: hue-rotate(0deg)   brightness(1.0); }
+}
+
 @keyframes spin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
