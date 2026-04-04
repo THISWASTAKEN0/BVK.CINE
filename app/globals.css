@@ -396,13 +396,13 @@ body {
   display: inline-block;
 }
 
-/* Red ghost */
+/* Red ghost — subtle offset, light blur */
 .chromatic-red {
   position: absolute;
   top: 0; left: 0;
-  color: rgba(255, 20, 20, 0.85);
-  transform: translateX(5px) translateY(2px);
-  filter: blur(4px);
+  color: rgba(255, 30, 30, 0.6);
+  transform: translateX(3px) translateY(1px);
+  filter: blur(1.8px);
   mix-blend-mode: screen;
   pointer-events: none;
   user-select: none;
@@ -413,9 +413,9 @@ body {
 .chromatic-green {
   position: absolute;
   top: 0; left: 0;
-  color: rgba(20, 255, 90, 0.65);
-  transform: translateX(-2px) translateY(-4px);
-  filter: blur(3.5px);
+  color: rgba(30, 255, 90, 0.45);
+  transform: translateX(-1px) translateY(-3px);
+  filter: blur(1.4px);
   mix-blend-mode: screen;
   pointer-events: none;
   user-select: none;
@@ -426,9 +426,9 @@ body {
 .chromatic-blue {
   position: absolute;
   top: 0; left: 0;
-  color: rgba(20, 70, 255, 0.85);
-  transform: translateX(-5px) translateY(2px);
-  filter: blur(4px);
+  color: rgba(30, 60, 255, 0.6);
+  transform: translateX(-3px) translateY(1px);
+  filter: blur(1.8px);
   mix-blend-mode: screen;
   pointer-events: none;
   user-select: none;
@@ -462,13 +462,7 @@ body {
 .chromatic-animate .chromatic-green { animation: ca-green-drift  8s ease-in-out infinite; animation-delay: -2.5s; }
 .chromatic-animate .chromatic-blue  { animation: ca-blue-drift   8s ease-in-out infinite; animation-delay: -5s; }
 
-/* text-shadow version for smaller elements */
-.chromatic-sm {
-  text-shadow:
-     3px  2px 5px rgba(255, 20,  20,  0.8),
-    -2px -3px 4px rgba(20,  255, 90,  0.65),
-    -3px  2px 5px rgba(20,  70,  255, 0.8);
-}
+/* chromatic-sm intentionally removed — only the hero title uses CA */
 
 /* ── Chromatic wave ─────────────────────────────────── */
 @keyframes wave-glow-pulse {

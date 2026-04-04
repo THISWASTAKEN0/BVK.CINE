@@ -38,7 +38,7 @@ export default function Navbar() {
           {/* Logo — chromatic aberration on the dot only */}
           <a
             href="/"
-            className="text-[15px] font-semibold tracking-tight text-white hover:opacity-70 transition-opacity chromatic-sm"
+            className="text-[15px] font-semibold tracking-tight text-white hover:opacity-70 transition-opacity"
           >
             {PHOTOGRAPHER_NAME.toUpperCase()}
           </a>
@@ -96,7 +96,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className="text-5xl font-extralight text-white tracking-tight hover:opacity-40 transition-opacity chromatic-sm"
+                className="text-5xl font-extralight text-white tracking-tight hover:opacity-40 transition-opacity"
                 style={{ animationDelay: `${i * 60}ms` }}
               >
                 {link.label}

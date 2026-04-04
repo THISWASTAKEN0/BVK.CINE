@@ -83,82 +83,113 @@ export default async function Home() {
           background: 'radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(0,0,0,0.55) 100%)',
         }} />
 
-        {/* ── Chromatic aberration wave ─────────────────
-            Mimics the reference: a large glowing arc rising from the bottom
-            with a warm golden hot-spot on the left bleeding into sharp
-            prismatic R/G/B bands on the right. Two-layer approach:
-            Layer 1 = warm atmospheric glow (pulsing)
-            Layer 2 = sharp rainbow bands (sweeping left←right)          */}
-        <div
-          className="absolute bottom-0 inset-x-0 pointer-events-none"
-          style={{ height: '58vh', zIndex: 1, overflow: 'hidden' }}
+        {/* ── Chromatic aberration wave arc (SVG) ─────────
+            SVG ellipse clip path gives a true arc shape.
+            3 layers: warm left glow + blue right atmosphere + sweeping
+            chromatic prismatic bands (cyan→green→white→red→blue→violet).  */}
+        <svg
+          viewBox="0 0 1440 420"
+          preserveAspectRatio="none"
+          className="absolute bottom-0 inset-x-0 w-full pointer-events-none"
+          style={{ height: '52vh', zIndex: 1 }}
         >
-          {/* The arc is a giant circle clipped by the container */}
-          <div style={{
-            position: 'absolute',
-            bottom: '-62%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '190vw',
-            height: '130vh',
-            borderRadius: '50%',
-            overflow: 'hidden',
-          }}>
-            {/* Layer 1 — warm golden atmosphere (left hot-spot) */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: `
-                radial-gradient(ellipse at 32% 48%, rgba(255,210,70,1)    0%,
-                                                     rgba(255,140,20,0.85) 10%,
-                                                     rgba(220,55,0,0.5)    22%,
-                                                     rgba(100,18,0,0.18)   40%,
-                                                     transparent           58%),
-                radial-gradient(ellipse at 20% 55%, rgba(255,160,40,0.4) 0%, transparent 35%)
-              `,
-              animation: 'wave-glow-pulse 6s ease-in-out infinite',
-            }} />
+          <defs>
+            {/* Arc clip — large ellipse with centre well below viewBox */}
+            <clipPath id="wave-arc">
+              <ellipse cx="720" cy="820" rx="1260" ry="780" />
+            </clipPath>
 
-            {/* Layer 2 — sharp chromatic prismatic bands (sweep) */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: `linear-gradient(
-                90deg,
-                transparent                   0%,
-                transparent                  38%,
-                rgba(0,   255,  80, 0.92)    46%,
-                rgba(255,  18,  18, 0.92)    52%,
-                rgba( 18,  45, 255, 0.92)    58%,
-                rgba(180,   0, 255, 0.60)    62%,
-                transparent                  68%,
-                transparent                 100%
-              )`,
-              backgroundSize: '280% 100%',
-              animation: 'wave-bands-sweep 14s ease-in-out infinite, wave-bands-hue 18s ease-in-out infinite',
-            }} />
+            {/* Warm golden atmospheric glow — left hot-spot */}
+            <radialGradient id="g-warm" cx="400" cy="220" r="680" gradientUnits="userSpaceOnUse">
+              <stop offset="0%"   stopColor="#ffd246" stopOpacity="1"   />
+              <stop offset="10%"  stopColor="#ff9c18" stopOpacity="0.88"/>
+              <stop offset="24%"  stopColor="#e03800" stopOpacity="0.55"/>
+              <stop offset="46%"  stopColor="#640c00" stopOpacity="0.14"/>
+              <stop offset="100%" stopColor="#000000" stopOpacity="0"   />
+            </radialGradient>
 
-            {/* Layer 3 — edge shimmer line at the very top of the arc */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(ellipse at 50% 0%, rgba(255,240,200,0.55) 0%, rgba(255,180,60,0.2) 8%, transparent 22%)',
-            }} />
-          </div>
+            {/* Cool blue atmospheric glow — right side */}
+            <radialGradient id="g-blue-atm" cx="1060" cy="140" r="520" gradientUnits="userSpaceOnUse">
+              <stop offset="0%"   stopColor="#003cff" stopOpacity="0.45"/>
+              <stop offset="35%"  stopColor="#0011bb" stopOpacity="0.18"/>
+              <stop offset="100%" stopColor="#000000" stopOpacity="0"   />
+            </radialGradient>
 
-          {/* Soft glow that bleeds above the arc edge */}
-          <div style={{
-            position: 'absolute',
-            bottom: '25%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '80vw',
+            {/* Chromatic prismatic bands — wide spectrum, blue-heavy */}
+            <linearGradient id="g-bands" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stopColor="#000000" stopOpacity="0"   />
+              <stop offset="20%"  stopColor="#000000" stopOpacity="0"   />
+              <stop offset="30%"  stopColor="#00eeff" stopOpacity="0.85"/> {/* cyan      */}
+              <stop offset="37%"  stopColor="#00ff66" stopOpacity="0.88"/> {/* green     */}
+              <stop offset="43%"  stopColor="#ffffff" stopOpacity="0.70"/> {/* white hot */}
+              <stop offset="49%"  stopColor="#ff2200" stopOpacity="0.90"/> {/* red       */}
+              <stop offset="55%"  stopColor="#1a2fff" stopOpacity="0.95"/> {/* blue      */}
+              <stop offset="61%"  stopColor="#7700ee" stopOpacity="0.80"/> {/* violet    */}
+              <stop offset="67%"  stopColor="#0000cc" stopOpacity="0.60"/> {/* deep blue */}
+              <stop offset="75%"  stopColor="#000022" stopOpacity="0.15"/> {/* fade      */}
+              <stop offset="100%" stopColor="#000000" stopOpacity="0"   />
+            </linearGradient>
+
+            {/* Thin bright rim at the very edge of the arc */}
+            <radialGradient id="g-rim" cx="720" cy="40" r="900" gradientUnits="userSpaceOnUse">
+              <stop offset="0%"   stopColor="#ffffff" stopOpacity="0"   />
+              <stop offset="88%"  stopColor="#ffffff" stopOpacity="0"   />
+              <stop offset="94%"  stopColor="#ffe8b0" stopOpacity="0.45"/>
+              <stop offset="97%"  stopColor="#ffffff" stopOpacity="0.22"/>
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="0"   />
+            </radialGradient>
+          </defs>
+
+          <g clipPath="url(#wave-arc)">
+            {/* Layer 1 — warm left glow (pulses) */}
+            <rect width="1440" height="1200" fill="url(#g-warm)">
+              <animate attributeName="opacity"
+                values="0.82;1.0;0.82" dur="7s" calcMode="ease" repeatCount="indefinite" />
+            </rect>
+
+            {/* Layer 2 — blue right atmosphere */}
+            <rect width="1440" height="1200" fill="url(#g-blue-atm)" />
+
+            {/* Layer 3 — chromatic bands sweeping left↔right */}
+            <rect width="1440" height="1200" fill="url(#g-bands)">
+              <animateTransform
+                attributeName="transform" type="translate"
+                values="420,0;-420,0;420,0"
+                dur="18s"
+                calcMode="spline"
+                keySplines="0.42 0 0.58 1; 0.42 0 0.58 1"
+                repeatCount="indefinite"
+              />
+            </rect>
+
+            {/* Layer 4 — slow hue-cycling on the bands via a second offset pass */}
+            <rect width="1440" height="1200" fill="url(#g-bands)" opacity="0.45">
+              <animateTransform
+                attributeName="transform" type="translate"
+                values="-600,0;600,0;-600,0"
+                dur="26s"
+                calcMode="spline"
+                keySplines="0.42 0 0.58 1; 0.42 0 0.58 1"
+                repeatCount="indefinite"
+              />
+            </rect>
+
+            {/* Layer 5 — rim highlight at arc edge */}
+            <rect width="1440" height="1200" fill="url(#g-rim)" />
+          </g>
+        </svg>
+
+        {/* Soft ambient halo above the arc — bleeds into hero bg */}
+        <div
+          className="absolute inset-x-0 pointer-events-none"
+          style={{
+            bottom: '22vh',
             height: '18vh',
-            background: 'radial-gradient(ellipse at 35% 50%, rgba(255,160,40,0.28) 0%, transparent 60%)',
-            filter: 'blur(24px)',
-            pointerEvents: 'none',
-          }} />
-        </div>
+            background: 'radial-gradient(ellipse at 32% 60%, rgba(255,160,40,0.22) 0%, transparent 55%), radial-gradient(ellipse at 72% 50%, rgba(0,60,255,0.14) 0%, transparent 50%)',
+            filter: 'blur(28px)',
+            zIndex: 1,
+          }}
+        />
 
         {/* Bottom page-bg fade so the wave blends into sections below */}
         <div className="absolute bottom-0 inset-x-0 h-32 pointer-events-none"
@@ -173,18 +204,17 @@ export default async function Home() {
             Photography Portfolio
           </p>
 
-          {/* Main title — Satoshi (Proxima Nova equivalent), clean white, no blur */}
+          {/* Main title — Satoshi font, subtle chromatic aberration only here */}
           <h1
-            className="text-white leading-[1.0] tracking-tight mb-6"
+            className="leading-[1.0] tracking-tight mb-6"
             style={{
               fontFamily: "'Satoshi', 'Inter', sans-serif",
               fontWeight: 800,
               fontSize: 'clamp(4rem, 10vw, 8.5rem)',
               letterSpacing: '-0.03em',
-              textShadow: '0 2px 40px rgba(0,0,0,0.5)',
             }}
           >
-            {NAME}
+            <ChromaticText text={NAME} animate />
           </h1>
 
           {/* Tagline */}
@@ -383,7 +413,7 @@ export default async function Home() {
             Contact
           </p>
           <h2 className="text-display font-extralight text-white mb-14 leading-tight">
-            <ChromaticText text="Let's connect." />
+            Let&apos;s connect.
           </h2>
 
           {/* Iridescent glass contact card */}

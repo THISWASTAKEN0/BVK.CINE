@@ -72,7 +72,7 @@ export default function CollectionCard({ collection }: Props) {
                 background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
               }} />
               <div className="px-4 py-4">
-                <p className="text-white font-semibold text-[15px] leading-tight chromatic-sm">
+                <p className="text-white font-semibold text-[15px] leading-tight">
                   {collection.name}
                 </p>
                 <div className="flex items-center gap-2 mt-1.5">
