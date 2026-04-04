@@ -4,6 +4,7 @@ import { createServerClient } from '@/lib/supabase-server';
 import Navbar from '@/components/public/Navbar';
 import CollectionGrid from '@/components/public/CollectionGrid';
 import ChromaticText from '@/components/public/ChromaticText';
+import ChromaticStar from '@/components/public/ChromaticStar';
 import type { Collection } from '@/lib/types';
 
 export const revalidate = 30;
@@ -135,56 +136,8 @@ export default async function Home() {
         {/* Bottom fade */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#080910]" />
 
-        {/* ── Chromatic statement piece — sits BEHIND content ── */}
-        {/* Three massive blurred blobs drift apart like a prism splitting light.
-            The glass buttons sit on top — their backdrop-filter blur makes the
-            colours bleed through the button faces. */}
-        <div
-          className="absolute pointer-events-none"
-          style={{ inset: 0, zIndex: 1, overflow: 'hidden' }}
-        >
-          {/* Red channel */}
-          <div style={{
-            position: 'absolute',
-            bottom: '12%',
-            left: '2%',
-            width: '62%',
-            height: '68%',
-            borderRadius: '50%',
-            background: 'radial-gradient(ellipse at 50% 55%, rgba(255,15,15,0.55) 0%, rgba(255,15,15,0.25) 35%, transparent 70%)',
-            filter: 'blur(55px)',
-            mixBlendMode: 'screen',
-            animation: 'ca-big-red 13s ease-in-out infinite',
-          }} />
-          {/* Green channel */}
-          <div style={{
-            position: 'absolute',
-            bottom: '16%',
-            left: '6%',
-            width: '50%',
-            height: '54%',
-            borderRadius: '50%',
-            background: 'radial-gradient(ellipse at 50% 50%, rgba(15,255,80,0.38) 0%, rgba(15,255,80,0.15) 35%, transparent 70%)',
-            filter: 'blur(48px)',
-            mixBlendMode: 'screen',
-            animation: 'ca-big-green 13s ease-in-out infinite',
-            animationDelay: '-4.5s',
-          }} />
-          {/* Blue channel */}
-          <div style={{
-            position: 'absolute',
-            bottom: '10%',
-            left: '-2%',
-            width: '58%',
-            height: '62%',
-            borderRadius: '50%',
-            background: 'radial-gradient(ellipse at 50% 55%, rgba(15,50,255,0.55) 0%, rgba(15,50,255,0.25) 35%, transparent 70%)',
-            filter: 'blur(55px)',
-            mixBlendMode: 'screen',
-            animation: 'ca-big-blue 13s ease-in-out infinite',
-            animationDelay: '-9s',
-          }} />
-        </div>
+        {/* ── Chromatic star statement piece ── */}
+        <ChromaticStar />
 
         {/* Hero content — sits above the chromatic blobs */}
         <div className="absolute bottom-24 left-6 md:left-14 lg:left-24 max-w-2xl" style={{ zIndex: 2 }}>
