@@ -135,8 +135,59 @@ export default async function Home() {
         {/* Bottom fade */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#080910]" />
 
-        {/* Hero content */}
-        <div className="absolute bottom-24 left-6 md:left-14 lg:left-24 max-w-2xl">
+        {/* ── Chromatic statement piece — sits BEHIND content ── */}
+        {/* Three massive blurred blobs drift apart like a prism splitting light.
+            The glass buttons sit on top — their backdrop-filter blur makes the
+            colours bleed through the button faces. */}
+        <div
+          className="absolute pointer-events-none"
+          style={{ inset: 0, zIndex: 1, overflow: 'hidden' }}
+        >
+          {/* Red channel */}
+          <div style={{
+            position: 'absolute',
+            bottom: '12%',
+            left: '2%',
+            width: '62%',
+            height: '68%',
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse at 50% 55%, rgba(255,15,15,0.55) 0%, rgba(255,15,15,0.25) 35%, transparent 70%)',
+            filter: 'blur(55px)',
+            mixBlendMode: 'screen',
+            animation: 'ca-big-red 13s ease-in-out infinite',
+          }} />
+          {/* Green channel */}
+          <div style={{
+            position: 'absolute',
+            bottom: '16%',
+            left: '6%',
+            width: '50%',
+            height: '54%',
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse at 50% 50%, rgba(15,255,80,0.38) 0%, rgba(15,255,80,0.15) 35%, transparent 70%)',
+            filter: 'blur(48px)',
+            mixBlendMode: 'screen',
+            animation: 'ca-big-green 13s ease-in-out infinite',
+            animationDelay: '-4.5s',
+          }} />
+          {/* Blue channel */}
+          <div style={{
+            position: 'absolute',
+            bottom: '10%',
+            left: '-2%',
+            width: '58%',
+            height: '62%',
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse at 50% 55%, rgba(15,50,255,0.55) 0%, rgba(15,50,255,0.25) 35%, transparent 70%)',
+            filter: 'blur(55px)',
+            mixBlendMode: 'screen',
+            animation: 'ca-big-blue 13s ease-in-out infinite',
+            animationDelay: '-9s',
+          }} />
+        </div>
+
+        {/* Hero content — sits above the chromatic blobs */}
+        <div className="absolute bottom-24 left-6 md:left-14 lg:left-24 max-w-2xl" style={{ zIndex: 2 }}>
           {/* Eyebrow label */}
           <div className="flex items-center gap-2.5 mb-6">
             <div className="w-1 h-5 rounded-full" style={{ background: 'linear-gradient(180deg, #5c8aff, #b06aff)' }} />
@@ -155,29 +206,35 @@ export default async function Home() {
             Capturing light. Telling stories.
           </p>
 
-          {/* CTA row */}
+          {/* CTA row — both fully liquid glass so chromatic blobs bleed through */}
           <div className="mt-9 flex items-center gap-4">
+            {/* Primary — blue-tinted glass with glow */}
             <a
               href="#work"
-              className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl text-[14px] font-medium text-white transition-all duration-300 hover:opacity-90 hover:scale-[1.03] active:scale-[0.97]"
+              className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl text-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
               style={{
-                background: 'linear-gradient(135deg, #5c8aff 0%, #9b5bff 100%)',
-                boxShadow: '0 6px 32px rgba(92,138,255,0.4), 0 1px 0 rgba(255,255,255,0.15) inset',
+                background: 'rgba(80, 120, 255, 0.18)',
+                backdropFilter: 'blur(24px) saturate(200%) brightness(1.2)',
+                WebkitBackdropFilter: 'blur(24px) saturate(200%) brightness(1.2)',
+                border: '1px solid rgba(120, 160, 255, 0.45)',
+                boxShadow: '0 1px 0 rgba(255,255,255,0.18) inset, 0 8px 40px rgba(80,120,255,0.3)',
               }}
             >
               <Camera size={14} />
               View Work
             </a>
 
+            {/* Secondary — pure glass */}
             <a
               href="#about"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl text-[14px] font-medium transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl text-[14px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
               style={{
                 background: 'rgba(255,255,255,0.07)',
-                border: '1px solid rgba(255,255,255,0.12)',
-                color: 'rgba(255,255,255,0.7)',
-                boxShadow: '0 1px 0 rgba(255,255,255,0.08) inset',
-                backdropFilter: 'blur(12px)',
+                backdropFilter: 'blur(24px) saturate(180%) brightness(1.1)',
+                WebkitBackdropFilter: 'blur(24px) saturate(180%) brightness(1.1)',
+                border: '1px solid rgba(255,255,255,0.14)',
+                color: 'rgba(255,255,255,0.75)',
+                boxShadow: '0 1px 0 rgba(255,255,255,0.1) inset',
               }}
             >
               About me
