@@ -14,11 +14,13 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.43.4",
+    "@types/three": "^0.183.1",
     "cloudinary": "^2.2.0",
     "lucide-react": "^0.400.0",
     "next": "14.2.5",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "three": "^0.183.2"
   },
   "devDependencies": {
     "@types/node": "^20.14.10",
