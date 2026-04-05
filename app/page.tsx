@@ -206,7 +206,9 @@ export default async function Home() {
               </a>
 
               <a
-                href="#about"
+                href={`https://instagram.com/${INSTAGRAM.replace('@', '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
                 style={{
                   background: 'transparent',
@@ -214,7 +216,8 @@ export default async function Home() {
                   color: 'rgba(255,255,255,0.55)',
                 }}
               >
-                About me
+                <Instagram size={13} />
+                Instagram
               </a>
             </div>
           </div>
