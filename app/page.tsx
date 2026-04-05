@@ -304,24 +304,29 @@ export default async function Home() {
                 <div
                   className="rounded-2xl px-5 py-5"
                   style={{
-                    background: 'linear-gradient(135deg, #3b6bff 0%, #6b3bff 100%)',
-                    boxShadow: '0 8px 32px rgba(60,100,255,0.35), 0 1px 0 rgba(255,255,255,0.15) inset',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.10)',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.30)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
                   }}
                 >
                   <p className="text-2xl font-semibold text-white">3 Years</p>
-                  <p className="text-[12px] mt-1 text-white/60 font-medium uppercase tracking-wider">Experience</p>
+                  <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.40)' }}>Experience</p>
                 </div>
 
                 <div
                   className="rounded-2xl px-5 py-5"
                   style={{
-                    background: 'var(--surface)',
-                    border: '1px solid var(--border)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.35)',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.10)',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.30)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
                   }}
                 >
-                  <p className="text-2xl font-semibold" style={{ color: 'var(--text-primary)' }}>a6700</p>
-                  <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Primary Camera</p>
+                  <p className="text-2xl font-semibold text-white">a6700</p>
+                  <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.40)' }}>Primary Camera</p>
                 </div>
               </div>
 
