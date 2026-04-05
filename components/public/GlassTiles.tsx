@@ -1,18 +1,26 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Camera, Aperture, Image as ImageIcon, Film } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
-const S = 114;  // front face size (px)
-const D = 20;   // glass thickness (px)
-const R = 26;   // corner radius (px)
+// Base dimensions at desktop size
+const BASE_S    = 114;   // front face size (px)
+const BASE_D    = 20;    // glass thickness (px)
+const BASE_R    = 26;    // corner radius (px)
+const BASE_ICON = 40;    // lucide icon size (px)
+const MOBILE_SCALE = 0.55;
 
 interface TileCfg {
   Icon:  LucideIcon;
   tilt:  string;
-  tint:  string;   // very subtle rgba tint on the front face
-  sheen: string;   // specular highlight colour
+  tint:  string;
+  sheen: string;
+  // desktop positions
   top: string; right: string;
+  // mobile positions — keep all tiles in the top-right zone so they
+  // don't bleed over the text / buttons in the lower section
+  mTop: string; mRight: string;
   dur: string; delay: string;
 }
 
@@ -22,37 +30,39 @@ const TILES: TileCfg[] = [
     tilt:  'rotateX(12deg) rotateY(-22deg) rotateZ(-5deg)',
     tint:  'rgba(148,188,255,0.14)',
     sheen: 'rgba(255,255,255,0.70)',
-    top: '11%', right: '13%', dur: '5.2s', delay: '0s',
+    top: '11%', right: '13%',
+    mTop: '8%',  mRight: '6%',
+    dur: '5.2s', delay: '0s',
   },
   {
     Icon:  Aperture,
     tilt:  'rotateX(8deg) rotateY(19deg) rotateZ(4deg)',
     tint:  'rgba(255,170,120,0.14)',
     sheen: 'rgba(255,215,185,0.66)',
-    top: '37%', right: '3%', dur: '6.1s', delay: '0.75s',
+    top: '37%', right: '3%',
+    mTop: '42%', mRight: '2%',
+    dur: '6.1s', delay: '0.75s',
   },
   {
     Icon:  ImageIcon,
     tilt:  'rotateX(-9deg) rotateY(-18deg) rotateZ(3deg)',
     tint:  'rgba(108,225,168,0.12)',
     sheen: 'rgba(195,255,222,0.62)',
-    top: '26%', right: '37%', dur: '4.9s', delay: '1.35s',
+    top: '26%', right: '37%',
+    mTop: '24%', mRight: '28%',   // was 37% — pulled right to avoid text overlap
+    dur: '4.9s', delay: '1.35s',
   },
   {
     Icon:  Film,
     tilt:  'rotateX(13deg) rotateY(21deg) rotateZ(-4deg)',
     tint:  'rgba(192,136,255,0.14)',
     sheen: 'rgba(228,200,255,0.64)',
-    top: '57%', right: '19%', dur: '5.7s', delay: '1.95s',
+    top: '57%', right: '19%',
+    mTop: '58%', mRight: '14%',
+    dur: '5.7s', delay: '1.95s',
   },
 ];
 
-/*
-  Glass edge style — shared across all 4 side faces.
-  Pure white-to-transparent gradient + backdrop-filter so the edge
-  looks like real frosted glass rather than a coloured panel.
-  The border on each face's free edge adds the bright rim line.
-*/
 const edgeBase = {
   backdropFilter:       'blur(18px) saturate(1.6) brightness(1.15)',
   WebkitBackdropFilter: 'blur(18px) saturate(1.6) brightness(1.15)',
@@ -60,6 +70,20 @@ const edgeBase = {
 };
 
 export default function GlassTiles() {
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const update = () => setScale(window.innerWidth < 768 ? MOBILE_SCALE : 1);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  const S    = BASE_S    * scale;
+  const D    = BASE_D    * scale;
+  const R    = BASE_R    * scale;
+  const icon = Math.round(BASE_ICON * scale);
+
   return (
     <>
       <style>{`
@@ -82,8 +106,13 @@ export default function GlassTiles() {
         zIndex: 4,
         pointerEvents: 'none',
       }}>
-        {TILES.map(({ Icon, tilt, tint, sheen, top, right, dur, delay }, i) => (
-          <div key={i} style={{ position: 'absolute', top, right, width: S, height: S }}>
+        {TILES.map(({ Icon, tilt, tint, sheen, top, right, mTop, mRight, dur, delay }, i) => (
+          <div key={i} style={{
+            position: 'absolute',
+            top:   scale < 1 ? mTop   : top,
+            right: scale < 1 ? mRight : right,
+            width: S, height: S,
+          }}>
 
             {/* Floating shadow */}
             <div style={{
@@ -96,7 +125,7 @@ export default function GlassTiles() {
               animation: `gtShadow ${dur} ease-in-out ${delay} infinite`,
             }} />
 
-            {/* 3-D box — no transform on any ancestor → preserve-3d intact */}
+            {/* 3-D box */}
             <div style={{
               position: 'absolute', inset: 0,
               transformStyle: 'preserve-3d',
@@ -104,8 +133,7 @@ export default function GlassTiles() {
               animation: `gtFloat ${dur} ease-in-out ${delay} infinite`,
             }}>
 
-              {/* ── FRONT FACE ──────────────────────────────────────
-                  backdrop-filter blurs the aurora CSS gradient behind it.   */}
+              {/* FRONT FACE */}
               <div style={{
                 position: 'absolute', inset: 0,
                 borderRadius: R,
@@ -126,21 +154,17 @@ export default function GlassTiles() {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-
-                {/* ── ICON — extruded relief, not a flat stamp ────────────
-                    Stacked drop-shadows: bright above + dark below simulate
-                    the icon lines being physically raised from the surface.  */}
                 <div style={{
                   color: 'rgba(255,255,255,0.96)',
                   filter: [
-                    'drop-shadow(0 -1.5px 0 rgba(255,255,255,0.55))',  // top highlight
-                    'drop-shadow(-1px 0   0 rgba(255,255,255,0.22))',  // left highlight
-                    'drop-shadow(0  2px  0 rgba(0,0,0,0.60))',         // bottom shadow
-                    'drop-shadow(1px 0   0 rgba(0,0,0,0.32))',         // right shadow
-                    'drop-shadow(0  3px 6px rgba(0,0,0,0.35))',        // soft depth
+                    'drop-shadow(0 -1.5px 0 rgba(255,255,255,0.55))',
+                    'drop-shadow(-1px 0   0 rgba(255,255,255,0.22))',
+                    'drop-shadow(0  2px  0 rgba(0,0,0,0.60))',
+                    'drop-shadow(1px 0   0 rgba(0,0,0,0.32))',
+                    'drop-shadow(0  3px 6px rgba(0,0,0,0.35))',
                   ].join(' '),
                 }}>
-                  <Icon size={40} strokeWidth={1.8} />
+                  <Icon size={icon} strokeWidth={1.8} />
                 </div>
 
                 {/* Top gloss band */}
@@ -153,10 +177,7 @@ export default function GlassTiles() {
                 }} />
               </div>
 
-              {/* ── RIGHT FACE ─────────────────────────────────────────────
-                  Height = S-2R, offset top by R → covers only the straight
-                  section of the edge, not the rounded corners. This makes the
-                  side face geometry match the front face radius exactly.       */}
+              {/* RIGHT FACE */}
               <div style={{
                 position: 'absolute',
                 top: R, left: S, width: D, height: S - 2 * R,
@@ -172,7 +193,7 @@ export default function GlassTiles() {
                 ...edgeBase,
               }} />
 
-              {/* ── LEFT FACE ── */}
+              {/* LEFT FACE */}
               <div style={{
                 position: 'absolute',
                 top: R, left: -D, width: D, height: S - 2 * R,
@@ -187,7 +208,7 @@ export default function GlassTiles() {
                 ...edgeBase,
               }} />
 
-              {/* ── TOP FACE ── */}
+              {/* TOP FACE */}
               <div style={{
                 position: 'absolute',
                 top: -D, left: R, width: S - 2 * R, height: D,
@@ -202,7 +223,7 @@ export default function GlassTiles() {
                 ...edgeBase,
               }} />
 
-              {/* ── BOTTOM FACE ── */}
+              {/* BOTTOM FACE */}
               <div style={{
                 position: 'absolute',
                 top: S, left: R, width: S - 2 * R, height: D,

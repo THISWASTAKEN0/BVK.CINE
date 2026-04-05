@@ -4,6 +4,7 @@ import { createServerClient } from '@/lib/supabase-server';
 import Navbar from '@/components/public/Navbar';
 import CollectionGrid from '@/components/public/CollectionGrid';
 import ChromaticText from '@/components/public/ChromaticText';
+import HeroTitle from '@/components/public/HeroTitle';
 import GlassTiles from '@/components/public/GlassTiles';
 import EmailReveal from '@/components/public/EmailReveal';
 import type { Collection } from '@/lib/types';
@@ -139,11 +140,19 @@ export default async function Home() {
         {/* ── 3-D glass icon tiles ── */}
         <GlassTiles />
 
-        {/* Left-edge fade so text always reads cleanly */}
+        {/* Desktop: left-edge fade keeps text readable against the aurora */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none hidden md:block"
           style={{
             background: 'linear-gradient(to right, #08090e 28%, rgba(8,9,14,0.7) 52%, transparent 75%)',
+            zIndex: 2,
+          }}
+        />
+        {/* Mobile: heavy veil — aurora stays as a subtle top-right colour hint only */}
+        <div
+          className="absolute inset-0 pointer-events-none md:hidden"
+          style={{
+            background: 'linear-gradient(160deg, rgba(8,9,14,0.78) 0%, rgba(8,9,14,0.88) 50%, #08090e 100%)',
             zIndex: 2,
           }}
         />
@@ -154,62 +163,49 @@ export default async function Home() {
           style={{ background: 'linear-gradient(to top, #08090e, transparent)', zIndex: 2 }}
         />
 
-        {/* ── Hero content — left-aligned ───────────── */}
+        {/* ── Hero content ──────────────────────────────
+            Mobile: bottom-anchored, left-aligned, minimal.
+            Desktop: vertically centred, left-aligned.    */}
         <div
-          className="absolute inset-0 flex flex-col justify-center px-8 md:px-16 lg:px-24"
+          className="absolute inset-0 flex flex-col justify-end md:justify-center px-6 md:px-16 lg:px-24 pb-20 md:pb-0"
           style={{ zIndex: 3 }}
         >
-          <div className="max-w-2xl">
-            {/* Eyebrow */}
+          <div className="max-w-2xl w-full">
+
+            {/* Eyebrow — desktop only, mobile is already minimal */}
             <p
-              className="text-[11px] font-semibold uppercase tracking-[0.35em] mb-7"
+              className="hidden md:block text-[11px] font-semibold uppercase tracking-[0.35em] mb-7"
               style={{ color: 'rgba(255,255,255,0.35)' }}
             >
               Photography Portfolio
             </p>
 
-            {/* Main title — BVK slides in first, .Cine follows */}
+            {/* Main title */}
             <h1
-              className="leading-[1.0] tracking-tight mb-6"
+              className="leading-[1.0] tracking-tight mb-4 md:mb-6"
               style={{
                 fontFamily: "'Satoshi', 'Inter', sans-serif",
                 fontWeight: 800,
-                fontSize: 'clamp(3.8rem, 9vw, 8rem)',
+                fontSize: 'clamp(3.4rem, 14vw, 8rem)',
                 letterSpacing: '-0.03em',
               }}
             >
-              {(() => {
-                const dot = NAME.indexOf('.');
-                const part1 = dot !== -1 ? NAME.slice(0, dot) : NAME;
-                const part2 = dot !== -1 ? NAME.slice(dot)    : '';
-                return (
-                  <>
-                    <span className="hero-word hero-word-1">
-                      <ChromaticText text={part1} animate />
-                    </span>
-                    {part2 && (
-                      <span className="hero-word hero-word-2">
-                        <ChromaticText text={part2} animate />
-                      </span>
-                    )}
-                  </>
-                );
-              })()}
+              <HeroTitle name={NAME} />
             </h1>
 
             {/* Tagline */}
             <p
-              className="text-[16px] md:text-[18px] font-light mb-10 tracking-wide"
+              className="text-[14px] md:text-[18px] font-light mb-8 tracking-wide"
               style={{ color: 'rgba(255,255,255,0.45)' }}
             >
               Capturing light. Telling stories.
             </p>
 
-            {/* CTA buttons */}
-            <div className="flex items-center gap-4 flex-wrap">
+            {/* CTA buttons — side-by-side, each take equal width on mobile */}
+            <div className="flex items-center gap-3">
               <a
                 href="#work"
-                className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full text-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
+                className="flex-1 md:flex-none inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full text-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
                 style={{
                   background: 'rgba(255,255,255,0.10)',
                   backdropFilter: 'blur(20px) saturate(180%)',
@@ -226,7 +222,7 @@ export default async function Home() {
                 href={`https://instagram.com/${INSTAGRAM.replace('@', '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
+                className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
                 style={{
                   background: 'transparent',
                   border: '1px solid rgba(255,255,255,0.18)',
