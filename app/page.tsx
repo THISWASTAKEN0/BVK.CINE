@@ -4,6 +4,7 @@ import { createServerClient } from '@/lib/supabase-server';
 import Navbar from '@/components/public/Navbar';
 import CollectionGrid from '@/components/public/CollectionGrid';
 import ChromaticText from '@/components/public/ChromaticText';
+import GlassTiles from '@/components/public/GlassTiles';
 import type { Collection } from '@/lib/types';
 
 export const revalidate = 30;
@@ -133,6 +134,9 @@ export default async function Home() {
             animation: 'blob-a 16s ease-in-out infinite reverse',
           }} />
         </div>
+
+        {/* ── 3-D glass icon tiles ── */}
+        <GlassTiles />
 
         {/* Left-edge fade so text always reads cleanly */}
         <div
