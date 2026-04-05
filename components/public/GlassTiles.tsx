@@ -12,14 +12,9 @@ const BASE_ICON = 40;    // lucide icon size (px)
 const MOBILE_SCALE = 0.70;
 
 interface TileCfg {
-  Icon:  LucideIcon;
-  tilt:  string;
-  tint:  string;
-  sheen: string;
-  // desktop positions
+  Icon: LucideIcon;
+  tilt: string;
   top: string; right: string;
-  // mobile positions — keep all tiles in the top-right zone so they
-  // don't bleed over the text / buttons in the lower section
   mTop: string; mRight: string;
   dur: string; delay: string;
 }
@@ -28,8 +23,6 @@ const TILES: TileCfg[] = [
   {
     Icon:  Camera,
     tilt:  'rotateX(12deg) rotateY(-22deg) rotateZ(-5deg)',
-    tint:  'rgba(148,188,255,0.14)',
-    sheen: 'rgba(255,255,255,0.70)',
     top: '11%', right: '13%',
     mTop: '8%',  mRight: '6%',
     dur: '5.2s', delay: '0s',
@@ -37,8 +30,6 @@ const TILES: TileCfg[] = [
   {
     Icon:  Aperture,
     tilt:  'rotateX(8deg) rotateY(19deg) rotateZ(4deg)',
-    tint:  'rgba(255,170,120,0.14)',
-    sheen: 'rgba(255,215,185,0.66)',
     top: '37%', right: '3%',
     mTop: '42%', mRight: '2%',
     dur: '6.1s', delay: '0.75s',
@@ -46,17 +37,13 @@ const TILES: TileCfg[] = [
   {
     Icon:  ImageIcon,
     tilt:  'rotateX(-9deg) rotateY(-18deg) rotateZ(3deg)',
-    tint:  'rgba(108,225,168,0.12)',
-    sheen: 'rgba(195,255,222,0.62)',
     top: '26%', right: '37%',
-    mTop: '24%', mRight: '28%',   // was 37% — pulled right to avoid text overlap
+    mTop: '24%', mRight: '28%',
     dur: '4.9s', delay: '1.35s',
   },
   {
     Icon:  Film,
     tilt:  'rotateX(13deg) rotateY(21deg) rotateZ(-4deg)',
-    tint:  'rgba(192,136,255,0.14)',
-    sheen: 'rgba(228,200,255,0.64)',
     top: '57%', right: '19%',
     mTop: '50%', mRight: '14%',
     dur: '5.7s', delay: '1.95s',
@@ -106,7 +93,7 @@ export default function GlassTiles() {
         zIndex: 4,
         pointerEvents: 'none',
       }}>
-        {TILES.map(({ Icon, tilt, tint, sheen, top, right, mTop, mRight, dur, delay }, i) => (
+        {TILES.map(({ Icon, tilt, top, right, mTop, mRight, dur, delay }, i) => (
           <div key={i} style={{
             position: 'absolute',
             top:   scale < 1 ? mTop   : top,
@@ -133,46 +120,51 @@ export default function GlassTiles() {
               animation: `gtFloat ${dur} ease-in-out ${delay} infinite`,
             }}>
 
-              {/* FRONT FACE */}
+              {/* FRONT FACE — pure frosted glass, no colour tint.
+                  Aurora colour bleeds through via backdropFilter naturally. */}
               <div style={{
                 position: 'absolute', inset: 0,
                 borderRadius: R,
                 background: `
-                  radial-gradient(ellipse at 27% 20%, ${sheen} 0%, transparent 52%),
-                  linear-gradient(150deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.04) 100%),
-                  ${tint}
+                  linear-gradient(145deg,
+                    rgba(255,255,255,0.28) 0%,
+                    rgba(255,255,255,0.10) 40%,
+                    rgba(255,255,255,0.04) 100%)
                 `,
-                backdropFilter:       'blur(28px) saturate(2.0) brightness(1.12)',
-                WebkitBackdropFilter: 'blur(28px) saturate(2.0) brightness(1.12)',
-                border: '1px solid rgba(255,255,255,0.44)',
+                backdropFilter:       'blur(28px) saturate(1.8) brightness(1.10)',
+                WebkitBackdropFilter: 'blur(28px) saturate(1.8) brightness(1.10)',
+                border: '1px solid rgba(255,255,255,0.50)',
                 boxShadow: `
-                  0 2px 0 rgba(255,255,255,0.36) inset,
-                  0 -1px 0 rgba(255,255,255,0.06) inset,
-                  1px 0 0 rgba(255,255,255,0.18) inset
+                  0 2px 0 rgba(255,255,255,0.40) inset,
+                  0 -1px 0 rgba(255,255,255,0.08) inset,
+                  1px 0 0 rgba(255,255,255,0.22) inset
                 `,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
+                {/* Icon — strong extrusion effect via layered drop-shadows.
+                    Bright highlight above-left + deep shadow below-right
+                    makes the strokes look physically raised from the surface. */}
                 <div style={{
-                  color: 'rgba(255,255,255,0.96)',
+                  color: 'rgba(255,255,255,1)',
                   filter: [
-                    'drop-shadow(0 -1.5px 0 rgba(255,255,255,0.55))',
-                    'drop-shadow(-1px 0   0 rgba(255,255,255,0.22))',
-                    'drop-shadow(0  2px  0 rgba(0,0,0,0.60))',
-                    'drop-shadow(1px 0   0 rgba(0,0,0,0.32))',
-                    'drop-shadow(0  3px 6px rgba(0,0,0,0.35))',
+                    'drop-shadow(0 -2px   0   rgba(255,255,255,0.90))',  // top edge highlight
+                    'drop-shadow(-2px 0   0   rgba(255,255,255,0.50))',  // left edge highlight
+                    'drop-shadow(0    3px 0   rgba(0,0,0,0.85))',        // bottom cast shadow
+                    'drop-shadow(2px  0   0   rgba(0,0,0,0.55))',        // right cast shadow
+                    'drop-shadow(0    5px 8px rgba(0,0,0,0.55))',        // depth blur
                   ].join(' '),
                 }}>
-                  <Icon size={icon} strokeWidth={1.8} />
+                  <Icon size={icon} strokeWidth={1.6} />
                 </div>
 
-                {/* Top gloss band */}
+                {/* Top-left gloss streak — mimics light hitting a glass surface */}
                 <div style={{
                   position: 'absolute', top: 0, left: 0, right: 0,
-                  height: '46%',
-                  borderRadius: `${R}px ${R}px 50% 50% / ${R}px ${R}px 26% 26%`,
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.26) 0%, transparent 100%)',
+                  height: '42%',
+                  borderRadius: `${R}px ${R}px 50% 50% / ${R}px ${R}px 22% 22%`,
+                  background: 'linear-gradient(180deg, rgba(255,255,255,0.30) 0%, transparent 100%)',
                   pointerEvents: 'none',
                 }} />
               </div>
