@@ -9,7 +9,7 @@ const BASE_S    = 114;   // front face size (px)
 const BASE_D    = 20;    // glass thickness (px)
 const BASE_R    = 26;    // corner radius (px)
 const BASE_ICON = 40;    // lucide icon size (px)
-const MOBILE_SCALE = 0.55;
+const MOBILE_SCALE = 0.70;
 
 interface TileCfg {
   Icon:  LucideIcon;
@@ -58,7 +58,7 @@ const TILES: TileCfg[] = [
     tint:  'rgba(192,136,255,0.14)',
     sheen: 'rgba(228,200,255,0.64)',
     top: '57%', right: '19%',
-    mTop: '58%', mRight: '14%',
+    mTop: '50%', mRight: '14%',
     dur: '5.7s', delay: '1.95s',
   },
 ];

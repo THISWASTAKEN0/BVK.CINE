@@ -148,11 +148,11 @@ export default async function Home() {
             zIndex: 2,
           }}
         />
-        {/* Mobile: heavy veil — aurora stays as a subtle top-right colour hint only */}
+        {/* Mobile: dark on left so text reads cleanly, open on right so tiles stay colourful */}
         <div
           className="absolute inset-0 pointer-events-none md:hidden"
           style={{
-            background: 'linear-gradient(160deg, rgba(8,9,14,0.78) 0%, rgba(8,9,14,0.88) 50%, #08090e 100%)',
+            background: 'linear-gradient(to right, #08090e 30%, rgba(8,9,14,0.70) 52%, rgba(8,9,14,0.15) 80%, transparent 100%)',
             zIndex: 2,
           }}
         />
