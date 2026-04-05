@@ -1,206 +1,246 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { Camera, Aperture, Image as ImageIcon, Film } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 /*
-  GlassTiles — true WebGL glass tiles rendered with Three.js.
-  Uses MeshPhysicalMaterial: transmission + iridescence + clearcoat.
-  Background colour spheres give the glass something to refract so it
-  picks up the aurora blob palette from the CSS hero behind the canvas.
+  GlassTiles — proper CSS 3-D glass tiles.
+
+  Each tile is a real 6-sided box rendered with transform-style: preserve-3d.
+  The FRONT face uses backdrop-filter so it actually blurs the aurora blob
+  gradient sitting behind it in the CSS layer — giving genuine glass feel.
+  All 4 visible side faces (right / left / top / bottom) are individually lit
+  to show the glass thickness.
+
+  Animation trick: the float keyframe embeds the base tilt via a CSS custom
+  property (--tile-tilt) so no transform exists on any ancestor → preserve-3d
+  works correctly in all Chromium browsers.
 */
 
+const S = 114;   // front face size (px)
+const D = 20;    // glass depth / thickness (px)
+
+interface TileCfg {
+  Icon:   LucideIcon;
+  tilt:   string;          // initial 3-D pose
+  tint:   string;          // rgba glass background tint
+  sheen:  string;          // specular highlight colour
+  edgeHi: string;          // bright edge colour
+  edgeLo: string;          // dark edge colour
+  top: string; right: string;
+  dur: string; delay: string;
+}
+
+const TILES: TileCfg[] = [
+  {
+    Icon: Camera,
+    tilt:   'rotateX(12deg) rotateY(-22deg) rotateZ(-5deg)',
+    tint:   'rgba(148,188,255,0.13)',
+    sheen:  'rgba(255,255,255,0.68)',
+    edgeHi: 'rgba(158,202,255,0.44)',
+    edgeLo: 'rgba(28,58,180,0.30)',
+    top: '11%', right: '13%', dur: '5.2s', delay: '0s',
+  },
+  {
+    Icon: Aperture,
+    tilt:   'rotateX(8deg) rotateY(19deg) rotateZ(4deg)',
+    tint:   'rgba(255,170,120,0.13)',
+    sheen:  'rgba(255,212,180,0.64)',
+    edgeHi: 'rgba(255,148,82,0.44)',
+    edgeLo: 'rgba(158,52,12,0.30)',
+    top: '37%', right: '3%', dur: '6.1s', delay: '0.75s',
+  },
+  {
+    Icon: ImageIcon,
+    tilt:   'rotateX(-9deg) rotateY(-18deg) rotateZ(3deg)',
+    tint:   'rgba(108,225,168,0.11)',
+    sheen:  'rgba(192,255,218,0.60)',
+    edgeHi: 'rgba(86,212,150,0.38)',
+    edgeLo: 'rgba(12,108,60,0.26)',
+    top: '26%', right: '37%', dur: '4.9s', delay: '1.35s',
+  },
+  {
+    Icon: Film,
+    tilt:   'rotateX(13deg) rotateY(21deg) rotateZ(-4deg)',
+    tint:   'rgba(192,136,255,0.13)',
+    sheen:  'rgba(226,196,255,0.62)',
+    edgeHi: 'rgba(172,108,255,0.40)',
+    edgeLo: 'rgba(72,12,158,0.28)',
+    top: '57%', right: '19%', dur: '5.7s', delay: '1.95s',
+  },
+];
+
+/* ─────────────────────────────────────────────── */
+
 export default function GlassTiles() {
-  const mountRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let animId = 0;
-    let disposed = false;
-
-    (async () => {
-      const THREE = await import('three');
-      if (disposed) return;
-
-      const mount = mountRef.current;
-      if (!mount) return;
-
-      /* ── Renderer ─────────────────────────────────── */
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(mount.clientWidth, mount.clientHeight);
-      renderer.outputColorSpace = THREE.SRGBColorSpace;
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.3;
-      renderer.domElement.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;';
-      mount.appendChild(renderer.domElement);
-
-      /* ── Scene & Camera ───────────────────────────── */
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(40, mount.clientWidth / mount.clientHeight, 0.1, 100);
-      camera.position.z = 7.5;
-
-      /* ── Environment (for glass reflections) ─────── */
-      try {
-        const { RoomEnvironment } = await import('three/examples/jsm/environments/RoomEnvironment.js' as string);
-        const pmrem = new THREE.PMREMGenerator(renderer);
-        scene.environment = pmrem.fromScene(new (RoomEnvironment as any)()).texture;
-        pmrem.dispose();
-      } catch {
-        /* fallback — lights handle it */
-      }
-
-      /* ── Lights ───────────────────────────────────── */
-      scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-
-      const lightDefs = [
-        { color: 0x4466ff, intensity: 5,  pos: [-4,  4, 6] },
-        { color: 0xff5500, intensity: 4,  pos: [ 5, -3, 5] },
-        { color: 0xaa33ff, intensity: 3,  pos: [ 0,  5, 4] },
-        { color: 0xffffff, intensity: 6,  pos: [ 0,  0, 8] },
-        { color: 0x00ccff, intensity: 2,  pos: [-2, -4, 5] },
-      ];
-      lightDefs.forEach(({ color, intensity, pos }) => {
-        const l = new THREE.PointLight(color, intensity, 30);
-        l.position.set(...(pos as [number, number, number]));
-        scene.add(l);
-      });
-
-      /* ── Background colour blobs ──────────────────── */
-      /* These sit behind the tiles so the glass refracts their colours,
-         mirroring the CSS aurora palette in the hero section.            */
-      const blobDefs = [
-        { color: 0xff5500, pos: [ 2.5,  1.8, -2.5], size: 2.4 },
-        { color: 0x0033ff, pos: [-2.2,  1.2, -3.5], size: 2.0 },
-        { color: 0x8800cc, pos: [ 3.2, -2.0, -3.0], size: 1.8 },
-        { color: 0xff0055, pos: [-1.0, -2.2, -3.5], size: 2.2 },
-        { color: 0x00aaff, pos: [ 0.2,  3.5, -4.0], size: 1.6 },
-      ];
-      blobDefs.forEach(({ color, pos, size }) => {
-        const mesh = new THREE.Mesh(
-          new THREE.SphereGeometry(size, 32, 32),
-          new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.78 }),
-        );
-        mesh.position.set(...(pos as [number, number, number]));
-        scene.add(mesh);
-      });
-
-      /* ── Rounded box geometry ─────────────────────── */
-      let RoundedBoxGeometry: any = null;
-      try {
-        const mod = await import('three/examples/jsm/geometries/RoundedBoxGeometry.js' as string);
-        RoundedBoxGeometry = (mod as any).RoundedBoxGeometry;
-      } catch { /* fall back to BoxGeometry */ }
-
-      const makeGeo = () => RoundedBoxGeometry
-        ? new RoundedBoxGeometry(1.18, 1.18, 0.22, 8, 0.22)
-        : new THREE.BoxGeometry(1.18, 1.18, 0.22);
-
-      /* ── Tile definitions ─────────────────────────── */
-      const tileDefs = [
-        { basePos: [-1.5,  1.2,  0.3] as [number, number, number], baseRot: [ 0.22, -0.34, -0.09] as [number, number, number], tint: 0xaaddff, delay: 0.0 },
-        { basePos: [ 1.7,  0.5, -0.2] as [number, number, number], baseRot: [ 0.14,  0.29,  0.07] as [number, number, number], tint: 0xffccaa, delay: 0.8 },
-        { basePos: [-0.2, -0.9,  0.2] as [number, number, number], baseRot: [-0.10, -0.24,  0.05] as [number, number, number], tint: 0xaaffd0, delay: 1.5 },
-        { basePos: [ 1.0, -1.7, -0.1] as [number, number, number], baseRot: [ 0.19,  0.27, -0.06] as [number, number, number], tint: 0xddaaff, delay: 2.2 },
-      ];
-
-      const tiles = tileDefs.map(({ basePos, baseRot, tint, delay }) => {
-        const geo = makeGeo();
-
-        /* Physical glass material */
-        const mat = new THREE.MeshPhysicalMaterial({
-          color:                       new THREE.Color(tint),
-          metalness:                   0,
-          roughness:                   0.02,
-          transmission:                0.88,      // glass-like transparency
-          thickness:                   0.5,        // refraction depth
-          ior:                         1.52,       // glass IOR
-          iridescence:                 0.80,       // rainbow sheen
-          iridescenceIOR:              1.38,
-          iridescenceThicknessRange:   [100, 900],
-          clearcoat:                   1.0,
-          clearcoatRoughness:          0.02,
-          transparent:                 true,
-          opacity:                     0.94,
-          side:                        THREE.DoubleSide,
-        });
-
-        const mesh = new THREE.Mesh(geo, mat);
-        mesh.position.set(...basePos);
-        mesh.rotation.set(...baseRot);
-
-        /* Glowing wireframe edges — makes the depth very visible */
-        const edgeGeo = new THREE.EdgesGeometry(
-          new THREE.BoxGeometry(1.18, 1.18, 0.22),
-          10, // crease angle threshold
-        );
-        const edgeMat = new THREE.LineBasicMaterial({
-          color:       0xffffff,
-          transparent: true,
-          opacity:     0.45,
-        });
-        mesh.add(new THREE.LineSegments(edgeGeo, edgeMat));
-
-        scene.add(mesh);
-        return { mesh, basePos, baseRot, delay };
-      });
-
-      /* ── Render loop ──────────────────────────────── */
-      const clock = new THREE.Clock();
-
-      const animate = () => {
-        if (disposed) return;
-        animId = requestAnimationFrame(animate);
-        const t = clock.getElapsedTime();
-
-        tiles.forEach(({ mesh, basePos, baseRot, delay }) => {
-          mesh.position.y = basePos[1] + Math.sin(t * 0.55 + delay)       * 0.12;
-          mesh.rotation.y = baseRot[1] + Math.sin(t * 0.38 + delay)       * 0.08;
-          mesh.rotation.x = baseRot[0] + Math.cos(t * 0.28 + delay * 0.7) * 0.04;
-        });
-
-        renderer.render(scene, camera);
-      };
-      animate();
-
-      /* ── Resize ───────────────────────────────────── */
-      const onResize = () => {
-        if (!mount || disposed) return;
-        const w = mount.clientWidth, h = mount.clientHeight;
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-        renderer.setSize(w, h);
-      };
-      window.addEventListener('resize', onResize);
-
-      /* ── Cleanup stored on the element ───────────── */
-      (mount as any)._glCleanup = () => {
-        disposed = true;
-        window.removeEventListener('resize', onResize);
-        cancelAnimationFrame(animId);
-        renderer.dispose();
-        if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
-      };
-    })();
-
-    return () => {
-      disposed = true;
-      cancelAnimationFrame(animId);
-      const mount = mountRef.current;
-      (mount as any)?._glCleanup?.();
-    };
-  }, []);
-
   return (
-    <div
-      ref={mountRef}
-      style={{
+    <>
+      <style>{`
+        /*
+          Float animation: custom prop carries the base tilt so the
+          keyframe only interpolates translateY while tilt stays constant.
+          No ancestor transform needed → preserve-3d is not flattened.
+        */
+        @keyframes gtFloat {
+          0%,100% { transform: var(--gt-tilt) translateY(0px);   }
+          45%      { transform: var(--gt-tilt) translateY(-18px); }
+          72%      { transform: var(--gt-tilt) translateY(-7px);  }
+        }
+        @keyframes gtShadow {
+          0%,100% { transform: scaleX(1.00); opacity: 0.40; }
+          45%      { transform: scaleX(0.68); opacity: 0.18; }
+          72%      { transform: scaleX(0.86); opacity: 0.28; }
+        }
+      `}</style>
+
+      {/* Outer wrapper — position only, no transform */}
+      <div style={{
         position: 'absolute',
-        top:    0,
-        right:  0,
-        width:  '55%',
-        height: '100%',
+        top: 0, right: 0, bottom: 0,
+        width: '54%',
         zIndex: 4,
         pointerEvents: 'none',
-      }}
-    />
+      }}>
+        {TILES.map(({ Icon, tilt, tint, sheen, edgeHi, edgeLo, top, right, dur, delay }, i) => (
+
+          <div key={i} style={{ position: 'absolute', top, right, width: S, height: S }}>
+
+            {/* ── Shadow (sibling — never a preserve-3d ancestor) ── */}
+            <div style={{
+              position: 'absolute',
+              top: S + 14,
+              left: '9%',
+              width: '82%',
+              height: 16,
+              borderRadius: '50%',
+              background: 'rgba(0,0,0,0.45)',
+              filter: 'blur(11px)',
+              animation: `gtShadow ${dur} ease-in-out ${delay} infinite`,
+            }} />
+
+            {/* ── 3-D tile box ── */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              transformStyle: 'preserve-3d',
+              /* CSS custom property holds the static tilt; keyframe only
+                 interpolates translateY, so no ambiguity for the browser. */
+              ['--gt-tilt' as string]: tilt,
+              animation: `gtFloat ${dur} ease-in-out ${delay} infinite`,
+            }}>
+
+              {/* ════ FRONT FACE ════
+                  backdrop-filter blurs the aurora CSS layers sitting behind
+                  this element in the paint order → real glass refraction look. */}
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                borderRadius: 24,
+                background: `
+                  radial-gradient(ellipse at 27% 22%, ${sheen} 0%, transparent 54%),
+                  linear-gradient(152deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.04) 100%),
+                  ${tint}
+                `,
+                backdropFilter:       'blur(26px) saturate(2.0) brightness(1.10)',
+                WebkitBackdropFilter: 'blur(26px) saturate(2.0) brightness(1.10)',
+                border: '1px solid rgba(255,255,255,0.42)',
+                boxShadow: `
+                  0 2px 0 rgba(255,255,255,0.34) inset,
+                  0 -1px 0 rgba(255,255,255,0.07) inset,
+                  1px 0 0 rgba(255,255,255,0.18) inset
+                `,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'rgba(255,255,255,0.92)',
+                /* Front face stays at z=0 — the box extrudes backward (-z). */
+              }}>
+                <Icon size={44} strokeWidth={1.15} />
+                {/* Top gloss band */}
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, right: 0,
+                  height: '44%',
+                  borderRadius: '24px 24px 50% 50% / 24px 24px 28% 28%',
+                  background: 'linear-gradient(180deg, rgba(255,255,255,0.22) 0%, transparent 100%)',
+                  pointerEvents: 'none',
+                }} />
+              </div>
+
+              {/* ════ RIGHT FACE ════
+                  Positioned at left:S (past right edge), rotated 90° around
+                  the shared left-center hinge → face at x=S, z: 0 → −D.    */}
+              <div style={{
+                position: 'absolute',
+                top: 0, left: S, width: D, height: S,
+                borderRadius: '0 7px 7px 0',
+                transformOrigin: '0% 50%',
+                transform: 'rotateY(90deg)',
+                background: `linear-gradient(to bottom,
+                  rgba(255,255,255,0.28) 0%,
+                  ${edgeHi} 26%,
+                  ${edgeLo} 68%,
+                  rgba(0,0,0,0.24) 100%
+                )`,
+                border: '1px solid rgba(255,255,255,0.24)',
+                borderLeft: 'none',
+                backfaceVisibility: 'hidden',
+              }} />
+
+              {/* ════ LEFT FACE ════ */}
+              <div style={{
+                position: 'absolute',
+                top: 0, left: -D, width: D, height: S,
+                borderRadius: '7px 0 0 7px',
+                transformOrigin: '100% 50%',
+                transform: 'rotateY(-90deg)',
+                background: `linear-gradient(to bottom,
+                  rgba(255,255,255,0.22) 0%,
+                  ${edgeHi} 33%,
+                  ${edgeLo} 100%
+                )`,
+                border: '1px solid rgba(255,255,255,0.16)',
+                borderRight: 'none',
+                backfaceVisibility: 'hidden',
+              }} />
+
+              {/* ════ TOP FACE ════ */}
+              <div style={{
+                position: 'absolute',
+                top: -D, left: 0, width: S, height: D,
+                borderRadius: '7px 7px 0 0',
+                transformOrigin: '50% 100%',
+                transform: 'rotateX(90deg)',
+                background: `linear-gradient(to right,
+                  rgba(255,255,255,0.32) 0%,
+                  ${edgeHi} 50%,
+                  rgba(255,255,255,0.14) 100%
+                )`,
+                border: '1px solid rgba(255,255,255,0.26)',
+                borderBottom: 'none',
+                backfaceVisibility: 'hidden',
+              }} />
+
+              {/* ════ BOTTOM FACE ════ */}
+              <div style={{
+                position: 'absolute',
+                top: S, left: 0, width: S, height: D,
+                borderRadius: '0 0 7px 7px',
+                transformOrigin: '50% 0%',
+                transform: 'rotateX(-90deg)',
+                background: `linear-gradient(to right,
+                  ${edgeLo} 0%,
+                  ${edgeHi} 44%,
+                  ${edgeLo} 100%
+                )`,
+                border: '1px solid rgba(255,255,255,0.13)',
+                borderTop: 'none',
+                backfaceVisibility: 'hidden',
+              }} />
+
+            </div>{/* end 3-D box */}
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
