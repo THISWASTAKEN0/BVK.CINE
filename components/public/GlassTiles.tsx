@@ -19,6 +19,8 @@ import type { LucideIcon } from 'lucide-react';
 
 const S = 114;   // front face size (px)
 const D = 20;    // glass depth / thickness (px)
+const R = 26;    // corner radius — same value applied to front face AND
+                 // the outer corners of every side face so they all match.
 
 interface TileCfg {
   Icon:   LucideIcon;
@@ -129,13 +131,11 @@ export default function GlassTiles() {
               animation: `gtFloat ${dur} ease-in-out ${delay} infinite`,
             }}>
 
-              {/* ════ FRONT FACE ════
-                  backdrop-filter blurs the aurora CSS layers sitting behind
-                  this element in the paint order → real glass refraction look. */}
+              {/* ════ FRONT FACE ════ */}
               <div style={{
                 position: 'absolute',
                 inset: 0,
-                borderRadius: 24,
+                borderRadius: R,
                 background: `
                   radial-gradient(ellipse at 27% 22%, ${sheen} 0%, transparent 54%),
                   linear-gradient(152deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.04) 100%),
@@ -152,27 +152,27 @@ export default function GlassTiles() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'rgba(255,255,255,0.92)',
-                /* Front face stays at z=0 — the box extrudes backward (-z). */
+                color: 'rgba(255,255,255,0.90)',
               }}>
-                <Icon size={44} strokeWidth={1.15} />
-                {/* Top gloss band */}
+                {/* Icon padded to sit inside the rounded safe-area */}
+                <Icon size={40} strokeWidth={1.4} />
+                {/* Top gloss band — radius matches front face */}
                 <div style={{
                   position: 'absolute', top: 0, left: 0, right: 0,
-                  height: '44%',
-                  borderRadius: '24px 24px 50% 50% / 24px 24px 28% 28%',
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.22) 0%, transparent 100%)',
+                  height: '46%',
+                  borderRadius: `${R}px ${R}px 50% 50% / ${R}px ${R}px 26% 26%`,
+                  background: 'linear-gradient(180deg, rgba(255,255,255,0.24) 0%, transparent 100%)',
                   pointerEvents: 'none',
                 }} />
               </div>
 
               {/* ════ RIGHT FACE ════
-                  Positioned at left:S (past right edge), rotated 90° around
-                  the shared left-center hinge → face at x=S, z: 0 → −D.    */}
+                  Outer corners use R — CSS caps them at D/2 automatically,
+                  giving a consistent pill-edge that matches the front face. */}
               <div style={{
                 position: 'absolute',
                 top: 0, left: S, width: D, height: S,
-                borderRadius: '0 7px 7px 0',
+                borderRadius: `0 ${R}px ${R}px 0`,
                 transformOrigin: '0% 50%',
                 transform: 'rotateY(90deg)',
                 background: `linear-gradient(to bottom,
@@ -190,7 +190,7 @@ export default function GlassTiles() {
               <div style={{
                 position: 'absolute',
                 top: 0, left: -D, width: D, height: S,
-                borderRadius: '7px 0 0 7px',
+                borderRadius: `${R}px 0 0 ${R}px`,
                 transformOrigin: '100% 50%',
                 transform: 'rotateY(-90deg)',
                 background: `linear-gradient(to bottom,
@@ -207,7 +207,7 @@ export default function GlassTiles() {
               <div style={{
                 position: 'absolute',
                 top: -D, left: 0, width: S, height: D,
-                borderRadius: '7px 7px 0 0',
+                borderRadius: `${R}px ${R}px 0 0`,
                 transformOrigin: '50% 100%',
                 transform: 'rotateX(90deg)',
                 background: `linear-gradient(to right,
@@ -224,7 +224,7 @@ export default function GlassTiles() {
               <div style={{
                 position: 'absolute',
                 top: S, left: 0, width: S, height: D,
-                borderRadius: '0 0 7px 7px',
+                borderRadius: `0 0 ${R}px ${R}px`,
                 transformOrigin: '50% 0%',
                 transform: 'rotateX(-90deg)',
                 background: `linear-gradient(to right,

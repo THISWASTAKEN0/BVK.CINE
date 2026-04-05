@@ -228,12 +228,11 @@ export default async function Home() {
 
       {/* ── Collections ──────────────────────────────── */}
       <section id="work" className="relative px-5 md:px-8 py-28 md:py-36">
-        {/* Ambient glow */}
-        <div className="glow-blob w-[800px] h-[600px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.06]" style={{ background: 'radial-gradient(ellipse, #5c8aff, #9b5bff)' }} />
+        <div className="glow-blob w-[700px] h-[500px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.05]" style={{ background: 'radial-gradient(ellipse, #5c8aff, #9b5bff)' }} />
 
         <div className="max-w-7xl mx-auto">
           {/* Section header */}
-          <div className="flex items-end justify-between mb-10 px-1">
+          <div className="flex items-end justify-between mb-12 px-1">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.3em] mb-3" style={{ color: 'var(--accent)' }}>
                 Selected Work
@@ -247,12 +246,7 @@ export default async function Home() {
             </p>
           </div>
 
-          {/* Iridescent glass panel */}
-          <div
-            className="relative rounded-3xl p-5 md:p-8 glass-bubble"
-          >
-            <CollectionGrid collections={collections} />
-          </div>
+          <CollectionGrid collections={collections} />
         </div>
       </section>
 

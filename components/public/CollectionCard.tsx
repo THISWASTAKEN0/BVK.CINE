@@ -23,16 +23,17 @@ export default function CollectionCard({ collection }: Props) {
   const objectPosition = collection.cover_photo_position ?? '50% 50%';
 
   return (
-    <Link href={`/collections/${collection.id}`} className="block group card-iri">
-      <div
-        className="relative rounded-[20px] overflow-hidden cursor-pointer"
-        style={{
-          background: 'var(--surface)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
-          transition: 'box-shadow 0.4s ease',
-        }}
-      >
+    <Link
+      href={`/collections/${collection.id}`}
+      className="block group card-iri rounded-[22px] overflow-hidden cursor-pointer"
+      style={{
+        background: 'var(--surface)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        boxShadow: '0 4px 32px rgba(0,0,0,0.45)',
+        transition: 'box-shadow 0.4s ease, transform 0.4s ease',
+      }}
+    >
+      <div className="relative">
         {coverPublicId ? (
           <div className="relative w-full aspect-[4/3] overflow-hidden">
             <Image
@@ -107,8 +108,6 @@ export default function CollectionCard({ collection }: Props) {
 
 export function CollectionCardSkeleton() {
   return (
-    <div className="rounded-[20px] overflow-hidden" style={{ border: '1px solid var(--border)' }}>
-      <div className="aspect-[4/3] skeleton rounded-[20px]" />
-    </div>
+    <div className="rounded-[22px] overflow-hidden aspect-[4/3] skeleton" />
   );
 }
