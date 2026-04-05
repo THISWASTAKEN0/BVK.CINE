@@ -154,76 +154,66 @@ export default function GlassTiles() {
               </div>
 
               {/* ── RIGHT FACE ─────────────────────────────────────────────
-                  Pure white gradient — no coloured tint so it reads as glass. */}
+                  Height = S-2R, offset top by R → covers only the straight
+                  section of the edge, not the rounded corners. This makes the
+                  side face geometry match the front face radius exactly.       */}
               <div style={{
                 position: 'absolute',
-                top: 0, left: S, width: D, height: S,
-                borderRadius: `0 ${R}px ${R}px 0`,
+                top: R, left: S, width: D, height: S - 2 * R,
                 transformOrigin: '0% 50%',
                 transform: 'rotateY(90deg)',
                 background: `linear-gradient(to bottom,
-                  rgba(255,255,255,0.50) 0%,
-                  rgba(255,255,255,0.22) 35%,
-                  rgba(255,255,255,0.10) 65%,
+                  rgba(255,255,255,0.52) 0%,
+                  rgba(255,255,255,0.24) 40%,
+                  rgba(255,255,255,0.10) 75%,
                   rgba(255,255,255,0.04) 100%
                 )`,
-                borderTop:    '1px solid rgba(255,255,255,0.30)',
-                borderRight:  '1px solid rgba(255,255,255,0.20)',
-                borderBottom: '1px solid rgba(255,255,255,0.12)',
+                borderRight: '1px solid rgba(255,255,255,0.22)',
                 ...edgeBase,
               }} />
 
               {/* ── LEFT FACE ── */}
               <div style={{
                 position: 'absolute',
-                top: 0, left: -D, width: D, height: S,
-                borderRadius: `${R}px 0 0 ${R}px`,
+                top: R, left: -D, width: D, height: S - 2 * R,
                 transformOrigin: '100% 50%',
                 transform: 'rotateY(-90deg)',
                 background: `linear-gradient(to bottom,
-                  rgba(255,255,255,0.40) 0%,
-                  rgba(255,255,255,0.16) 40%,
+                  rgba(255,255,255,0.42) 0%,
+                  rgba(255,255,255,0.18) 45%,
                   rgba(255,255,255,0.06) 100%
                 )`,
-                borderTop:    '1px solid rgba(255,255,255,0.28)',
-                borderLeft:   '1px solid rgba(255,255,255,0.18)',
-                borderBottom: '1px solid rgba(255,255,255,0.10)',
+                borderLeft: '1px solid rgba(255,255,255,0.18)',
                 ...edgeBase,
               }} />
 
               {/* ── TOP FACE ── */}
               <div style={{
                 position: 'absolute',
-                top: -D, left: 0, width: S, height: D,
-                borderRadius: `${R}px ${R}px 0 0`,
+                top: -D, left: R, width: S - 2 * R, height: D,
                 transformOrigin: '50% 100%',
                 transform: 'rotateX(90deg)',
                 background: `linear-gradient(to right,
-                  rgba(255,255,255,0.48) 0%,
-                  rgba(255,255,255,0.28) 50%,
-                  rgba(255,255,255,0.16) 100%
+                  rgba(255,255,255,0.42) 0%,
+                  rgba(255,255,255,0.30) 50%,
+                  rgba(255,255,255,0.18) 100%
                 )`,
-                borderTop:   '1px solid rgba(255,255,255,0.36)',
-                borderLeft:  '1px solid rgba(255,255,255,0.22)',
-                borderRight: '1px solid rgba(255,255,255,0.16)',
+                borderTop: '1px solid rgba(255,255,255,0.32)',
                 ...edgeBase,
               }} />
 
               {/* ── BOTTOM FACE ── */}
               <div style={{
                 position: 'absolute',
-                top: S, left: 0, width: S, height: D,
-                borderRadius: `0 0 ${R}px ${R}px`,
+                top: S, left: R, width: S - 2 * R, height: D,
                 transformOrigin: '50% 0%',
                 transform: 'rotateX(-90deg)',
                 background: `linear-gradient(to right,
-                  rgba(255,255,255,0.14) 0%,
-                  rgba(255,255,255,0.28) 45%,
-                  rgba(255,255,255,0.14) 100%
+                  rgba(255,255,255,0.12) 0%,
+                  rgba(255,255,255,0.26) 50%,
+                  rgba(255,255,255,0.12) 100%
                 )`,
-                borderBottom: '1px solid rgba(255,255,255,0.16)',
-                borderLeft:   '1px solid rgba(255,255,255,0.12)',
-                borderRight:  '1px solid rgba(255,255,255,0.10)',
+                borderBottom: '1px solid rgba(255,255,255,0.14)',
                 ...edgeBase,
               }} />
 
