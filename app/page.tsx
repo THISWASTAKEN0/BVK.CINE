@@ -1,10 +1,11 @@
 import Image from 'next/image';
-import { ChevronDown, Mail, Instagram, Camera } from 'lucide-react';
+import { ChevronDown, Instagram, Camera } from 'lucide-react';
 import { createServerClient } from '@/lib/supabase-server';
 import Navbar from '@/components/public/Navbar';
 import CollectionGrid from '@/components/public/CollectionGrid';
 import ChromaticText from '@/components/public/ChromaticText';
 import GlassTiles from '@/components/public/GlassTiles';
+import EmailReveal from '@/components/public/EmailReveal';
 import type { Collection } from '@/lib/types';
 
 export const revalidate = 30;
@@ -386,18 +387,7 @@ export default async function Home() {
 
           {/* Iridescent glass contact card */}
           <div className="glass-bubble relative rounded-3xl p-8 flex flex-col items-center gap-5">
-            <a
-              href={`mailto:${EMAIL}`}
-              className="flex items-center gap-3.5 text-[15px] font-light text-white/65 hover:text-white transition-colors group w-full justify-center py-1"
-            >
-              <span
-                className="p-2.5 rounded-xl flex-shrink-0"
-                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
-              >
-                <Mail size={15} className="text-white/45 group-hover:text-white transition-colors" />
-              </span>
-              {EMAIL}
-            </a>
+            <EmailReveal email={EMAIL} />
 
             <div className="w-full h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
 
