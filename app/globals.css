@@ -464,20 +464,50 @@ body {
 
 /* chromatic-sm intentionally removed — only the hero title uses CA */
 
-/* ── Chromatic wave ─────────────────────────────────── */
-@keyframes wave-glow-pulse {
-  0%, 100% { opacity: 0.88; transform: translateX(-50%) scale(1);    }
-  50%       { opacity: 1.00; transform: translateX(-50%) scale(1.02); }
+/* ── Hero title entry animation ─────────────────────── */
+@keyframes heroWordIn {
+  from {
+    opacity: 0;
+    transform: translateY(36px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
 }
-@keyframes wave-bands-sweep {
-  0%   { background-position: 140% 0; }
-  50%  { background-position:  -20% 0; }
-  100% { background-position: 140% 0; }
+
+/* Each word is display:inline-block so translateY works inline */
+.hero-word {
+  display: inline-block;
+  animation: heroWordIn 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-@keyframes wave-bands-hue {
-  0%   { filter: hue-rotate(0deg)   brightness(1.0); }
-  50%  { filter: hue-rotate(25deg)  brightness(1.12); }
-  100% { filter: hue-rotate(0deg)   brightness(1.0); }
+/* BVK — fires immediately */
+.hero-word-1 { animation-delay: 0.05s; }
+/* .Cine — follows 280ms later */
+.hero-word-2 { animation-delay: 0.33s; }
+
+/* ── Fluid gradient blob animations ─────────────────── */
+@keyframes blob-a {
+  0%,100% { transform: translate(  0%,   0%) scale(1.00); }
+  30%     { transform: translate(  6%,  -9%) scale(1.10); }
+  65%     { transform: translate( -4%,   7%) scale(0.93); }
+}
+@keyframes blob-b {
+  0%,100% { transform: translate(  0%,   0%) scale(1.00); }
+  30%     { transform: translate( -9%,   6%) scale(0.91); }
+  65%     { transform: translate(  7%,  -5%) scale(1.12); }
+}
+@keyframes blob-c {
+  0%,100% { transform: translate(  0%,   0%) scale(1.00); }
+  30%     { transform: translate(  4%,   8%) scale(1.08); }
+  65%     { transform: translate( -7%,  -4%) scale(0.95); }
+}
+@keyframes blob-d {
+  0%,100% { transform: translate(  0%,   0%) scale(1.00); }
+  30%     { transform: translate( -5%,  -7%) scale(1.05); }
+  65%     { transform: translate(  8%,   5%) scale(0.97); }
 }
 
 @keyframes spin {

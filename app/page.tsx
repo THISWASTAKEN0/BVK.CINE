@@ -168,7 +168,7 @@ export default async function Home() {
               Photography Portfolio
             </p>
 
-            {/* Main title */}
+            {/* Main title — BVK slides in first, .Cine follows */}
             <h1
               className="leading-[1.0] tracking-tight mb-6"
               style={{
@@ -178,7 +178,23 @@ export default async function Home() {
                 letterSpacing: '-0.03em',
               }}
             >
-              <ChromaticText text={NAME} animate />
+              {(() => {
+                const dot = NAME.indexOf('.');
+                const part1 = dot !== -1 ? NAME.slice(0, dot) : NAME;
+                const part2 = dot !== -1 ? NAME.slice(dot)    : '';
+                return (
+                  <>
+                    <span className="hero-word hero-word-1">
+                      <ChromaticText text={part1} animate />
+                    </span>
+                    {part2 && (
+                      <span className="hero-word hero-word-2">
+                        <ChromaticText text={part2} animate />
+                      </span>
+                    )}
+                  </>
+                );
+              })()}
             </h1>
 
             {/* Tagline */}
