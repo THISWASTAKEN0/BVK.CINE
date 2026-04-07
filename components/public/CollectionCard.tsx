@@ -25,13 +25,8 @@ export default function CollectionCard({ collection }: Props) {
   return (
     <Link
       href={`/collections/${collection.id}`}
-      className="block group card-iri rounded-[22px] overflow-hidden cursor-pointer"
-      style={{
-        background: 'var(--surface)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        boxShadow: '0 4px 32px rgba(0,0,0,0.45)',
-        transition: 'box-shadow 0.4s ease, transform 0.4s ease',
-      }}
+      className="block group card-iri liquid-glass rounded-[22px] overflow-hidden cursor-pointer"
+      style={{ transition: 'box-shadow 0.4s ease, transform 0.4s ease' }}
     >
       <div className="relative">
         {coverPublicId ? (
@@ -96,7 +91,7 @@ export default function CollectionCard({ collection }: Props) {
         ) : (
           <div
             className="aspect-[4/3] flex items-center justify-center"
-            style={{ background: 'var(--surface-2, var(--surface))' }}
+            style={{ background: 'rgba(8,10,24,0.85)' }}
           >
             <span className="text-[13px]" style={{ color: 'var(--text-secondary)' }}>No cover photo</span>
           </div>

@@ -201,18 +201,11 @@ export default async function Home() {
               Capturing light. Telling stories.
             </p>
 
-            {/* CTA buttons — side-by-side, each take equal width on mobile */}
+            {/* CTA buttons */}
             <div className="flex items-center gap-3">
               <a
                 href="#work"
-                className="flex-1 md:flex-none inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full text-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
-                style={{
-                  background: 'rgba(255,255,255,0.10)',
-                  backdropFilter: 'blur(20px) saturate(180%)',
-                  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                  border: '1px solid rgba(255,255,255,0.22)',
-                  boxShadow: '0 1px 0 rgba(255,255,255,0.12) inset',
-                }}
+                className="liquid-glass-pill flex-1 md:flex-none inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full text-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
               >
                 <Camera size={13} />
                 View Work
@@ -222,12 +215,8 @@ export default async function Home() {
                 href={`https://instagram.com/${INSTAGRAM.replace('@', '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
-                style={{
-                  background: 'transparent',
-                  border: '1px solid rgba(255,255,255,0.18)',
-                  color: 'rgba(255,255,255,0.55)',
-                }}
+                className="liquid-glass-pill flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
+                style={{ color: 'rgba(255,255,255,0.65)' }}
               >
                 <Instagram size={13} />
                 Instagram
@@ -250,9 +239,9 @@ export default async function Home() {
           {/* Section header */}
           <div className="flex items-end justify-between mb-12 px-1">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] mb-3" style={{ color: 'var(--accent)' }}>
+              <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-4" style={{ color: 'var(--accent)' }}>
                 Selected Work
-              </p>
+              </span>
               <h2 className="text-heading font-light gradient-text">
                 Collections
               </h2>
@@ -272,9 +261,9 @@ export default async function Home() {
 
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] mb-3" style={{ color: 'var(--accent)' }}>
+            <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-4" style={{ color: 'var(--accent)' }}>
               About
-            </p>
+            </span>
             <h2 className="text-heading font-light gradient-text">
               The Photographer
             </h2>
@@ -310,53 +299,32 @@ export default async function Home() {
 
             {/* Bio + stats */}
             <div className="flex flex-col justify-center gap-8">
-              <p className="text-[18px] md:text-[20px] font-light leading-relaxed" style={{ color: 'rgba(220,220,245,0.75)' }}>
-                Hi, I&apos;m Bhavesh — photographer based in Buffalo Grove.
-                Capturing moments one at a time.
-              </p>
+              <div className="liquid-glass rounded-2xl px-6 py-5">
+                <p className="text-[17px] md:text-[19px] font-light leading-relaxed" style={{ color: 'rgba(220,220,245,0.80)' }}>
+                  Hi, I&apos;m Bhavesh — photographer based in Buffalo Grove.
+                  Capturing moments one at a time.
+                </p>
+              </div>
 
-              {/* Stat cards — inspired by image 3's blue accent card */}
+              {/* Stat cards */}
               <div className="grid grid-cols-2 gap-4">
-                <div
-                  className="rounded-2xl px-5 py-5"
-                  style={{
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.10)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.30)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                  }}
-                >
+                <div className="liquid-glass rounded-2xl px-5 py-5">
                   <p className="text-2xl font-semibold text-white">3 Years</p>
                   <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.40)' }}>Experience</p>
                 </div>
-
-                <div
-                  className="rounded-2xl px-5 py-5"
-                  style={{
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.10)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.30)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                  }}
-                >
+                <div className="liquid-glass rounded-2xl px-5 py-5">
                   <p className="text-2xl font-semibold text-white">a6700</p>
                   <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.40)' }}>Primary Camera</p>
                 </div>
               </div>
 
-              {/* Small neumorphic tag row */}
+              {/* Tag row */}
               <div className="flex flex-wrap gap-2.5">
                 {['Portrait', 'Sports', 'Events', 'Lifestyle'].map((tag) => (
                   <span
                     key={tag}
-                    className="px-4 py-1.5 rounded-full text-[12px] font-medium"
-                    style={{
-                      background: 'rgba(92,138,255,0.1)',
-                      border: '1px solid rgba(92,138,255,0.2)',
-                      color: 'rgba(180,200,255,0.8)',
-                    }}
+                    className="liquid-glass-pill px-4 py-1.5 rounded-full text-[12px] font-medium"
+                    style={{ color: 'rgba(200, 210, 255, 0.80)' }}
                   >
                     {tag}
                   </span>
@@ -390,9 +358,9 @@ export default async function Home() {
         />
 
         <div className="relative max-w-md mx-auto px-6 text-center">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] mb-5" style={{ color: 'rgba(200,200,240,0.35)' }}>
+          <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-5" style={{ color: 'rgba(200,200,240,0.50)' }}>
             Contact
-          </p>
+          </span>
           <h2 className="text-display font-extralight text-white mb-14 leading-tight">
             Let&apos;s connect.
           </h2>

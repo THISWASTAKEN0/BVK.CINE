@@ -253,13 +253,58 @@ body {
   box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 1px 16px rgba(0,0,0,0.06);
 }
 
-/* Navbar glass — dark */
+/* Navbar glass — dark (floating pill) */
 .glass-nav-dark {
-  backdrop-filter: blur(40px) saturate(180%) brightness(0.85);
-  -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(0.85);
-  background: rgba(8, 9, 16, 0.8);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.065);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 4px 32px rgba(0,0,0,0.5);
+  backdrop-filter: blur(48px) saturate(220%) brightness(1.06);
+  -webkit-backdrop-filter: blur(48px) saturate(220%) brightness(1.06);
+  background: rgba(6, 7, 16, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 1.5px 0 rgba(255, 255, 255, 0.18) inset,
+    0 8px 40px rgba(0, 0, 0, 0.50),
+    0 2px 8px rgba(0, 0, 0, 0.22);
+}
+
+/* ── Liquid Glass — Apple visionOS / iOS 26 style ───
+   A surface that refracts and reflects light like real
+   wet glass: high blur, low fill, bright specular rim. */
+.liquid-glass {
+  position: relative;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(48px) saturate(220%) brightness(1.12);
+  -webkit-backdrop-filter: blur(48px) saturate(220%) brightness(1.12);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow:
+    0 1.5px 0 rgba(255, 255, 255, 0.38) inset,
+    0 -0.5px 0 rgba(255, 255, 255, 0.08) inset,
+    0 12px 48px rgba(0, 0, 0, 0.36),
+    0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* Top-left refractive highlight — makes it look wet */
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    148deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.05) 30%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+/* Pill variant — for tags, badges, small chips */
+.liquid-glass-pill {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px) saturate(200%) brightness(1.10);
+  -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.10);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.30) inset,
+    0 2px 12px rgba(0, 0, 0, 0.22);
 }
 
 /* ── Iridescent / Bubble glass ──────────────────────── */

@@ -29,42 +29,42 @@ export default function Navbar() {
 
   return (
     <>
-      <nav
-        className={`fixed top-0 inset-x-0 z-40 transition-all duration-500 ease-out ${
-          scrolled ? 'glass-nav-dark' : 'bg-transparent'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 md:px-8 h-14 flex items-center justify-between">
-          {/* Logo — chromatic aberration on the dot only */}
-          <a
-            href="/"
-            className="text-[15px] font-semibold tracking-tight text-white hover:opacity-70 transition-opacity"
-          >
-            {PHOTOGRAPHER_NAME.toUpperCase()}
-          </a>
+      {/* Floating liquid glass pill nav */}
+      <nav className="fixed top-0 inset-x-0 z-40 px-3 md:px-5 pt-3 pointer-events-none">
+        <div
+          className={`rounded-2xl transition-all duration-500 ease-out pointer-events-auto ${
+            scrolled ? 'glass-nav-dark' : ''
+          }`}
+        >
+          <div className="max-w-7xl mx-auto px-5 md:px-7 h-12 flex items-center justify-between">
+            <a
+              href="/"
+              className="text-[14px] font-semibold tracking-tight text-white hover:opacity-70 transition-opacity"
+            >
+              {PHOTOGRAPHER_NAME.toUpperCase()}
+            </a>
 
-          {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-[13px] font-medium text-white/50 hover:text-white transition-colors duration-200 tracking-wide uppercase"
-                style={{ letterSpacing: '0.06em' }}
-              >
-                {link.label}
-              </a>
-            ))}
+            <div className="hidden md:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-[12px] font-medium text-white/50 hover:text-white transition-colors duration-200 uppercase"
+                  style={{ letterSpacing: '0.06em' }}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+
+            <button
+              className="md:hidden p-2 -mr-2 text-white/70"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Open navigation menu"
+            >
+              <Menu size={18} />
+            </button>
           </div>
-
-          {/* Mobile hamburger */}
-          <button
-            className="md:hidden p-2 -mr-2 text-white/70"
-            onClick={() => setMenuOpen(true)}
-            aria-label="Open navigation menu"
-          >
-            <Menu size={20} />
-          </button>
         </div>
       </nav>
 
