@@ -39,3 +39,9 @@ export function heroUrl(publicId: string): string {
 export function fullUrl(publicId: string): string {
   return getCloudinaryUrl(publicId, 'q_auto,f_auto');
 }
+
+// Force-download URL — fl_attachment sets Content-Disposition: attachment
+// so the browser downloads the file instead of displaying it, even cross-origin
+export function downloadUrl(publicId: string): string {
+  return getCloudinaryUrl(publicId, 'fl_attachment,q_auto');
+}

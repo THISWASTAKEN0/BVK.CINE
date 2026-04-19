@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { fullUrl, filmstripUrl } from '@/lib/cloudinary';
+import { X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import { fullUrl, filmstripUrl, downloadUrl } from '@/lib/cloudinary';
 import type { Photo } from '@/lib/types';
 
 interface Props {
@@ -85,13 +85,25 @@ export default function Lightbox({ photos, initialIndex, onClose }: Props) {
         <span className="text-white/50 text-sm tabular-nums">
           {current + 1} / {photos.length}
         </span>
-        <button
-          onClick={onClose}
-          aria-label="Close lightbox"
-          className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
-        >
-          <X size={18} />
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Download current photo */}
+          <a
+            href={downloadUrl(photo.cloudinary_public_id)}
+            download
+            onClick={(e) => e.stopPropagation()}
+            aria-label="Download photo"
+            className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white flex items-center justify-center"
+          >
+            <Download size={18} />
+          </a>
+          <button
+            onClick={onClose}
+            aria-label="Close lightbox"
+            className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
+          >
+            <X size={18} />
+          </button>
+        </div>
       </div>
 
       {/* ── Main image area ──────────────────────────────── */}

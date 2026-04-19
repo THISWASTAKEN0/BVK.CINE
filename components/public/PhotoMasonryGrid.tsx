@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { thumbUrl } from '@/lib/cloudinary';
+import { thumbUrl, downloadUrl } from '@/lib/cloudinary';
+import { Download } from 'lucide-react';
 import Lightbox from './Lightbox';
 import type { Photo } from '@/lib/types';
 
@@ -40,8 +41,21 @@ export default function PhotoMasonryGrid({ photos }: Props) {
                 className="w-full h-auto object-cover transition-transform duration-500 ease-apple group-hover:scale-[1.02]"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
-              {/* Subtle overlay hint */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-xl" />
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-xl" />
+
+              {/* Download button — appears on hover */}
+              <a
+                href={downloadUrl(photo.cloudinary_public_id)}
+                download
+                onClick={(e) => e.stopPropagation()}
+                aria-label="Download photo"
+                className="absolute bottom-2.5 right-2.5 p-2 rounded-full text-white
+                  opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0
+                  transition-all duration-200 liquid-glass-pill"
+              >
+                <Download size={14} />
+              </a>
             </div>
           </button>
         ))}
