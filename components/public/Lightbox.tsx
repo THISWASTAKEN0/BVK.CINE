@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
-import { fullUrl, filmstripUrl, downloadUrl } from '@/lib/cloudinary';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { fullUrl, filmstripUrl } from '@/lib/cloudinary';
+import DownloadButton from './DownloadButton';
 import type { Photo } from '@/lib/types';
 
 interface Props {
@@ -86,16 +87,12 @@ export default function Lightbox({ photos, initialIndex, onClose }: Props) {
           {current + 1} / {photos.length}
         </span>
         <div className="flex items-center gap-2">
-          {/* Download current photo */}
-          <a
-            href={downloadUrl(photo.cloudinary_public_id)}
-            download
-            onClick={(e) => e.stopPropagation()}
-            aria-label="Download photo"
+          <DownloadButton
+            publicId={photo.cloudinary_public_id}
+            filename={photo.filename}
+            iconSize={18}
             className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white flex items-center justify-center"
-          >
-            <Download size={18} />
-          </a>
+          />
           <button
             onClick={onClose}
             aria-label="Close lightbox"
@@ -135,10 +132,11 @@ export default function Lightbox({ photos, initialIndex, onClose }: Props) {
           <ChevronLeft size={22} />
         </button>
 
-        {/* Image — crossfade on change via key */}
+        {/* Image — crossfade on change via key.
+            pointer-events kept ON so iOS users can long-press → Save Image */}
         <div
           key={imgKey}
-          className="relative max-w-[90vw] max-h-[88vh] animate-fade-in pointer-events-none"
+          className="relative max-w-[90vw] max-h-[88vh] animate-fade-in"
           onClick={(e) => e.stopPropagation()}
         >
           <Image
