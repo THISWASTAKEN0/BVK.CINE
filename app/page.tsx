@@ -2,7 +2,6 @@ import { ChevronDown, Instagram, Camera } from 'lucide-react';
 import { createServerClient } from '@/lib/supabase-server';
 import Navbar from '@/components/public/Navbar';
 import CollectionGrid from '@/components/public/CollectionGrid';
-import PolaroidWall from '@/components/public/PolaroidWall';
 import ChromaticText from '@/components/public/ChromaticText';
 import HeroTitle from '@/components/public/HeroTitle';
 import GlassTiles from '@/components/public/GlassTiles';
@@ -215,12 +214,11 @@ export default async function Home() {
       </section>
 
       {/* ── Collections ──────────────────────────────── */}
-      <section id="work" className="relative py-28 md:py-36">
+      <section id="work" className="relative px-5 md:px-8 py-28 md:py-36">
         <div className="glow-blob w-[700px] h-[500px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.05]" style={{ background: 'radial-gradient(ellipse, #5c8aff, #9b5bff)' }} />
 
-        {/* Section header — padded, centred */}
-        <div className="max-w-7xl mx-auto px-5 md:px-8">
-          <div className="flex items-end justify-between mb-10 px-1">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-end justify-between mb-12 px-1">
             <div>
               <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-4" style={{ color: 'var(--accent)' }}>
                 Selected Work
@@ -233,10 +231,9 @@ export default async function Home() {
               {collections.length} collection{collections.length !== 1 ? 's' : ''}
             </p>
           </div>
-        </div>
 
-        {/* Filmstrip — full-bleed, no horizontal padding */}
-        <CollectionGrid collections={collections} />
+          <CollectionGrid collections={collections} />
+        </div>
       </section>
 
       {/* ── About ────────────────────────────────────── */}
@@ -253,43 +250,37 @@ export default async function Home() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-start">
-            {/* Polaroid wall — collection covers scattered like prints */}
-            <PolaroidWall collections={collections} />
+          <div className="max-w-xl mx-auto flex flex-col gap-8">
+            <div className="liquid-glass rounded-2xl px-6 py-5">
+              <p className="text-[17px] md:text-[19px] font-light leading-relaxed" style={{ color: 'rgba(220,220,245,0.80)' }}>
+                Hi, I&apos;m Bhavesh — photographer based in Buffalo Grove.
+                Capturing moments one at a time.
+              </p>
+            </div>
 
-            {/* Bio + stats */}
-            <div className="flex flex-col justify-center gap-8">
-              <div className="liquid-glass rounded-2xl px-6 py-5">
-                <p className="text-[17px] md:text-[19px] font-light leading-relaxed" style={{ color: 'rgba(220,220,245,0.80)' }}>
-                  Hi, I&apos;m Bhavesh — photographer based in Buffalo Grove.
-                  Capturing moments one at a time.
-                </p>
+            {/* Stat cards */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="liquid-glass rounded-2xl px-5 py-5">
+                <p className="text-2xl font-semibold text-white">3 Years</p>
+                <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.40)' }}>Experience</p>
               </div>
+              <div className="liquid-glass rounded-2xl px-5 py-5">
+                <p className="text-2xl font-semibold text-white">a6700</p>
+                <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.40)' }}>Primary Camera</p>
+              </div>
+            </div>
 
-              {/* Stat cards */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="liquid-glass rounded-2xl px-5 py-5">
-                  <p className="text-2xl font-semibold text-white">3 Years</p>
-                  <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.40)' }}>Experience</p>
-                </div>
-                <div className="liquid-glass rounded-2xl px-5 py-5">
-                  <p className="text-2xl font-semibold text-white">a6700</p>
-                  <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.40)' }}>Primary Camera</p>
-                </div>
-              </div>
-
-              {/* Tag row */}
-              <div className="flex flex-wrap gap-2.5">
-                {['Portrait', 'Sports', 'Events', 'Lifestyle'].map((tag) => (
-                  <span
-                    key={tag}
-                    className="liquid-glass-pill px-4 py-1.5 rounded-full text-[12px] font-medium"
-                    style={{ color: 'rgba(200, 210, 255, 0.80)' }}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+            {/* Tag row */}
+            <div className="flex flex-wrap gap-2.5">
+              {['Portrait', 'Sports', 'Events', 'Lifestyle'].map((tag) => (
+                <span
+                  key={tag}
+                  className="liquid-glass-pill px-4 py-1.5 rounded-full text-[12px] font-medium"
+                  style={{ color: 'rgba(200, 210, 255, 0.80)' }}
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
           </div>
         </div>
