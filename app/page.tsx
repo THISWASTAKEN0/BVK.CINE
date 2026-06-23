@@ -1,8 +1,8 @@
-import Image from 'next/image';
 import { ChevronDown, Instagram, Camera } from 'lucide-react';
 import { createServerClient } from '@/lib/supabase-server';
 import Navbar from '@/components/public/Navbar';
 import CollectionGrid from '@/components/public/CollectionGrid';
+import PolaroidWall from '@/components/public/PolaroidWall';
 import ChromaticText from '@/components/public/ChromaticText';
 import HeroTitle from '@/components/public/HeroTitle';
 import GlassTiles from '@/components/public/GlassTiles';
@@ -51,25 +51,8 @@ async function getCollections(): Promise<Collection[]> {
   }));
 }
 
-async function getPortraitUrl(): Promise<string> {
-  try {
-    const supabase = createServerClient();
-    const { data } = await supabase
-      .from('site_settings')
-      .select('value')
-      .eq('key', 'portrait_url')
-      .single();
-    return data?.value ?? '';
-  } catch {
-    return '';
-  }
-}
-
 export default async function Home() {
-  const [collections, portraitUrl] = await Promise.all([
-    getCollections(),
-    getPortraitUrl(),
-  ]);
+  const collections = await getCollections();
 
   return (
     <div className="public-site">
@@ -232,12 +215,12 @@ export default async function Home() {
       </section>
 
       {/* ── Collections ──────────────────────────────── */}
-      <section id="work" className="relative px-5 md:px-8 py-28 md:py-36">
+      <section id="work" className="relative py-28 md:py-36">
         <div className="glow-blob w-[700px] h-[500px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.05]" style={{ background: 'radial-gradient(ellipse, #5c8aff, #9b5bff)' }} />
 
-        <div className="max-w-7xl mx-auto">
-          {/* Section header */}
-          <div className="flex items-end justify-between mb-12 px-1">
+        {/* Section header — padded, centred */}
+        <div className="max-w-7xl mx-auto px-5 md:px-8">
+          <div className="flex items-end justify-between mb-10 px-1">
             <div>
               <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-4" style={{ color: 'var(--accent)' }}>
                 Selected Work
@@ -250,9 +233,10 @@ export default async function Home() {
               {collections.length} collection{collections.length !== 1 ? 's' : ''}
             </p>
           </div>
-
-          <CollectionGrid collections={collections} />
         </div>
+
+        {/* Filmstrip — full-bleed, no horizontal padding */}
+        <CollectionGrid collections={collections} />
       </section>
 
       {/* ── About ────────────────────────────────────── */}
@@ -270,32 +254,8 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-start">
-            {/* Portrait */}
-            <div
-              className="card-iri relative rounded-3xl overflow-hidden aspect-[3/4]"
-              style={{
-                background: 'var(--surface)',
-                border: '1px solid var(--border)',
-                boxShadow: '0 24px 80px rgba(0,0,0,0.6)',
-              }}
-            >
-              {portraitUrl ? (
-                <Image
-                  src={portraitUrl}
-                  alt={`Portrait of ${NAME}`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3" style={{ background: 'var(--surface)', color: 'var(--text-secondary)' }}>
-                  <div className="w-20 h-20 rounded-full" style={{ background: 'var(--surface-2, var(--surface))' }} />
-                  <p className="text-sm text-center px-8 leading-relaxed opacity-50">
-                    Upload your portrait in the admin dashboard
-                  </p>
-                </div>
-              )}
-            </div>
+            {/* Polaroid wall — collection covers scattered like prints */}
+            <PolaroidWall collections={collections} />
 
             {/* Bio + stats */}
             <div className="flex flex-col justify-center gap-8">
