@@ -11,9 +11,18 @@ const BASE_R    = 26;    // corner radius (px)
 const BASE_ICON = 40;    // lucide icon size (px)
 const MOBILE_SCALE = 0.70;
 
+interface TileColor {
+  tint:   string;   // rgba fill on front face
+  border: string;   // border color
+  glow:   string;   // box-shadow glow color
+  icon:   string;   // icon stroke color
+  shadow: string;   // drop-shadow on icon
+}
+
 interface TileCfg {
-  Icon: LucideIcon;
-  tilt: string;
+  Icon:   LucideIcon;
+  color:  TileColor;
+  tilt:   string;
   top: string; right: string;
   mTop: string; mRight: string;
   dur: string; delay: string;
@@ -22,6 +31,13 @@ interface TileCfg {
 const TILES: TileCfg[] = [
   {
     Icon:  Camera,
+    color: {
+      tint:   'rgba(249,115,22,0.18)',
+      border: 'rgba(249,115,22,0.52)',
+      glow:   'rgba(249,115,22,0.28)',
+      icon:   '#F97316',
+      shadow: 'rgba(249,115,22,0.50)',
+    },
     tilt:  'rotateX(12deg) rotateY(-22deg) rotateZ(-5deg)',
     top: '11%', right: '13%',
     mTop: '8%',  mRight: '6%',
@@ -29,6 +45,13 @@ const TILES: TileCfg[] = [
   },
   {
     Icon:  Aperture,
+    color: {
+      tint:   'rgba(139,92,246,0.18)',
+      border: 'rgba(139,92,246,0.50)',
+      glow:   'rgba(139,92,246,0.26)',
+      icon:   '#A855F7',
+      shadow: 'rgba(139,92,246,0.48)',
+    },
     tilt:  'rotateX(8deg) rotateY(19deg) rotateZ(4deg)',
     top: '37%', right: '3%',
     mTop: '42%', mRight: '2%',
@@ -36,6 +59,13 @@ const TILES: TileCfg[] = [
   },
   {
     Icon:  ImageIcon,
+    color: {
+      tint:   'rgba(59,130,246,0.18)',
+      border: 'rgba(59,130,246,0.50)',
+      glow:   'rgba(59,130,246,0.26)',
+      icon:   '#60A5FA',
+      shadow: 'rgba(59,130,246,0.48)',
+    },
     tilt:  'rotateX(-9deg) rotateY(-18deg) rotateZ(3deg)',
     top: '26%', right: '37%',
     mTop: '24%', mRight: '28%',
@@ -43,6 +73,13 @@ const TILES: TileCfg[] = [
   },
   {
     Icon:  Film,
+    color: {
+      tint:   'rgba(6,182,212,0.18)',
+      border: 'rgba(6,182,212,0.48)',
+      glow:   'rgba(6,182,212,0.24)',
+      icon:   '#22D3EE',
+      shadow: 'rgba(6,182,212,0.46)',
+    },
     tilt:  'rotateX(13deg) rotateY(21deg) rotateZ(-4deg)',
     top: '57%', right: '19%',
     mTop: '50%', mRight: '14%',
@@ -93,7 +130,7 @@ export default function GlassTiles() {
         zIndex: 4,
         pointerEvents: 'none',
       }}>
-        {TILES.map(({ Icon, tilt, top, right, mTop, mRight, dur, delay }, i) => (
+        {TILES.map(({ Icon, color, tilt, top, right, mTop, mRight, dur, delay }, i) => (
           <div key={i} style={{
             position: 'absolute',
             top:   scale < 1 ? mTop   : top,
@@ -120,51 +157,48 @@ export default function GlassTiles() {
               animation: `gtFloat ${dur} ease-in-out ${delay} infinite`,
             }}>
 
-              {/* FRONT FACE — pure frosted glass, no colour tint.
-                  Aurora colour bleeds through via backdropFilter naturally. */}
+              {/* FRONT FACE — per-tile color tint + specular rim */}
               <div style={{
                 position: 'absolute', inset: 0,
                 borderRadius: R,
                 background: `
                   linear-gradient(145deg,
-                    rgba(255,255,255,0.28) 0%,
-                    rgba(255,255,255,0.10) 40%,
-                    rgba(255,255,255,0.04) 100%)
+                    rgba(255,255,255,0.26) 0%,
+                    rgba(255,255,255,0.08) 38%,
+                    ${color.tint} 100%)
                 `,
                 backdropFilter:       'blur(28px) saturate(1.8) brightness(1.10)',
                 WebkitBackdropFilter: 'blur(28px) saturate(1.8) brightness(1.10)',
-                border: '1px solid rgba(255,255,255,0.50)',
+                border: `1px solid ${color.border}`,
                 boxShadow: `
-                  0 2px 0 rgba(255,255,255,0.40) inset,
+                  0 2px 0 rgba(255,255,255,0.38) inset,
                   0 -1px 0 rgba(255,255,255,0.08) inset,
-                  1px 0 0 rgba(255,255,255,0.22) inset
+                  1px 0 0 rgba(255,255,255,0.22) inset,
+                  0 0 28px ${color.glow}
                 `,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-                {/* Icon — strong extrusion effect via layered drop-shadows.
-                    Bright highlight above-left + deep shadow below-right
-                    makes the strokes look physically raised from the surface. */}
+                {/* Colored icon with extrusion drop-shadows */}
                 <div style={{
-                  color: 'rgba(255,255,255,1)',
+                  color: color.icon,
                   filter: [
-                    'drop-shadow(0 -2px   0   rgba(255,255,255,0.90))',  // top edge highlight
-                    'drop-shadow(-2px 0   0   rgba(255,255,255,0.50))',  // left edge highlight
-                    'drop-shadow(0    3px 0   rgba(0,0,0,0.85))',        // bottom cast shadow
-                    'drop-shadow(2px  0   0   rgba(0,0,0,0.55))',        // right cast shadow
-                    'drop-shadow(0    5px 8px rgba(0,0,0,0.55))',        // depth blur
+                    'drop-shadow(0 -2px   0   rgba(255,255,255,0.60))',
+                    `drop-shadow(0    3px 0   rgba(0,0,0,0.75))`,
+                    `drop-shadow(2px  0   0   rgba(0,0,0,0.45))`,
+                    `drop-shadow(0    5px 8px ${color.shadow})`,
                   ].join(' '),
                 }}>
                   <Icon size={icon} strokeWidth={1.6} />
                 </div>
 
-                {/* Top-left gloss streak — mimics light hitting a glass surface */}
+                {/* Top-left gloss streak */}
                 <div style={{
                   position: 'absolute', top: 0, left: 0, right: 0,
                   height: '42%',
                   borderRadius: `${R}px ${R}px 50% 50% / ${R}px ${R}px 22% 22%`,
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.30) 0%, transparent 100%)',
+                  background: 'linear-gradient(180deg, rgba(255,255,255,0.28) 0%, transparent 100%)',
                   pointerEvents: 'none',
                 }} />
               </div>
