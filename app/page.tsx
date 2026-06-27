@@ -139,10 +139,10 @@ export default async function Home() {
           }}
         />
 
-        {/* Bottom fade into next section */}
+        {/* Bottom fade — dark hero into light page bg */}
         <div
           className="absolute bottom-0 inset-x-0 h-40 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, #08090e, transparent)', zIndex: 2 }}
+          style={{ background: 'linear-gradient(to top, #ecedf5, #08090e 55%, transparent)', zIndex: 2 }}
         />
 
         {/* ── Hero content ──────────────────────────────
@@ -188,6 +188,7 @@ export default async function Home() {
               <a
                 href="#work"
                 className="liquid-glass-pill flex-1 md:flex-none inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full text-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
+                style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.22)', boxShadow: '0 1px 0 rgba(255,255,255,0.32) inset, 0 2px 12px rgba(0,0,0,0.24)' }}
               >
                 <Camera size={13} />
                 View Work
@@ -198,7 +199,7 @@ export default async function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="liquid-glass-pill flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
-                style={{ color: 'rgba(255,255,255,0.65)' }}
+                style={{ color: 'rgba(255,255,255,0.65)', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.15)', boxShadow: '0 1px 0 rgba(255,255,255,0.22) inset, 0 2px 12px rgba(0,0,0,0.20)' }}
               >
                 <Instagram size={13} />
                 Instagram
@@ -252,7 +253,7 @@ export default async function Home() {
 
           <div className="max-w-xl mx-auto flex flex-col gap-8">
             <div className="liquid-glass rounded-2xl px-6 py-5">
-              <p className="text-[17px] md:text-[19px] font-light leading-relaxed" style={{ color: 'rgba(220,220,245,0.80)' }}>
+              <p className="text-[17px] md:text-[19px] font-light leading-relaxed" style={{ color: 'rgba(20,20,40,0.80)' }}>
                 Hi, I&apos;m Bhavesh — photographer based in Buffalo Grove.
                 Capturing moments one at a time.
               </p>
@@ -261,12 +262,12 @@ export default async function Home() {
             {/* Stat cards */}
             <div className="grid grid-cols-2 gap-4">
               <div className="liquid-glass rounded-2xl px-5 py-5">
-                <p className="text-2xl font-semibold text-white">3 Years</p>
-                <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.40)' }}>Experience</p>
+                <p className="text-2xl font-semibold" style={{ color: 'var(--text-primary)' }}>3 Years</p>
+                <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Experience</p>
               </div>
               <div className="liquid-glass rounded-2xl px-5 py-5">
-                <p className="text-2xl font-semibold text-white">a6700</p>
-                <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.40)' }}>Primary Camera</p>
+                <p className="text-2xl font-semibold" style={{ color: 'var(--text-primary)' }}>a6700</p>
+                <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Primary Camera</p>
               </div>
             </div>
 
@@ -276,7 +277,7 @@ export default async function Home() {
                 <span
                   key={tag}
                   className="liquid-glass-pill px-4 py-1.5 rounded-full text-[12px] font-medium"
-                  style={{ color: 'rgba(200, 210, 255, 0.80)' }}
+                  style={{ color: 'var(--text-secondary)' }}
                 >
                   {tag}
                 </span>
@@ -309,7 +310,7 @@ export default async function Home() {
         />
 
         <div className="relative max-w-md mx-auto px-6 text-center">
-          <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-5" style={{ color: 'rgba(200,200,240,0.50)' }}>
+          <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-5" style={{ color: 'rgba(200,200,240,0.50)', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', boxShadow: '0 1px 0 rgba(255,255,255,0.22) inset' }}>
             Contact
           </span>
           <h2 className="text-display font-extralight text-white mb-14 leading-tight">

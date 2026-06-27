@@ -33,13 +33,14 @@ export default function Navbar() {
       <nav className="fixed top-0 inset-x-0 z-40 px-3 md:px-5 pt-3 pointer-events-none">
         <div
           className={`rounded-2xl transition-all duration-500 ease-out pointer-events-auto ${
-            scrolled ? 'glass-nav-dark' : ''
+            scrolled ? 'glass-nav' : ''
           }`}
         >
           <div className="max-w-7xl mx-auto px-5 md:px-7 h-12 flex items-center justify-between">
             <a
               href="/"
-              className="text-[14px] font-semibold tracking-tight text-white hover:opacity-70 transition-opacity"
+              className="text-[14px] font-semibold tracking-tight hover:opacity-60 transition-opacity"
+              style={{ color: scrolled ? '#0d0d18' : '#ffffff' }}
             >
               {PHOTOGRAPHER_NAME.toUpperCase()}
             </a>
@@ -49,8 +50,8 @@ export default function Navbar() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-[12px] font-medium text-white/50 hover:text-white transition-colors duration-200 uppercase"
-                  style={{ letterSpacing: '0.06em' }}
+                  className="text-[12px] font-medium transition-colors duration-200 uppercase"
+                  style={{ letterSpacing: '0.06em', color: scrolled ? 'rgba(20,20,40,0.55)' : 'rgba(255,255,255,0.50)' }}
                 >
                   {link.label}
                 </a>
