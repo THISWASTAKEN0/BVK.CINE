@@ -38,6 +38,12 @@
   min-height: 100vh;
 }
 
+/* ── Chromatic text: white ghosts invisible on light bg — hide them ── */
+.public-site .chromatic-red,
+.public-site .chromatic-green,
+.public-site .chromatic-blue { display: none; }
+.public-site .chromatic-main  { color: var(--text-primary); }
+
 /* ── Light glass overrides for public site ── */
 .public-site .liquid-glass {
   background: rgba(255, 255, 255, 0.66);

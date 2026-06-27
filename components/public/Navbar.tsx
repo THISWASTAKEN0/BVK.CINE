@@ -40,7 +40,7 @@ export default function Navbar() {
             <a
               href="/"
               className="text-[14px] font-semibold tracking-tight hover:opacity-60 transition-opacity"
-              style={{ color: scrolled ? '#0d0d18' : '#ffffff' }}
+              style={{ color: '#0d0d18' }}
             >
               {PHOTOGRAPHER_NAME.toUpperCase()}
             </a>
@@ -50,8 +50,8 @@ export default function Navbar() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-[12px] font-medium transition-colors duration-200 uppercase"
-                  style={{ letterSpacing: '0.06em', color: scrolled ? 'rgba(20,20,40,0.55)' : 'rgba(255,255,255,0.50)' }}
+                  className="text-[12px] font-medium transition-colors duration-200 uppercase hover:opacity-100"
+                  style={{ letterSpacing: '0.06em', color: 'rgba(20,20,40,0.50)' }}
                 >
                   {link.label}
                 </a>

@@ -144,8 +144,8 @@ export default function GlassTiles() {
               top: S + 14, left: '9%',
               width: '82%', height: 16,
               borderRadius: '50%',
-              background: 'rgba(0,0,0,0.50)',
-              filter: 'blur(12px)',
+              background: 'rgba(20,40,100,0.18)',
+              filter: 'blur(14px)',
               animation: `gtShadow ${dur} ease-in-out ${delay} infinite`,
             }} />
 

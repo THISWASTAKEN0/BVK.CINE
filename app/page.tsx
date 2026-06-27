@@ -60,109 +60,73 @@ export default async function Home() {
       {/* ── Hero ─────────────────────────────────────── */}
       <section className="relative h-screen w-full overflow-hidden">
 
-        {/* Near-black base */}
-        <div className="absolute inset-0" style={{ background: '#08090e' }} />
-
-        {/* ── Fluid aurora blob — right side ─────────────
-            Unblurred coloured ellipses inside a heavily-blurred container
-            produce a smooth organic light-leak similar to the reference.   */}
+        {/* ── Baby blue + camera-sensor teal aurora — right side ── */}
         <div
           className="absolute pointer-events-none"
           style={{
-            top: '-10%',
-            right: '-8%',
-            width: '62%',
-            height: '120%',
-            filter: 'blur(72px) saturate(1.4)',
+            top: '-10%', right: '-8%',
+            width: '62%', height: '120%',
+            filter: 'blur(80px) saturate(1.3)',
             zIndex: 1,
           }}
         >
-          {/* Orange */}
+          {/* Baby blue */}
           <div style={{
-            position: 'absolute', top: '18%', left: '30%', width: '55%', height: '45%',
+            position: 'absolute', top: '8%', left: '25%', width: '60%', height: '50%',
             borderRadius: '50%',
-            background: 'radial-gradient(ellipse, #ff6820 0%, transparent 70%)',
-            opacity: 0.9,
+            background: 'radial-gradient(ellipse, #93C5FD 0%, transparent 70%)',
+            opacity: 0.75,
             animation: 'blob-a 11s ease-in-out infinite',
           }} />
-          {/* Deep red */}
+          {/* Sensor teal */}
           <div style={{
-            position: 'absolute', top: '38%', left: '10%', width: '50%', height: '42%',
+            position: 'absolute', top: '40%', left: '8%', width: '55%', height: '45%',
             borderRadius: '50%',
-            background: 'radial-gradient(ellipse, #cc1450 0%, transparent 70%)',
-            opacity: 0.85,
+            background: 'radial-gradient(ellipse, #06B6D4 0%, transparent 70%)',
+            opacity: 0.65,
             animation: 'blob-b 14s ease-in-out infinite',
           }} />
-          {/* Electric blue */}
+          {/* Sky blue accent */}
           <div style={{
-            position: 'absolute', top: '5%', left: '55%', width: '48%', height: '50%',
+            position: 'absolute', top: '2%', left: '52%', width: '50%', height: '48%',
             borderRadius: '50%',
-            background: 'radial-gradient(ellipse, #1a2fff 0%, transparent 70%)',
-            opacity: 0.8,
+            background: 'radial-gradient(ellipse, #BAE6FD 0%, transparent 70%)',
+            opacity: 0.70,
             animation: 'blob-c 10s ease-in-out infinite',
           }} />
-          {/* Purple */}
+          {/* Green-teal */}
           <div style={{
-            position: 'absolute', top: '55%', left: '40%', width: '52%', height: '44%',
+            position: 'absolute', top: '58%', left: '38%', width: '52%', height: '42%',
             borderRadius: '50%',
-            background: 'radial-gradient(ellipse, #7a10cc 0%, transparent 70%)',
-            opacity: 0.75,
+            background: 'radial-gradient(ellipse, #34D399 0%, transparent 70%)',
+            opacity: 0.45,
             animation: 'blob-d 13s ease-in-out infinite',
-          }} />
-          {/* Cyan accent */}
-          <div style={{
-            position: 'absolute', top: '0%', left: '20%', width: '40%', height: '35%',
-            borderRadius: '50%',
-            background: 'radial-gradient(ellipse, #00c8ff 0%, transparent 70%)',
-            opacity: 0.55,
-            animation: 'blob-a 16s ease-in-out infinite reverse',
           }} />
         </div>
 
         {/* ── 3-D glass icon tiles ── */}
         <GlassTiles />
 
-        {/* Desktop: left-edge fade keeps text readable against the aurora */}
+        {/* Soft bottom fade into page bg */}
         <div
-          className="absolute inset-0 pointer-events-none hidden md:block"
-          style={{
-            background: 'linear-gradient(to right, #08090e 28%, rgba(8,9,14,0.7) 52%, transparent 75%)',
-            zIndex: 2,
-          }}
-        />
-        {/* Mobile: dark on left so text reads cleanly, open on right so tiles stay colourful */}
-        <div
-          className="absolute inset-0 pointer-events-none md:hidden"
-          style={{
-            background: 'linear-gradient(to right, #08090e 30%, rgba(8,9,14,0.70) 52%, rgba(8,9,14,0.15) 80%, transparent 100%)',
-            zIndex: 2,
-          }}
+          className="absolute bottom-0 inset-x-0 h-48 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, #ecedf5, transparent)', zIndex: 2 }}
         />
 
-        {/* Bottom fade — dark hero into light page bg */}
-        <div
-          className="absolute bottom-0 inset-x-0 h-40 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, #ecedf5, #08090e 55%, transparent)', zIndex: 2 }}
-        />
-
-        {/* ── Hero content ──────────────────────────────
-            Mobile: bottom-anchored, left-aligned, minimal.
-            Desktop: vertically centred, left-aligned.    */}
+        {/* ── Hero content ── */}
         <div
           className="absolute inset-0 flex flex-col justify-end md:justify-center px-6 md:px-16 lg:px-24 pb-20 md:pb-0"
           style={{ zIndex: 3 }}
         >
           <div className="max-w-2xl w-full">
 
-            {/* Eyebrow — desktop only, mobile is already minimal */}
             <p
               className="hidden md:block text-[11px] font-semibold uppercase tracking-[0.35em] mb-7"
-              style={{ color: 'rgba(255,255,255,0.35)' }}
+              style={{ color: 'var(--text-secondary)' }}
             >
               Photography Portfolio
             </p>
 
-            {/* Main title */}
             <h1
               className="leading-[1.0] tracking-tight mb-4 md:mb-6"
               style={{
@@ -175,20 +139,18 @@ export default async function Home() {
               <HeroTitle name={NAME} />
             </h1>
 
-            {/* Tagline */}
             <p
               className="text-[14px] md:text-[18px] font-light mb-8 tracking-wide"
-              style={{ color: 'rgba(255,255,255,0.45)' }}
+              style={{ color: 'var(--text-secondary)' }}
             >
               Capturing light. Telling stories.
             </p>
 
-            {/* CTA buttons */}
             <div className="flex items-center gap-3">
               <a
                 href="#work"
-                className="liquid-glass-pill flex-1 md:flex-none inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full text-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
-                style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.22)', boxShadow: '0 1px 0 rgba(255,255,255,0.32) inset, 0 2px 12px rgba(0,0,0,0.24)' }}
+                className="liquid-glass-pill flex-1 md:flex-none inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full text-[14px] font-semibold transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
+                style={{ color: 'var(--text-primary)' }}
               >
                 <Camera size={13} />
                 View Work
@@ -199,7 +161,7 @@ export default async function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="liquid-glass-pill flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-medium transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
-                style={{ color: 'rgba(255,255,255,0.65)', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.15)', boxShadow: '0 1px 0 rgba(255,255,255,0.22) inset, 0 2px 12px rgba(0,0,0,0.20)' }}
+                style={{ color: 'var(--text-secondary)' }}
               >
                 <Instagram size={13} />
                 Instagram
@@ -208,9 +170,8 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* Scroll indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce" style={{ zIndex: 3 }}>
-          <ChevronDown size={18} className="text-white/20" />
+          <ChevronDown size={18} style={{ color: 'rgba(13,13,24,0.20)' }} />
         </div>
       </section>
 
