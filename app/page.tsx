@@ -60,57 +60,36 @@ export default async function Home() {
       {/* ── Hero ─────────────────────────────────────── */}
       <section className="relative h-screen w-full overflow-hidden">
 
-        {/* ── Baby blue + camera-sensor teal aurora — right side ── */}
+        {/* ── Light mode aurora: baby blue + teal (hidden in dark mode via CSS) ── */}
         <div
-          className="absolute pointer-events-none"
-          style={{
-            top: '-10%', right: '-8%',
-            width: '62%', height: '120%',
-            filter: 'blur(80px) saturate(1.3)',
-            zIndex: 1,
-          }}
+          className="aurora-light-only absolute pointer-events-none"
+          style={{ top: '-10%', right: '-8%', width: '62%', height: '120%', filter: 'blur(80px) saturate(1.3)', zIndex: 1 }}
         >
-          {/* Baby blue */}
-          <div style={{
-            position: 'absolute', top: '8%', left: '25%', width: '60%', height: '50%',
-            borderRadius: '50%',
-            background: 'radial-gradient(ellipse, #93C5FD 0%, transparent 70%)',
-            opacity: 0.75,
-            animation: 'blob-a 11s ease-in-out infinite',
-          }} />
-          {/* Sensor teal */}
-          <div style={{
-            position: 'absolute', top: '40%', left: '8%', width: '55%', height: '45%',
-            borderRadius: '50%',
-            background: 'radial-gradient(ellipse, #06B6D4 0%, transparent 70%)',
-            opacity: 0.65,
-            animation: 'blob-b 14s ease-in-out infinite',
-          }} />
-          {/* Sky blue accent */}
-          <div style={{
-            position: 'absolute', top: '2%', left: '52%', width: '50%', height: '48%',
-            borderRadius: '50%',
-            background: 'radial-gradient(ellipse, #BAE6FD 0%, transparent 70%)',
-            opacity: 0.70,
-            animation: 'blob-c 10s ease-in-out infinite',
-          }} />
-          {/* Green-teal */}
-          <div style={{
-            position: 'absolute', top: '58%', left: '38%', width: '52%', height: '42%',
-            borderRadius: '50%',
-            background: 'radial-gradient(ellipse, #34D399 0%, transparent 70%)',
-            opacity: 0.45,
-            animation: 'blob-d 13s ease-in-out infinite',
-          }} />
+          <div style={{ position:'absolute', top:'8%', left:'25%', width:'60%', height:'50%', borderRadius:'50%', background:'radial-gradient(ellipse,#93C5FD 0%,transparent 70%)', opacity:0.75, animation:'blob-a 11s ease-in-out infinite' }} />
+          <div style={{ position:'absolute', top:'40%', left:'8%', width:'55%', height:'45%', borderRadius:'50%', background:'radial-gradient(ellipse,#06B6D4 0%,transparent 70%)', opacity:0.65, animation:'blob-b 14s ease-in-out infinite' }} />
+          <div style={{ position:'absolute', top:'2%', left:'52%', width:'50%', height:'48%', borderRadius:'50%', background:'radial-gradient(ellipse,#BAE6FD 0%,transparent 70%)', opacity:0.70, animation:'blob-c 10s ease-in-out infinite' }} />
+          <div style={{ position:'absolute', top:'58%', left:'38%', width:'52%', height:'42%', borderRadius:'50%', background:'radial-gradient(ellipse,#34D399 0%,transparent 70%)', opacity:0.45, animation:'blob-d 13s ease-in-out infinite' }} />
+        </div>
+
+        {/* ── Dark mode aurora: orange + red + blue + purple (hidden in light mode via CSS) ── */}
+        <div
+          className="aurora-dark-only absolute pointer-events-none"
+          style={{ top: '-10%', right: '-8%', width: '62%', height: '120%', filter: 'blur(72px) saturate(1.4)', zIndex: 1 }}
+        >
+          <div style={{ position:'absolute', top:'18%', left:'30%', width:'55%', height:'45%', borderRadius:'50%', background:'radial-gradient(ellipse,#ff6820 0%,transparent 70%)', opacity:0.9, animation:'blob-a 11s ease-in-out infinite' }} />
+          <div style={{ position:'absolute', top:'38%', left:'10%', width:'50%', height:'42%', borderRadius:'50%', background:'radial-gradient(ellipse,#cc1450 0%,transparent 70%)', opacity:0.85, animation:'blob-b 14s ease-in-out infinite' }} />
+          <div style={{ position:'absolute', top:'5%', left:'55%', width:'48%', height:'50%', borderRadius:'50%', background:'radial-gradient(ellipse,#1a2fff 0%,transparent 70%)', opacity:0.8, animation:'blob-c 10s ease-in-out infinite' }} />
+          <div style={{ position:'absolute', top:'55%', left:'40%', width:'52%', height:'44%', borderRadius:'50%', background:'radial-gradient(ellipse,#7a10cc 0%,transparent 70%)', opacity:0.75, animation:'blob-d 13s ease-in-out infinite' }} />
+          <div style={{ position:'absolute', top:'0%', left:'20%', width:'40%', height:'35%', borderRadius:'50%', background:'radial-gradient(ellipse,#00c8ff 0%,transparent 70%)', opacity:0.55, animation:'blob-a 16s ease-in-out infinite reverse' }} />
         </div>
 
         {/* ── 3-D glass icon tiles ── */}
         <GlassTiles />
 
-        {/* Soft bottom fade into page bg */}
+        {/* Soft bottom fade into page bg — color set via CSS var */}
         <div
-          className="absolute bottom-0 inset-x-0 h-48 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, #ecedf5, transparent)', zIndex: 2 }}
+          className="absolute bottom-0 inset-x-0 h-48 pointer-events-none hero-fade"
+          style={{ zIndex: 2 }}
         />
 
         {/* ── Hero content ── */}
@@ -170,8 +149,8 @@ export default async function Home() {
           </div>
         </div>
 
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce" style={{ zIndex: 3 }}>
-          <ChevronDown size={18} style={{ color: 'rgba(13,13,24,0.20)' }} />
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce" style={{ zIndex: 3, color: 'var(--text-secondary)', opacity: 0.5 }}>
+          <ChevronDown size={18} />
         </div>
       </section>
 
@@ -214,7 +193,7 @@ export default async function Home() {
 
           <div className="max-w-xl mx-auto flex flex-col gap-8">
             <div className="liquid-glass rounded-2xl px-6 py-5">
-              <p className="text-[17px] md:text-[19px] font-light leading-relaxed" style={{ color: 'rgba(20,20,40,0.80)' }}>
+              <p className="text-[17px] md:text-[19px] font-light leading-relaxed" style={{ color: 'var(--text-primary)' }}>
                 Hi, I&apos;m Bhavesh — photographer based in Buffalo Grove.
                 Capturing moments one at a time.
               </p>

@@ -75,6 +75,85 @@
   background-clip: text;
 }
 
+/* ── Aurora visibility helpers (toggled by media query) ── */
+.aurora-dark-only { display: none; }
+
+/* ── Hero bottom fade — uses page bg color so it matches both modes ── */
+.hero-fade {
+  background: linear-gradient(to top, var(--bg), transparent);
+}
+
+/* ══════════════════════════════════════════════════════
+   DARK MODE — follows system prefers-color-scheme
+   ══════════════════════════════════════════════════════ */
+@media (prefers-color-scheme: dark) {
+  .public-site {
+    --bg: #08090e;
+    --surface: #0d0e1c;
+    --surface-2: #111325;
+    --text-primary: #f0f0f8;
+    --text-secondary: rgba(210, 210, 240, 0.45);
+    --accent: #5c8aff;
+    --accent-hover: #7aa3ff;
+    --border: rgba(255, 255, 255, 0.065);
+    --border-strong: rgba(255, 255, 255, 0.13);
+    --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.55);
+    --shadow-lg: 0 24px 72px rgba(0, 0, 0, 0.65);
+  }
+
+  /* Revert glass back to dark */
+  .public-site .liquid-glass {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(48px) saturate(220%) brightness(1.12);
+    -webkit-backdrop-filter: blur(48px) saturate(220%) brightness(1.12);
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    box-shadow:
+      0 1.5px 0 rgba(255, 255, 255, 0.38) inset,
+      0 -0.5px 0 rgba(255, 255, 255, 0.08) inset,
+      0 12px 48px rgba(0, 0, 0, 0.36),
+      0 2px 8px rgba(0, 0, 0, 0.18);
+  }
+
+  .public-site .liquid-glass::before {
+    background: linear-gradient(148deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.05) 30%, transparent 60%);
+  }
+
+  .public-site .liquid-glass-pill {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.30) inset,
+      0 2px 12px rgba(0, 0, 0, 0.22);
+  }
+
+  /* Revert gradient-text to white for dark bg */
+  .public-site .gradient-text {
+    background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.65) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Revert chromatic text — white ghost layers work on dark */
+  .public-site .chromatic-red,
+  .public-site .chromatic-green,
+  .public-site .chromatic-blue { display: block; }
+  .public-site .chromatic-main { color: white; }
+
+  /* Scrolled navbar goes dark glass */
+  .public-site .glass-nav {
+    backdrop-filter: blur(48px) saturate(220%) brightness(1.06);
+    -webkit-backdrop-filter: blur(48px) saturate(220%) brightness(1.06);
+    background: rgba(6, 7, 16, 0.42);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: 0 1.5px 0 rgba(255, 255, 255, 0.14) inset, 0 8px 40px rgba(0, 0, 0, 0.50);
+  }
+
+  /* Aurora set swap */
+  .aurora-light-only { display: none !important; }
+  .aurora-dark-only  { display: block !important; }
+}
+
 /* ── Base ───────────────────────────────────────────── */
 *,
 *::before,
