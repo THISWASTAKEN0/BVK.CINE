@@ -60,20 +60,9 @@ export default async function Home() {
       {/* ── Hero ─────────────────────────────────────── */}
       <section className="relative h-screen w-full overflow-hidden">
 
-        {/* ── Light mode aurora: baby blue + teal (hidden in dark mode via CSS) ── */}
+        {/* ── Aurora: deep navy purple + blue ── */}
         <div
-          className="aurora-light-only absolute pointer-events-none"
-          style={{ top: '-10%', right: '-8%', width: '62%', height: '120%', filter: 'blur(80px) saturate(1.3)', zIndex: 1 }}
-        >
-          <div style={{ position:'absolute', top:'8%', left:'25%', width:'60%', height:'50%', borderRadius:'50%', background:'radial-gradient(ellipse,#93C5FD 0%,transparent 70%)', opacity:0.75, animation:'blob-a 11s ease-in-out infinite' }} />
-          <div style={{ position:'absolute', top:'40%', left:'8%', width:'55%', height:'45%', borderRadius:'50%', background:'radial-gradient(ellipse,#06B6D4 0%,transparent 70%)', opacity:0.65, animation:'blob-b 14s ease-in-out infinite' }} />
-          <div style={{ position:'absolute', top:'2%', left:'52%', width:'50%', height:'48%', borderRadius:'50%', background:'radial-gradient(ellipse,#BAE6FD 0%,transparent 70%)', opacity:0.70, animation:'blob-c 10s ease-in-out infinite' }} />
-          <div style={{ position:'absolute', top:'58%', left:'38%', width:'52%', height:'42%', borderRadius:'50%', background:'radial-gradient(ellipse,#34D399 0%,transparent 70%)', opacity:0.45, animation:'blob-d 13s ease-in-out infinite' }} />
-        </div>
-
-        {/* ── Dark mode aurora: deep navy purple + blue (hidden in light mode via CSS) ── */}
-        <div
-          className="aurora-dark-only absolute pointer-events-none"
+          className="absolute pointer-events-none"
           style={{ top: '-10%', right: '-8%', width: '62%', height: '120%', filter: 'blur(80px) saturate(1.5)', zIndex: 1 }}
         >
           {/* Deep purple */}

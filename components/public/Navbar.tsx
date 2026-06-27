@@ -33,7 +33,7 @@ export default function Navbar() {
       <nav className="fixed top-0 inset-x-0 z-40 px-3 md:px-5 pt-3 pointer-events-none">
         <div
           className={`rounded-2xl transition-all duration-500 ease-out pointer-events-auto ${
-            scrolled ? 'glass-nav' : ''
+            scrolled ? 'glass-nav-dark' : ''
           }`}
         >
           <div className="max-w-7xl mx-auto px-5 md:px-7 h-12 flex items-center justify-between">
