@@ -71,16 +71,19 @@ export default async function Home() {
           <div style={{ position:'absolute', top:'58%', left:'38%', width:'52%', height:'42%', borderRadius:'50%', background:'radial-gradient(ellipse,#34D399 0%,transparent 70%)', opacity:0.45, animation:'blob-d 13s ease-in-out infinite' }} />
         </div>
 
-        {/* ── Dark mode aurora: orange + red + blue + purple (hidden in light mode via CSS) ── */}
+        {/* ── Dark mode aurora: deep navy purple + blue (hidden in light mode via CSS) ── */}
         <div
           className="aurora-dark-only absolute pointer-events-none"
-          style={{ top: '-10%', right: '-8%', width: '62%', height: '120%', filter: 'blur(72px) saturate(1.4)', zIndex: 1 }}
+          style={{ top: '-10%', right: '-8%', width: '62%', height: '120%', filter: 'blur(80px) saturate(1.5)', zIndex: 1 }}
         >
-          <div style={{ position:'absolute', top:'18%', left:'30%', width:'55%', height:'45%', borderRadius:'50%', background:'radial-gradient(ellipse,#ff6820 0%,transparent 70%)', opacity:0.9, animation:'blob-a 11s ease-in-out infinite' }} />
-          <div style={{ position:'absolute', top:'38%', left:'10%', width:'50%', height:'42%', borderRadius:'50%', background:'radial-gradient(ellipse,#cc1450 0%,transparent 70%)', opacity:0.85, animation:'blob-b 14s ease-in-out infinite' }} />
-          <div style={{ position:'absolute', top:'5%', left:'55%', width:'48%', height:'50%', borderRadius:'50%', background:'radial-gradient(ellipse,#1a2fff 0%,transparent 70%)', opacity:0.8, animation:'blob-c 10s ease-in-out infinite' }} />
-          <div style={{ position:'absolute', top:'55%', left:'40%', width:'52%', height:'44%', borderRadius:'50%', background:'radial-gradient(ellipse,#7a10cc 0%,transparent 70%)', opacity:0.75, animation:'blob-d 13s ease-in-out infinite' }} />
-          <div style={{ position:'absolute', top:'0%', left:'20%', width:'40%', height:'35%', borderRadius:'50%', background:'radial-gradient(ellipse,#00c8ff 0%,transparent 70%)', opacity:0.55, animation:'blob-a 16s ease-in-out infinite reverse' }} />
+          {/* Deep purple */}
+          <div style={{ position:'absolute', top:'10%', left:'20%', width:'60%', height:'55%', borderRadius:'50%', background:'radial-gradient(ellipse,rgba(80,20,200,1) 0%,transparent 70%)', opacity:0.85, animation:'blob-a 11s ease-in-out infinite' }} />
+          {/* Indigo-blue */}
+          <div style={{ position:'absolute', top:'45%', left:'5%', width:'55%', height:'48%', borderRadius:'50%', background:'radial-gradient(ellipse,rgba(15,50,200,1) 0%,transparent 70%)', opacity:0.80, animation:'blob-b 14s ease-in-out infinite' }} />
+          {/* Electric blue accent */}
+          <div style={{ position:'absolute', top:'0%', left:'50%', width:'50%', height:'45%', borderRadius:'50%', background:'radial-gradient(ellipse,rgba(20,80,255,1) 0%,transparent 70%)', opacity:0.70, animation:'blob-c 10s ease-in-out infinite' }} />
+          {/* Violet */}
+          <div style={{ position:'absolute', top:'55%', left:'35%', width:'50%', height:'42%', borderRadius:'50%', background:'radial-gradient(ellipse,rgba(120,30,220,1) 0%,transparent 70%)', opacity:0.65, animation:'blob-d 13s ease-in-out infinite' }} />
         </div>
 
         {/* ── 3-D glass icon tiles ── */}
