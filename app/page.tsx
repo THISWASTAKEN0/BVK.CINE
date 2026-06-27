@@ -232,51 +232,44 @@ export default async function Home() {
 
       {/* ── Contact ──────────────────────────────────── */}
       <section id="contact" className="relative overflow-hidden py-32 md:py-44">
-        <div className="absolute inset-0" style={{
-          background: '#060710',
-          backgroundImage: `
-            radial-gradient(ellipse at 20% 50%, rgba(60, 10, 160, 0.5) 0%, transparent 58%),
-            radial-gradient(ellipse at 82% 30%, rgba(15, 50, 180, 0.42) 0%, transparent 52%)
-          `,
-        }} />
-        <div className="absolute inset-0 opacity-[0.035]" style={{
-          backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")',
-        }} />
+        <div className="contact-section-bg absolute inset-0" />
 
-        {/* Decorative orb behind contact */}
+        {/* Decorative orb */}
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none opacity-20"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse, rgba(100,60,255,0.6) 0%, transparent 70%)',
-            filter: 'blur(60px)',
+            background: 'radial-gradient(ellipse, var(--accent) 0%, transparent 70%)',
+            filter: 'blur(80px)',
+            opacity: 0.12,
           }}
         />
 
         <div className="relative max-w-md mx-auto px-6 text-center">
-          <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-5" style={{ color: 'rgba(200,200,240,0.50)', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', boxShadow: '0 1px 0 rgba(255,255,255,0.22) inset' }}>
+          <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-5" style={{ color: 'var(--text-secondary)' }}>
             Contact
           </span>
-          <h2 className="text-display font-extralight text-white mb-14 leading-tight">
+          <h2 className="text-display font-extralight mb-14 leading-tight" style={{ color: 'var(--text-primary)' }}>
             Let&apos;s connect.
           </h2>
 
-          {/* Iridescent glass contact card */}
+          {/* Glass contact card */}
           <div className="glass-bubble relative rounded-3xl p-8 flex flex-col items-center gap-5">
             <EmailReveal email={EMAIL} />
 
-            <div className="w-full h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
+            <div className="w-full h-px" style={{ background: 'var(--border)' }} />
 
             <a
               href={`https://instagram.com/${INSTAGRAM.replace('@', '')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3.5 text-[15px] font-light text-white/65 hover:text-white transition-colors group w-full justify-center py-1"
+              className="flex items-center gap-3.5 text-[15px] font-light transition-opacity hover:opacity-100 group w-full justify-center py-1"
+              style={{ color: 'var(--text-secondary)' }}
             >
               <span
                 className="p-2.5 rounded-xl flex-shrink-0"
-                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
+                style={{ background: 'var(--border)', border: '1px solid var(--border-strong)' }}
               >
-                <Instagram size={15} className="text-white/45 group-hover:text-white transition-colors" />
+                <Instagram size={15} style={{ color: 'var(--text-secondary)' }} />
               </span>
               {INSTAGRAM}
             </a>

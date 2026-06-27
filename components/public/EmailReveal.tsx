@@ -17,39 +17,36 @@ export default function EmailReveal({ email }: { email: string }) {
 
   return (
     <div className="flex items-center gap-3.5 w-full justify-center py-1">
-      {/* Icon button — click to reveal */}
       <button
         onClick={revealed ? copy : reveal}
         aria-label={revealed ? 'Copy email' : 'Reveal email'}
         className="p-2.5 rounded-xl flex-shrink-0 transition-all duration-200 hover:scale-110 active:scale-95"
         style={{
-          background: 'rgba(255,255,255,0.06)',
-          border: '1px solid rgba(255,255,255,0.1)',
+          background: 'var(--border)',
+          border: '1px solid var(--border-strong)',
           cursor: 'pointer',
         }}
       >
         {revealed
           ? copied
-            ? <Check size={15} className="text-white/80" />
-            : <Copy size={15} className="text-white/45" />
-          : <Mail size={15} className="text-white/45" />
+            ? <Check size={15} style={{ color: 'var(--accent)' }} />
+            : <Copy size={15} style={{ color: 'var(--text-secondary)' }} />
+          : <Mail size={15} style={{ color: 'var(--text-secondary)' }} />
         }
       </button>
 
       {revealed ? (
-        /* Revealed: clickable mailto link */
         <a
           href={`mailto:${email}`}
-          className="text-[15px] font-light text-white/65 hover:text-white transition-colors"
-          style={{ letterSpacing: '0.01em' }}
+          className="text-[15px] font-light transition-opacity hover:opacity-100"
+          style={{ letterSpacing: '0.01em', color: 'var(--text-secondary)' }}
         >
           {email}
         </a>
       ) : (
-        /* Hidden: blurred placeholder */
         <button
           onClick={reveal}
-          className="text-[15px] font-light text-white/40 transition-colors hover:text-white/60"
+          className="text-[15px] font-light transition-opacity hover:opacity-70"
           style={{
             filter: 'blur(5px)',
             letterSpacing: '0.01em',
@@ -58,6 +55,8 @@ export default function EmailReveal({ email }: { email: string }) {
             border: 'none',
             padding: 0,
             userSelect: 'none',
+            color: 'var(--text-primary)',
+            opacity: 0.45,
           }}
           aria-label="Reveal email address"
         >
