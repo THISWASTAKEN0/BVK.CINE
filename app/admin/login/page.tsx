@@ -7,6 +7,91 @@ import { createClient } from '@/lib/supabase-client';
 const PHOTOGRAPHER_NAME =
   process.env.NEXT_PUBLIC_PHOTOGRAPHER_NAME ?? 'BVK.Cine';
 
+function SuccessCheck() {
+  return (
+    <div className="flex flex-col items-center justify-center py-8 gap-5">
+      <div style={{ position: 'relative', width: 80, height: 80 }}>
+        {/* Circle */}
+        <svg
+          viewBox="0 0 80 80"
+          width={80}
+          height={80}
+          style={{ position: 'absolute', inset: 0 }}
+        >
+          <circle
+            cx="40"
+            cy="40"
+            r="34"
+            fill="none"
+            stroke="rgba(255,255,255,0.15)"
+            strokeWidth="3"
+          />
+          <circle
+            cx="40"
+            cy="40"
+            r="34"
+            fill="none"
+            stroke="white"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeDasharray={`${2 * Math.PI * 34}`}
+            strokeDashoffset={`${2 * Math.PI * 34}`}
+            style={{
+              transformOrigin: 'center',
+              transform: 'rotate(-90deg)',
+              animation: 'login-circle 0.45s cubic-bezier(0.65,0,0.35,1) 0.05s forwards',
+            }}
+          />
+        </svg>
+        {/* Checkmark */}
+        <svg
+          viewBox="0 0 80 80"
+          width={80}
+          height={80}
+          style={{ position: 'absolute', inset: 0 }}
+        >
+          <polyline
+            points="22,42 35,55 58,28"
+            fill="none"
+            stroke="white"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeDasharray="60"
+            strokeDashoffset="60"
+            style={{
+              animation: 'login-check 0.35s cubic-bezier(0.65,0,0.35,1) 0.42s forwards',
+            }}
+          />
+        </svg>
+      </div>
+      <p
+        className="text-[15px] font-medium tracking-wide"
+        style={{
+          color: 'rgba(255,255,255,0.85)',
+          opacity: 0,
+          animation: 'login-fade-up 0.4s ease 0.65s forwards',
+        }}
+      >
+        Welcome back
+      </p>
+
+      <style>{`
+        @keyframes login-circle {
+          to { stroke-dashoffset: 0; }
+        }
+        @keyframes login-check {
+          to { stroke-dashoffset: 0; }
+        }
+        @keyframes login-fade-up {
+          from { opacity: 0; transform: translateY(6px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export default function LoginPage() {
   const supabase = createClient();
 
@@ -15,6 +100,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading]           = useState(false);
   const [error, setError]               = useState('');
+  const [success, setSuccess]           = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +109,8 @@ export default function LoginPage() {
     setLoading(true);
     const { error: err } = await supabase.auth.signInWithPassword({ email, password });
     if (err) { setError('Incorrect email or password.'); setLoading(false); return; }
-    window.location.href = '/admin/dashboard';
+    setSuccess(true);
+    setTimeout(() => { window.location.href = '/admin/dashboard'; }, 1400);
   };
 
   const inputStyle = {
@@ -36,15 +123,13 @@ export default function LoginPage() {
     border: '1px solid rgba(255,255,255,0.28)',
     color: '#ffffff',
   };
-  const inputBase  = 'w-full px-3.5 py-2.5 rounded-xl text-[15px] placeholder:text-text-secondary focus:outline-none transition';
+  const inputBase = 'w-full px-3.5 py-2.5 rounded-xl text-[15px] placeholder:text-text-secondary focus:outline-none transition';
 
   return (
-    /* The layout already sets .admin-site (#0c0d12 bg), so this div just needs to fill it */
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
 
       {/* ── Aurora blobs ─────────────────────────────────── */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Teal / cyan */}
         <div
           className="aurora-blob"
           style={{
@@ -54,7 +139,6 @@ export default function LoginPage() {
             animation: 'aurora-a 14s ease-in-out infinite',
           }}
         />
-        {/* Violet / purple */}
         <div
           className="aurora-blob"
           style={{
@@ -64,7 +148,6 @@ export default function LoginPage() {
             animation: 'aurora-b 18s ease-in-out infinite',
           }}
         />
-        {/* Royal blue */}
         <div
           className="aurora-blob"
           style={{
@@ -74,7 +157,6 @@ export default function LoginPage() {
             animation: 'aurora-c 13s ease-in-out infinite',
           }}
         />
-        {/* Magenta / rose — centre-ish so it overlaps the card */}
         <div
           className="aurora-blob"
           style={{
@@ -84,7 +166,6 @@ export default function LoginPage() {
             animation: 'aurora-d 17s ease-in-out infinite',
           }}
         />
-        {/* Emerald green */}
         <div
           className="aurora-blob"
           style={{
@@ -96,7 +177,7 @@ export default function LoginPage() {
         />
       </div>
 
-      {/* Very thin veil — just enough to unify edges, aurora stays vivid */}
+      {/* Very thin veil */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: 'rgba(8, 9, 14, 0.18)' }}
@@ -104,8 +185,11 @@ export default function LoginPage() {
 
       {/* ── Card ─────────────────────────────────────────── */}
       <div className="relative w-full max-w-sm">
-        {/* Name / header above the card */}
-        <div className="text-center mb-8">
+        {/* Header above card */}
+        <div
+          className="text-center mb-8 transition-all duration-500"
+          style={{ opacity: success ? 0 : 1, transform: success ? 'translateY(-8px)' : 'translateY(0)' }}
+        >
           <p
             className="text-[11px] font-semibold uppercase tracking-[0.32em] mb-3"
             style={{ color: 'rgba(220,225,255,0.5)' }}
@@ -117,7 +201,7 @@ export default function LoginPage() {
           </h1>
         </div>
 
-        {/* Glassmorphic card — the aurora shows through the blur */}
+        {/* Glassmorphic card */}
         <div
           style={{
             background: 'rgba(10, 12, 20, 0.18)',
@@ -128,92 +212,97 @@ export default function LoginPage() {
               '0 1px 0 rgba(255,255,255,0.18) inset, 0 -1px 0 rgba(0,0,0,0.2) inset, 0 24px 48px rgba(0,0,0,0.3)',
             borderRadius: '20px',
             padding: '32px',
+            transition: 'all 0.4s cubic-bezier(0.4,0,0.2,1)',
           }}
         >
-          <form onSubmit={handleSubmit} noValidate className="space-y-4">
-            {/* Email */}
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-[13px] font-medium mb-1.5"
-                style={{ color: 'rgba(255,255,255,0.9)' }}
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className={inputBase}
-                style={inputStyle}
-                onFocus={(e) => Object.assign(e.target.style, inputFocus)}
-                onBlur={(e)  => Object.assign(e.target.style, inputStyle)}
-                autoFocus
-              />
-            </div>
-
-            {/* Password */}
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-[13px] font-medium mb-1.5"
-                style={{ color: 'rgba(255,255,255,0.9)' }}
-              >
-                Password
-              </label>
-              <div className="relative">
+          {success ? (
+            <SuccessCheck />
+          ) : (
+            <form onSubmit={handleSubmit} noValidate className="space-y-4">
+              {/* Email */}
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-[13px] font-medium mb-1.5"
+                  style={{ color: 'rgba(255,255,255,0.9)' }}
+                >
+                  Email
+                </label>
                 <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className={`${inputBase} pr-10`}
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className={inputBase}
                   style={inputStyle}
                   onFocus={(e) => Object.assign(e.target.style, inputFocus)}
                   onBlur={(e)  => Object.assign(e.target.style, inputStyle)}
+                  autoFocus
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 transition-opacity hover:opacity-100"
-                  style={{ color: 'rgba(175,182,215,0.5)' }}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
               </div>
-            </div>
 
-            {error && (
-              <div
-                className="px-3.5 py-2.5 rounded-xl text-[13px]"
+              {/* Password */}
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-[13px] font-medium mb-1.5"
+                  style={{ color: 'rgba(255,255,255,0.9)' }}
+                >
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className={`${inputBase} pr-10`}
+                    style={inputStyle}
+                    onFocus={(e) => Object.assign(e.target.style, inputFocus)}
+                    onBlur={(e)  => Object.assign(e.target.style, inputStyle)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 transition-opacity hover:opacity-100"
+                    style={{ color: 'rgba(175,182,215,0.5)' }}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              {error && (
+                <div
+                  className="px-3.5 py-2.5 rounded-xl text-[13px]"
+                  style={{
+                    background: 'rgba(255,77,79,0.15)',
+                    color: '#ff8080',
+                    border: '1px solid rgba(255,77,79,0.25)',
+                  }}
+                >
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 rounded-xl text-[15px] font-semibold text-white transition-opacity disabled:opacity-50 mt-1"
                 style={{
-                  background: 'rgba(255,77,79,0.15)',
-                  color: '#ff8080',
-                  border: '1px solid rgba(255,77,79,0.25)',
+                  background: 'linear-gradient(135deg, rgba(107,140,255,0.9) 0%, rgba(150,80,255,0.9) 100%)',
+                  boxShadow: '0 4px 24px rgba(107,140,255,0.35)',
                 }}
               >
-                {error}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-2.5 rounded-xl text-[15px] font-semibold text-white transition-opacity disabled:opacity-50 mt-1"
-              style={{
-                background: 'linear-gradient(135deg, rgba(107,140,255,0.9) 0%, rgba(150,80,255,0.9) 100%)',
-                boxShadow: '0 4px 24px rgba(107,140,255,0.35)',
-              }}
-            >
-              {loading ? 'Signing in…' : 'Sign In'}
-            </button>
-          </form>
+                {loading ? 'Signing in…' : 'Sign In'}
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>
