@@ -72,7 +72,7 @@ export default function LoginPage() {
     setSuccess(true);
     // "Welcome back" fully visible at ~1050ms — wait a beat then zoom
     setTimeout(() => setZooming(true), 1300);
-    setTimeout(() => { window.location.href = '/admin/dashboard'; }, 1850);
+    setTimeout(() => { window.location.href = '/admin/dashboard'; }, 2100);
   };
 
   const inputStyle = {
@@ -146,8 +146,10 @@ export default function LoginPage() {
             padding: '32px',
             transform: zooming ? 'scale(22)' : 'scale(1)',
             transformOrigin: 'center center',
+            filter: zooming ? 'blur(28px)' : 'blur(0px)',
+            opacity: zooming ? 0 : 1,
             transition: zooming
-              ? 'transform 0.55s cubic-bezier(0.4,0,1,1), border-radius 0.55s ease, background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, backdrop-filter 0.1s ease'
+              ? 'transform 0.55s cubic-bezier(0.4,0,1,1), border-radius 0.55s ease, background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, filter 0.5s ease 0.15s, opacity 0.4s ease 0.3s'
               : 'background 0.4s ease, border-color 0.4s ease',
           }}
         >
