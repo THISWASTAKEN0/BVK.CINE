@@ -26,13 +26,16 @@ export default function LoginPage() {
     window.location.href = '/admin/dashboard';
   };
 
-  /* Light glass inputs */
   const inputStyle = {
-    background: 'rgba(255,255,255,0.10)',
-    border: '1px solid rgba(255,255,255,0.22)',
+    background: 'rgba(255,255,255,0.06)',
+    border: '1px solid rgba(255,255,255,0.10)',
     color: '#ffffff',
   };
-  const inputFocus = { ...inputStyle, borderColor: 'rgba(255,255,255,0.60)', background: 'rgba(255,255,255,0.15)' };
+  const inputFocus = {
+    background: 'rgba(255,255,255,0.10)',
+    border: '1px solid rgba(255,255,255,0.28)',
+    color: '#ffffff',
+  };
   const inputBase  = 'w-full px-3.5 py-2.5 rounded-xl text-[15px] placeholder:text-text-secondary focus:outline-none transition';
 
   return (
@@ -45,9 +48,9 @@ export default function LoginPage() {
         <div
           className="aurora-blob"
           style={{
-            width: 640, height: 520,
-            top: '2%', left: '8%',
-            background: 'radial-gradient(ellipse, rgba(0,220,200,0.72) 0%, transparent 70%)',
+            width: 700, height: 580,
+            top: '-5%', left: '0%',
+            background: 'radial-gradient(ellipse, rgba(0,230,210,0.90) 0%, transparent 68%)',
             animation: 'aurora-a 14s ease-in-out infinite',
           }}
         />
@@ -55,9 +58,9 @@ export default function LoginPage() {
         <div
           className="aurora-blob"
           style={{
-            width: 700, height: 540,
-            top: '35%', right: '2%',
-            background: 'radial-gradient(ellipse, rgba(130,0,255,0.68) 0%, transparent 70%)',
+            width: 760, height: 600,
+            top: '30%', right: '-5%',
+            background: 'radial-gradient(ellipse, rgba(140,0,255,0.88) 0%, transparent 68%)',
             animation: 'aurora-b 18s ease-in-out infinite',
           }}
         />
@@ -65,38 +68,38 @@ export default function LoginPage() {
         <div
           className="aurora-blob"
           style={{
-            width: 540, height: 620,
-            bottom: '0%', left: '-4%',
-            background: 'radial-gradient(ellipse, rgba(20,90,255,0.65) 0%, transparent 70%)',
+            width: 600, height: 680,
+            bottom: '-5%', left: '-6%',
+            background: 'radial-gradient(ellipse, rgba(20,100,255,0.82) 0%, transparent 68%)',
             animation: 'aurora-c 13s ease-in-out infinite',
           }}
         />
-        {/* Magenta / rose */}
+        {/* Magenta / rose — centre-ish so it overlaps the card */}
         <div
           className="aurora-blob"
           style={{
-            width: 420, height: 420,
-            top: '15%', right: '28%',
-            background: 'radial-gradient(ellipse, rgba(220,0,180,0.52) 0%, transparent 70%)',
+            width: 500, height: 500,
+            top: '20%', left: '30%',
+            background: 'radial-gradient(ellipse, rgba(220,0,180,0.72) 0%, transparent 68%)',
             animation: 'aurora-d 17s ease-in-out infinite',
           }}
         />
-        {/* Emerald green — subtle depth */}
+        {/* Emerald green */}
         <div
           className="aurora-blob"
           style={{
-            width: 460, height: 360,
-            bottom: '18%', right: '15%',
-            background: 'radial-gradient(ellipse, rgba(0,210,120,0.42) 0%, transparent 70%)',
+            width: 480, height: 400,
+            bottom: '10%', right: '10%',
+            background: 'radial-gradient(ellipse, rgba(0,220,120,0.62) 0%, transparent 68%)',
             animation: 'aurora-a 21s ease-in-out infinite reverse',
           }}
         />
       </div>
 
-      {/* Slight dark veil so the aurora doesn't overpower the card */}
+      {/* Very thin veil — just enough to unify edges, aurora stays vivid */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'rgba(8, 9, 14, 0.38)' }}
+        style={{ background: 'rgba(8, 9, 14, 0.18)' }}
       />
 
       {/* ── Card ─────────────────────────────────────────── */}
@@ -117,12 +120,12 @@ export default function LoginPage() {
         {/* Glassmorphic card — the aurora shows through the blur */}
         <div
           style={{
-            background: 'rgba(255, 255, 255, 0.13)',
-            backdropFilter: 'blur(48px) saturate(200%) brightness(1.15)',
-            WebkitBackdropFilter: 'blur(48px) saturate(200%) brightness(1.15)',
-            border: '1px solid rgba(255,255,255,0.35)',
+            background: 'rgba(10, 12, 20, 0.18)',
+            backdropFilter: 'blur(40px) saturate(180%) brightness(0.95)',
+            WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(0.95)',
+            border: '1px solid rgba(255,255,255,0.13)',
             boxShadow:
-              '0 1.5px 0 rgba(255,255,255,0.45) inset, 0 32px 80px rgba(0,0,0,0.30)',
+              '0 1px 0 rgba(255,255,255,0.18) inset, 0 -1px 0 rgba(0,0,0,0.2) inset, 0 24px 48px rgba(0,0,0,0.3)',
             borderRadius: '20px',
             padding: '32px',
           }}
