@@ -642,6 +642,37 @@ body {
   transform: translateY(0);
 }
 
+/* ── Aurora login background ────────────────────────── */
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  pointer-events: none;
+  will-change: transform;
+}
+
+@keyframes aurora-a {
+  0%,100% { transform: translate(  0%,   0%) scale(1.00); }
+  25%      { transform: translate(  5%,  -9%) scale(1.14); }
+  50%      { transform: translate( -4%,   7%) scale(0.90); }
+  75%      { transform: translate(  8%,   4%) scale(1.07); }
+}
+@keyframes aurora-b {
+  0%,100% { transform: translate(  0%,   0%) scale(1.00); }
+  30%      { transform: translate( -9%,   5%) scale(0.87); }
+  65%      { transform: translate(  6%,  -8%) scale(1.16); }
+}
+@keyframes aurora-c {
+  0%,100% { transform: translate(  0%,   0%) scale(1.00); }
+  35%      { transform: translate(  8%,  -5%) scale(1.09); }
+  70%      { transform: translate( -6%,   9%) scale(0.93); }
+}
+@keyframes aurora-d {
+  0%,100% { transform: translate(  0%,   0%) scale(1.00); }
+  40%      { transform: translate( -7%,  -8%) scale(1.18); }
+  78%      { transform: translate( 10%,   4%) scale(0.88); }
+}
+
 /* ── Reduced motion ─────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
