@@ -2,7 +2,6 @@ import { ChevronDown, Instagram, Camera } from 'lucide-react';
 import { createServerClient } from '@/lib/supabase-server';
 import Navbar from '@/components/public/Navbar';
 import CollectionGrid from '@/components/public/CollectionGrid';
-import ChromaticText from '@/components/public/ChromaticText';
 import HeroTitle from '@/components/public/HeroTitle';
 import GlassTiles from '@/components/public/GlassTiles';
 import EmailReveal from '@/components/public/EmailReveal';
@@ -60,37 +59,28 @@ export default async function Home() {
       {/* ── Hero ─────────────────────────────────────── */}
       <section className="relative h-screen w-full overflow-hidden">
 
-        {/* ── Aurora: deep navy purple + blue ── */}
         <div
           className="absolute pointer-events-none"
           style={{ top: '-10%', right: '-8%', width: '62%', height: '120%', filter: 'blur(80px) saturate(1.5)', zIndex: 1 }}
         >
-          {/* Deep purple */}
           <div style={{ position:'absolute', top:'10%', left:'20%', width:'60%', height:'55%', borderRadius:'50%', background:'radial-gradient(ellipse,rgba(80,20,200,1) 0%,transparent 70%)', opacity:0.85, animation:'blob-a 11s ease-in-out infinite' }} />
-          {/* Indigo-blue */}
-          <div style={{ position:'absolute', top:'45%', left:'5%', width:'55%', height:'48%', borderRadius:'50%', background:'radial-gradient(ellipse,rgba(15,50,200,1) 0%,transparent 70%)', opacity:0.80, animation:'blob-b 14s ease-in-out infinite' }} />
-          {/* Electric blue accent */}
-          <div style={{ position:'absolute', top:'0%', left:'50%', width:'50%', height:'45%', borderRadius:'50%', background:'radial-gradient(ellipse,rgba(20,80,255,1) 0%,transparent 70%)', opacity:0.70, animation:'blob-c 10s ease-in-out infinite' }} />
-          {/* Violet */}
-          <div style={{ position:'absolute', top:'55%', left:'35%', width:'50%', height:'42%', borderRadius:'50%', background:'radial-gradient(ellipse,rgba(120,30,220,1) 0%,transparent 70%)', opacity:0.65, animation:'blob-d 13s ease-in-out infinite' }} />
+          <div style={{ position:'absolute', top:'45%', left:'5%',  width:'55%', height:'48%', borderRadius:'50%', background:'radial-gradient(ellipse,rgba(15,50,200,1) 0%,transparent 70%)',  opacity:0.80, animation:'blob-b 14s ease-in-out infinite' }} />
+          <div style={{ position:'absolute', top:'0%',  left:'50%', width:'50%', height:'45%', borderRadius:'50%', background:'radial-gradient(ellipse,rgba(20,80,255,1) 0%,transparent 70%)', opacity:0.70, animation:'blob-c 10s ease-in-out infinite' }} />
+          <div style={{ position:'absolute', top:'55%', left:'35%', width:'50%', height:'42%', borderRadius:'50%', background:'radial-gradient(ellipse,rgba(120,30,220,1) 0%,transparent 70%)',opacity:0.65, animation:'blob-d 13s ease-in-out infinite' }} />
         </div>
 
-        {/* ── 3-D glass icon tiles ── */}
         <GlassTiles />
 
-        {/* Soft bottom fade into page bg — color set via CSS var */}
         <div
           className="absolute bottom-0 inset-x-0 h-48 pointer-events-none hero-fade"
           style={{ zIndex: 2 }}
         />
 
-        {/* ── Hero content ── */}
         <div
           className="absolute inset-0 flex flex-col justify-end md:justify-center px-6 md:px-16 lg:px-24 pb-20 md:pb-0"
           style={{ zIndex: 3 }}
         >
           <div className="max-w-2xl w-full">
-
             <p
               className="hidden md:block text-[11px] font-semibold uppercase tracking-[0.35em] mb-7"
               style={{ color: 'var(--text-secondary)' }}
@@ -191,7 +181,6 @@ export default async function Home() {
               </p>
             </div>
 
-            {/* Stat cards */}
             <div className="grid grid-cols-2 gap-4">
               <div className="liquid-glass rounded-2xl px-5 py-5">
                 <p className="text-2xl font-semibold" style={{ color: 'var(--text-primary)' }}>3 Years</p>
@@ -203,7 +192,6 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Tag row */}
             <div className="flex flex-wrap gap-2.5">
               {['Portrait', 'Sports', 'Events', 'Lifestyle'].map((tag) => (
                 <span
@@ -223,7 +211,6 @@ export default async function Home() {
       <section id="contact" className="relative overflow-hidden py-32 md:py-44">
         <div className="contact-section-bg absolute inset-0" />
 
-        {/* Decorative orb */}
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
           style={{
@@ -241,7 +228,6 @@ export default async function Home() {
             Let&apos;s connect.
           </h2>
 
-          {/* Glass contact card */}
           <div className="glass-bubble relative rounded-3xl p-8 flex flex-col items-center gap-5">
             <EmailReveal email={EMAIL} />
 
