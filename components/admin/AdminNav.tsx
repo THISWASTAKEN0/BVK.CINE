@@ -6,7 +6,7 @@ import { ExternalLink, LogOut } from 'lucide-react';
 import { createClient } from '@/lib/supabase-client';
 
 const PHOTOGRAPHER_NAME =
-  process.env.NEXT_PUBLIC_PHOTOGRAPHER_NAME ?? 'ALEX CHEN';
+  process.env.NEXT_PUBLIC_PHOTOGRAPHER_NAME ?? 'BVK.CINE';
 
 export default function AdminNav() {
   const router = useRouter();
@@ -19,34 +19,52 @@ export default function AdminNav() {
   };
 
   return (
-    <nav className="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-black/8">
+    <nav
+      className="sticky top-0 z-30 border-b"
+      style={{
+        background: 'rgba(12, 13, 18, 0.88)',
+        backdropFilter: 'blur(24px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+        borderColor: 'var(--border)',
+      }}
+    >
       <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-        <Link
-          href="/admin/dashboard"
-          className="font-semibold tracking-tight text-[15px] text-text-primary"
-        >
-          {PHOTOGRAPHER_NAME}
-          <span className="ml-2 text-[11px] font-normal text-text-secondary bg-surface px-2 py-0.5 rounded-full">
+        {/* Logo */}
+        <Link href="/admin/dashboard" className="flex items-center gap-2.5 group">
+          <span className="font-bold tracking-wider text-[14px] text-text-primary">
+            {PHOTOGRAPHER_NAME.toUpperCase()}
+          </span>
+          <span
+            className="text-[10px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-full"
+            style={{
+              color: 'var(--accent)',
+              border: '1px solid var(--accent)',
+              background: 'rgba(107, 140, 255, 0.1)',
+            }}
+          >
             Admin
           </span>
         </Link>
 
-        <div className="flex items-center gap-3">
+        {/* Actions */}
+        <div className="flex items-center gap-1">
           <Link
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-[13px] text-text-secondary hover:text-text-primary transition-colors"
+            className="flex items-center gap-1.5 text-[13px] text-text-secondary hover:text-text-primary transition-colors px-3 py-1.5 rounded-lg hover:bg-surface"
           >
-            <ExternalLink size={14} />
+            <ExternalLink size={13} />
             View Site
           </Link>
 
+          <div className="w-px h-4 mx-1" style={{ background: 'var(--border-strong)' }} />
+
           <button
             onClick={handleSignOut}
-            className="flex items-center gap-1.5 text-[13px] text-text-secondary hover:text-destructive transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50"
+            className="flex items-center gap-1.5 text-[13px] text-text-secondary hover:text-destructive transition-colors px-3 py-1.5 rounded-lg hover:bg-surface"
           >
-            <LogOut size={14} />
+            <LogOut size={13} />
             Sign Out
           </button>
         </div>

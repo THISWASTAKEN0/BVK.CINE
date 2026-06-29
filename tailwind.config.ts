@@ -9,14 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: '#FFFFFF',
-        surface: '#F5F5F7',
-        'text-primary': '#1D1D1F',
-        'text-secondary': '#6E6E73',
-        accent: '#0071E3',
-        'accent-hover': '#0077ED',
-        border: 'rgba(0,0,0,0.08)',
-        destructive: '#FF3B30',
+        bg: 'var(--bg)',
+        surface: 'var(--surface)',
+        'surface-2': 'var(--surface-2)',
+        'text-primary': 'var(--text-primary)',
+        'text-secondary': 'var(--text-secondary)',
+        accent: 'var(--accent)',
+        'accent-hover': 'var(--accent-hover)',
+        border: 'var(--border)',
+        'border-strong': 'var(--border-strong)',
+        destructive: 'var(--destructive)',
       },
       borderRadius: {
         card: '16px',

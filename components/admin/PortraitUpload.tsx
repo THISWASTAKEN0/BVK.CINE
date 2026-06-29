@@ -92,12 +92,12 @@ export default function PortraitUpload({ currentUrl, onSaved }: Props) {
   return (
     <div className="flex flex-col sm:flex-row gap-6 items-start">
       {/* Portrait preview */}
-      <div className="relative w-32 h-32 rounded-2xl overflow-hidden flex-shrink-0 bg-surface border border-black/8">
+      <div className="relative w-32 h-32 rounded-2xl overflow-hidden flex-shrink-0 bg-surface" style={{ border: '1px solid var(--border)' }}>
         {preview ? (
           <Image src={preview} alt="Portrait" fill className="object-cover" sizes="128px" />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-12 h-12 rounded-full bg-[#e8e8ed]" />
+            <div className="w-12 h-12 rounded-full" style={{ background: 'var(--surface-2)' }} />
           </div>
         )}
       </div>
@@ -113,7 +113,10 @@ export default function PortraitUpload({ currentUrl, onSaved }: Props) {
         />
 
         <div
-          className="w-full border-2 border-dashed border-black/10 rounded-2xl p-6 text-center cursor-pointer hover:border-accent hover:bg-accent/[0.03] transition-colors"
+          className="w-full rounded-2xl p-6 text-center cursor-pointer transition-colors"
+          style={{ border: '2px dashed var(--border-strong)' }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--accent)'; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border-strong)'; }}
           onClick={() => status !== 'uploading' && inputRef.current?.click()}
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}

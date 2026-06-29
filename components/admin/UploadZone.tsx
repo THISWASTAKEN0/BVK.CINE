@@ -181,14 +181,12 @@ export default function UploadZone({ collectionId, onUploaded }: Props) {
     <div className="space-y-4">
       {/* Drop zone */}
       <div
-        className={`
-          relative border-2 border-dashed rounded-2xl p-10 text-center
-          transition-all duration-200 cursor-pointer
-          ${isDragOver
-            ? 'border-accent bg-accent/5 scale-[1.01]'
-            : 'border-black/10 bg-surface hover:border-accent/40 hover:bg-accent/3'
-          }
-        `}
+        className="relative border-2 border-dashed rounded-2xl p-10 text-center transition-all duration-200 cursor-pointer"
+        style={{
+          borderColor: isDragOver ? 'var(--accent)' : 'var(--border-strong)',
+          background: isDragOver ? 'rgba(107,140,255,0.06)' : 'var(--surface)',
+          transform: isDragOver ? 'scale(1.01)' : undefined,
+        }}
         onClick={() => inputRef.current?.click()}
         onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
         onDragLeave={() => setIsDragOver(false)}
@@ -199,7 +197,10 @@ export default function UploadZone({ collectionId, onUploaded }: Props) {
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') inputRef.current?.click(); }}
       >
         <div className="flex flex-col items-center gap-3">
-          <div className={`p-4 rounded-full transition-colors ${isDragOver ? 'bg-accent/10' : 'bg-white'}`}>
+          <div
+            className="p-4 rounded-full transition-colors"
+            style={{ background: isDragOver ? 'rgba(107,140,255,0.12)' : 'var(--surface-2)' }}
+          >
             <Upload size={28} className={isDragOver ? 'text-accent' : 'text-text-secondary'} />
           </div>
           <div>
@@ -245,9 +246,10 @@ export default function UploadZone({ collectionId, onUploaded }: Props) {
           {items.map((item) => (
             <div
               key={item.localId}
-              className="flex items-center gap-3 bg-surface rounded-xl px-4 py-3"
+              className="flex items-center gap-3 rounded-xl px-4 py-3"
+              style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}
             >
-              <div className="p-1.5 bg-white rounded-lg flex-shrink-0">
+              <div className="p-1.5 rounded-lg flex-shrink-0" style={{ background: 'var(--surface)' }}>
                 <ImageIcon size={14} className="text-text-secondary" />
               </div>
 

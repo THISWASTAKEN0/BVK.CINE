@@ -12,78 +12,72 @@ import type { Collection, CollectionFormData, Photo } from '@/lib/types';
 
 type Props = { params: { id: string } };
 
+function Section({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
+  return (
+    <section>
+      <div className="mb-4">
+        <h2 className="text-[16px] font-semibold text-text-primary">{title}</h2>
+        {subtitle && <p className="text-[13px] text-text-secondary mt-0.5">{subtitle}</p>}
+      </div>
+      {children}
+    </section>
+  );
+}
+
 export default function CollectionDetailPage({ params }: Props) {
   const { id } = params;
 
   const [collection, setCollection] = useState<Collection | null>(null);
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [editOpen, setEditOpen] = useState(false);
+  const [photos, setPhotos]         = useState<Photo[]>([]);
+  const [loading, setLoading]       = useState(true);
+  const [error, setError]           = useState('');
+  const [editOpen, setEditOpen]     = useState(false);
 
   const fetchData = useCallback(async () => {
     setError('');
     const res = await fetch(`/api/collections/${id}`);
-    if (!res.ok) {
-      setError('Collection not found.');
-      setLoading(false);
-      return;
-    }
+    if (!res.ok) { setError('Collection not found.'); setLoading(false); return; }
     const { collection: col, photos: phs } = await res.json();
     setCollection(col);
     setPhotos(phs);
     setLoading(false);
   }, [id]);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  useEffect(() => { fetchData(); }, [fetchData]);
 
-  // ── Edit collection metadata ──────────────────────────────────────────────
   const handleEdit = async (form: CollectionFormData) => {
     const res = await fetch(`/api/collections/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form),
     });
     if (!res.ok) throw new Error('Failed to update collection');
     const updated: Collection = await res.json();
     setCollection((prev) => (prev ? { ...prev, ...updated } : updated));
   };
 
-  // ── Upload: add photo to grid immediately ─────────────────────────────────
-  const handleUploaded = (photo: Photo) => {
-    setPhotos((prev) => [...prev, photo]);
-  };
+  const handleUploaded = (photo: Photo) => setPhotos((prev) => [...prev, photo]);
 
-  // ── Photo drag-and-drop reorder ───────────────────────────────────────────
   const handleReorder = async (reordered: Photo[]) => {
     setPhotos(reordered);
     await Promise.all(
       reordered.map((p, i) =>
         fetch(`/api/photos/${p.id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
+          method: 'PATCH', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ display_order: i }),
         }).catch(() => {})
       )
     );
   };
 
-  // ── Delete photo ──────────────────────────────────────────────────────────
   const handleDeletePhoto = async (photoId: string) => {
     setPhotos((prev) => prev.filter((p) => p.id !== photoId));
-    if (collection?.cover_photo_id === photoId) {
+    if (collection?.cover_photo_id === photoId)
       setCollection((prev) => prev ? { ...prev, cover_photo_id: null, cover_photo: null } : prev);
-    }
-    if (collection?.hover_photo_id === photoId) {
+    if (collection?.hover_photo_id === photoId)
       setCollection((prev) => prev ? { ...prev, hover_photo_id: null, hover_photo: null } : prev);
-    }
     const res = await fetch(`/api/photos/${photoId}`, { method: 'DELETE' });
     if (!res.ok) fetchData();
   };
 
-  // ── Set hover photo ───────────────────────────────────────────────────────
   const handleSetHoverPhoto = async (photoId: string) => {
     const photo = photos.find((p) => p.id === photoId);
     if (!photo) return;
@@ -91,79 +85,53 @@ export default function CollectionDetailPage({ params }: Props) {
       prev ? { ...prev, hover_photo_id: photoId, hover_photo: { id: photo.id, cloudinary_public_id: photo.cloudinary_public_id, cloudinary_url: photo.cloudinary_url } } : prev
     );
     await fetch(`/api/collections/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ hover_photo_id: photoId }),
     }).catch(() => fetchData());
   };
 
-  // ── Hover focal point ─────────────────────────────────────────────────────
   const handleHoverFocalPoint = async (position: string): Promise<boolean> => {
     setCollection((prev) => prev ? { ...prev, hover_photo_position: position } : prev);
     try {
       const res = await fetch(`/api/collections/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ hover_photo_position: position }),
       });
-      if (!res.ok) throw new Error('Server error');
+      if (!res.ok) throw new Error();
       return true;
-    } catch {
-      return false;
-    }
+    } catch { return false; }
   };
 
-  // ── Set cover photo ───────────────────────────────────────────────────────
   const handleSetCover = async (photoId: string) => {
     const photo = photos.find((p) => p.id === photoId);
     if (!photo) return;
-
-    // Optimistic
     setCollection((prev) =>
-      prev
-        ? {
-            ...prev,
-            cover_photo_id: photoId,
-            cover_photo: {
-              id: photo.id,
-              cloudinary_public_id: photo.cloudinary_public_id,
-              cloudinary_url: photo.cloudinary_url,
-            },
-          }
-        : prev
+      prev ? { ...prev, cover_photo_id: photoId, cover_photo: { id: photo.id, cloudinary_public_id: photo.cloudinary_public_id, cloudinary_url: photo.cloudinary_url } } : prev
     );
-
     await fetch(`/api/collections/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cover_photo_id: photoId }),
     }).catch(() => fetchData());
   };
 
-  // ── Focal point ───────────────────────────────────────────────────────────
   const handleFocalPoint = async (position: string): Promise<boolean> => {
     setCollection((prev) => prev ? { ...prev, cover_photo_position: position } : prev);
     try {
       const res = await fetch(`/api/collections/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ cover_photo_position: position }),
       });
-      if (!res.ok) throw new Error('Server error');
+      if (!res.ok) throw new Error();
       return true;
-    } catch {
-      return false;
-    }
+    } catch { return false; }
   };
 
-  // ── Toggle published ──────────────────────────────────────────────────────
   const handleTogglePublished = async () => {
     if (!collection) return;
     const newValue = !collection.is_published;
     setCollection((prev) => prev ? { ...prev, is_published: newValue } : prev);
     await fetch(`/api/collections/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ is_published: newValue }),
     }).catch(() => fetchData());
   };
@@ -173,9 +141,9 @@ export default function CollectionDetailPage({ params }: Props) {
       <>
         <AdminNav />
         <main className="max-w-6xl mx-auto px-6 py-8 space-y-4">
-          <div className="h-8 w-32 skeleton rounded-lg" />
-          <div className="h-12 w-64 skeleton rounded-xl" />
-          <div className="h-48 skeleton rounded-2xl" />
+          <div className="h-6 w-28 skeleton rounded-lg" />
+          <div className="h-10 w-64 skeleton rounded-xl" />
+          <div className="h-40 skeleton rounded-2xl" />
           <div className="grid grid-cols-3 lg:grid-cols-4 gap-3">
             {Array.from({ length: 8 }).map((_, i) => (
               <div key={i} className="aspect-square skeleton rounded-xl" />
@@ -191,7 +159,7 @@ export default function CollectionDetailPage({ params }: Props) {
       <>
         <AdminNav />
         <main className="max-w-6xl mx-auto px-6 py-8">
-          <p className="text-destructive">{error || 'Collection not found.'}</p>
+          <p style={{ color: 'var(--destructive)' }}>{error || 'Collection not found.'}</p>
           <Link href="/admin/dashboard" className="text-accent text-sm mt-4 inline-block">
             ← Back to dashboard
           </Link>
@@ -205,6 +173,7 @@ export default function CollectionDetailPage({ params }: Props) {
       <AdminNav />
 
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-8">
+
         {/* Back */}
         <Link
           href="/admin/dashboard"
@@ -215,81 +184,68 @@ export default function CollectionDetailPage({ params }: Props) {
         </Link>
 
         {/* Page header */}
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3">
-              <h1 className="text-[28px] font-semibold text-text-primary tracking-tight truncate">
-                {collection.name}
-              </h1>
-              <button
-                onClick={() => setEditOpen(true)}
-                className="p-2 rounded-lg text-text-secondary hover:bg-surface hover:text-text-primary transition-colors flex-shrink-0"
-                aria-label="Edit collection"
-              >
-                <Pencil size={16} />
-              </button>
-            </div>
+        <div
+          className="rounded-2xl px-6 py-5"
+          style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+        >
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2.5">
+                <h1 className="text-[24px] font-semibold text-text-primary tracking-tight truncate">
+                  {collection.name}
+                </h1>
+                <button
+                  onClick={() => setEditOpen(true)}
+                  className="p-1.5 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors flex-shrink-0"
+                  aria-label="Edit collection"
+                >
+                  <Pencil size={14} />
+                </button>
+              </div>
 
-            {/* Meta bar */}
-            <div className="flex flex-wrap items-center gap-3 mt-2">
-              {collection.shoot_date && (
-                <span className="flex items-center gap-1.5 text-[13px] text-text-secondary">
-                  <Calendar size={12} />
-                  {new Date(collection.shoot_date + 'T00:00:00').toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
-                </span>
-              )}
-              <span className="flex items-center gap-1.5 text-[13px] text-text-secondary">
-                <ImageIcon size={12} />
-                {photos.length} {photos.length === 1 ? 'photo' : 'photos'}
-              </span>
-              <button
-                onClick={handleTogglePublished}
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-medium transition-colors ${
-                  collection.is_published
-                    ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                    : 'bg-surface text-text-secondary hover:bg-[#e8e8ed]'
-                }`}
-              >
-                {collection.is_published ? (
-                  <>
-                    <Eye size={11} />
-                    Published
-                  </>
-                ) : (
-                  <>
-                    <EyeOff size={11} />
-                    Draft
-                  </>
+              <div className="flex flex-wrap items-center gap-3 mt-2">
+                {collection.shoot_date && (
+                  <span className="flex items-center gap-1.5 text-[13px] text-text-secondary">
+                    <Calendar size={12} />
+                    {new Date(collection.shoot_date + 'T00:00:00').toLocaleDateString('en-US', {
+                      month: 'long', day: 'numeric', year: 'numeric',
+                    })}
+                  </span>
                 )}
-              </button>
-            </div>
+                <span className="flex items-center gap-1.5 text-[13px] text-text-secondary">
+                  <ImageIcon size={12} />
+                  {photos.length} {photos.length === 1 ? 'photo' : 'photos'}
+                </span>
+                <button
+                  onClick={handleTogglePublished}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-medium transition-colors"
+                  style={
+                    collection.is_published
+                      ? { background: 'rgba(52,211,153,0.12)', color: '#34d399', border: '1px solid rgba(52,211,153,0.2)' }
+                      : { background: 'var(--surface-2)', color: 'var(--text-secondary)', border: '1px solid var(--border)' }
+                  }
+                >
+                  {collection.is_published ? <><Eye size={11} /> Published</> : <><EyeOff size={11} /> Draft</>}
+                </button>
+              </div>
 
-            {collection.description && (
-              <p className="text-[14px] text-text-secondary mt-3 max-w-xl leading-relaxed">
-                {collection.description}
-              </p>
-            )}
+              {collection.description && (
+                <p className="text-[14px] text-text-secondary mt-3 max-w-xl leading-relaxed">
+                  {collection.description}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Upload zone */}
-        <section>
-          <h2 className="text-[17px] font-semibold text-text-primary mb-4">
-            Upload Photos
-          </h2>
+        {/* Upload */}
+        <Section title="Upload Photos">
           <UploadZone collectionId={id} onUploaded={handleUploaded} />
-        </section>
+        </Section>
 
-        {/* Cover focal point picker */}
+        {/* Cover focal point */}
         {collection.cover_photo && (
-          <section>
-            <h2 className="text-[17px] font-semibold text-text-primary mb-4">
-              Cover Crop
-            </h2>
+          <Section title="Cover Crop">
             <div className="max-w-sm">
               <FocalPointPicker
                 cloudinaryPublicId={collection.cover_photo.cloudinary_public_id}
@@ -297,18 +253,12 @@ export default function CollectionDetailPage({ params }: Props) {
                 onChange={handleFocalPoint}
               />
             </div>
-          </section>
+          </Section>
         )}
 
-        {/* Hover photo focal point picker */}
+        {/* Hover focal point */}
         {collection.hover_photo && (
-          <section>
-            <h2 className="text-[17px] font-semibold text-text-primary mb-1">
-              Hover Photo Frame
-            </h2>
-            <p className="text-[13px] text-text-secondary mb-4">
-              Drag to set the focal point for the hover reveal.
-            </p>
+          <Section title="Hover Photo Frame" subtitle="Drag to set the focal point for the hover reveal.">
             <div className="max-w-sm">
               <FocalPointPicker
                 cloudinaryPublicId={collection.hover_photo.cloudinary_public_id}
@@ -316,27 +266,14 @@ export default function CollectionDetailPage({ params }: Props) {
                 onChange={handleHoverFocalPoint}
               />
             </div>
-          </section>
+          </Section>
         )}
 
         {/* Photo grid */}
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-[17px] font-semibold text-text-primary">
-              Photos
-              {photos.length > 0 && (
-                <span className="ml-2 text-[14px] font-normal text-text-secondary">
-                  ({photos.length})
-                </span>
-              )}
-            </h2>
-            {photos.length > 0 && (
-              <p className="text-[12px] text-text-secondary">
-                Drag to reorder · ★ cover · ⊞ hover · ✕ delete
-              </p>
-            )}
-          </div>
-
+        <Section
+          title={`Photos${photos.length > 0 ? ` (${photos.length})` : ''}`}
+          subtitle={photos.length > 0 ? 'Drag to reorder · ★ cover · ⊞ hover · ✕ delete' : undefined}
+        >
           <SortablePhotoGrid
             photos={photos}
             coverPhotoId={collection.cover_photo_id}
@@ -346,10 +283,9 @@ export default function CollectionDetailPage({ params }: Props) {
             onSetCover={handleSetCover}
             onSetHoverPhoto={handleSetHoverPhoto}
           />
-        </section>
+        </Section>
       </main>
 
-      {/* Edit drawer */}
       <CollectionForm
         open={editOpen}
         onClose={() => setEditOpen(false)}
