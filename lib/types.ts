@@ -5,10 +5,13 @@ export interface Collection {
   shoot_date: string | null;
   cover_photo_id: string | null;
   cover_photo_position: string | null;
+  hover_photo_id: string | null;
+  hover_photo_position: string | null;
   display_order: number;
   is_published: boolean;
   created_at: string;
   cover_photo?: CoverPhoto | null;
+  hover_photo?: CoverPhoto | null;
   photo_count?: number;
 }
 

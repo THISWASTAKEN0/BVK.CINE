@@ -590,6 +590,17 @@ body {
   65%       { transform: translateX(-45px) translateY(-25px) scale(0.9);  }
 }
 
+/* ── Scroll reveal ──────────────────────────────────── */
+.sr-hidden {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sr-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* ── Reduced motion ─────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

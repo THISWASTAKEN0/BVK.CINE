@@ -5,6 +5,7 @@ import CollectionGrid from '@/components/public/CollectionGrid';
 import HeroTitle from '@/components/public/HeroTitle';
 import GlassTiles from '@/components/public/GlassTiles';
 import EmailReveal from '@/components/public/EmailReveal';
+import ScrollReveal from '@/components/public/ScrollReveal';
 import type { Collection } from '@/lib/types';
 
 export const revalidate = 30;
@@ -26,26 +27,29 @@ async function getCollections(): Promise<Collection[]> {
   if (!collections?.length) return [];
 
   const collectionIds = collections.map((c) => c.id);
-  const coverIds = collections.map((c) => c.cover_photo_id).filter(Boolean) as string[];
+  const coverIds   = collections.map((c) => c.cover_photo_id).filter(Boolean) as string[];
+  const hoverIds   = collections.map((c) => c.hover_photo_id).filter(Boolean) as string[];
+  const allPhotoIds = [...new Set([...coverIds, ...hoverIds])];
 
-  const [{ data: photoCounts }, { data: coverPhotos }] = await Promise.all([
+  const [{ data: photoCounts }, { data: photoData }] = await Promise.all([
     supabase.from('photos').select('collection_id').in('collection_id', collectionIds),
-    coverIds.length
-      ? supabase.from('photos').select('id, cloudinary_public_id, cloudinary_url').in('id', coverIds)
+    allPhotoIds.length
+      ? supabase.from('photos').select('id, cloudinary_public_id, cloudinary_url').in('id', allPhotoIds)
       : Promise.resolve({ data: [] }),
   ]);
 
   const countByCollection = (photoCounts ?? []).reduce<Record<string, number>>(
     (acc, p) => { acc[p.collection_id] = (acc[p.collection_id] ?? 0) + 1; return acc; }, {}
   );
-  const coverById = (coverPhotos ?? []).reduce<Record<string, { id: string; cloudinary_public_id: string; cloudinary_url: string }>>(
+  const photoById = (photoData ?? []).reduce<Record<string, { id: string; cloudinary_public_id: string; cloudinary_url: string }>>(
     (acc, p) => { acc[p.id] = p; return acc; }, {}
   );
 
   return collections.map((col) => ({
     ...col,
     photo_count: countByCollection[col.id] ?? 0,
-    cover_photo: col.cover_photo_id ? (coverById[col.cover_photo_id] ?? null) : null,
+    cover_photo:  col.cover_photo_id  ? (photoById[col.cover_photo_id]  ?? null) : null,
+    hover_photo:  col.hover_photo_id  ? (photoById[col.hover_photo_id]  ?? null) : null,
   }));
 }
 
@@ -141,19 +145,21 @@ export default async function Home() {
         <div className="glow-blob w-[700px] h-[500px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.05]" style={{ background: 'radial-gradient(ellipse, #5c8aff, #9b5bff)' }} />
 
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-end justify-between mb-12 px-1">
-            <div>
-              <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-4" style={{ color: 'var(--accent)' }}>
-                Selected Work
-              </span>
-              <h2 className="text-heading font-light gradient-text">
-                Collections
-              </h2>
+          <ScrollReveal>
+            <div className="flex items-end justify-between mb-12 px-1">
+              <div>
+                <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-4" style={{ color: 'var(--accent)' }}>
+                  Selected Work
+                </span>
+                <h2 className="text-heading font-light gradient-text">
+                  Collections
+                </h2>
+              </div>
+              <p className="hidden md:block text-[13px] pb-1" style={{ color: 'var(--text-secondary)' }}>
+                {collections.length} collection{collections.length !== 1 ? 's' : ''}
+              </p>
             </div>
-            <p className="hidden md:block text-[13px] pb-1" style={{ color: 'var(--text-secondary)' }}>
-              {collections.length} collection{collections.length !== 1 ? 's' : ''}
-            </p>
-          </div>
+          </ScrollReveal>
 
           <CollectionGrid collections={collections} />
         </div>
@@ -164,34 +170,41 @@ export default async function Home() {
         <div className="glow-blob w-[500px] h-[500px] top-0 right-0 opacity-[0.05]" style={{ background: '#9b5bff' }} />
 
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
-            <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-4" style={{ color: 'var(--accent)' }}>
-              About
-            </span>
-            <h2 className="text-heading font-light gradient-text">
-              The Photographer
-            </h2>
-          </div>
+          <ScrollReveal>
+            <div className="mb-16">
+              <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-4" style={{ color: 'var(--accent)' }}>
+                About
+              </span>
+              <h2 className="text-heading font-light gradient-text">
+                The Photographer
+              </h2>
+            </div>
+          </ScrollReveal>
 
           <div className="max-w-xl mx-auto flex flex-col gap-8">
-            <div className="liquid-glass rounded-2xl px-6 py-5">
-              <p className="text-[17px] md:text-[19px] font-light leading-relaxed" style={{ color: 'var(--text-primary)' }}>
-                Hi, I&apos;m Bhavesh — photographer based in Buffalo Grove.
-                Capturing moments one at a time.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="liquid-glass rounded-2xl px-5 py-5">
-                <p className="text-2xl font-semibold" style={{ color: 'var(--text-primary)' }}>3 Years</p>
-                <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Experience</p>
+            <ScrollReveal delay={100}>
+              <div className="liquid-glass rounded-2xl px-6 py-5">
+                <p className="text-[17px] md:text-[19px] font-light leading-relaxed" style={{ color: 'var(--text-primary)' }}>
+                  Hi, I&apos;m Bhavesh — photographer based in Buffalo Grove.
+                  Capturing moments one at a time.
+                </p>
               </div>
-              <div className="liquid-glass rounded-2xl px-5 py-5">
-                <p className="text-2xl font-semibold" style={{ color: 'var(--text-primary)' }}>a6700</p>
-                <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Primary Camera</p>
-              </div>
-            </div>
+            </ScrollReveal>
 
+            <ScrollReveal delay={200}>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="liquid-glass rounded-2xl px-5 py-5">
+                  <p className="text-2xl font-semibold" style={{ color: 'var(--text-primary)' }}>3 Years</p>
+                  <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Experience</p>
+                </div>
+                <div className="liquid-glass rounded-2xl px-5 py-5">
+                  <p className="text-2xl font-semibold" style={{ color: 'var(--text-primary)' }}>a6700</p>
+                  <p className="text-[12px] mt-1 font-medium uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Primary Camera</p>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={300}>
             <div className="flex flex-wrap gap-2.5">
               {['Portrait', 'Sports', 'Events', 'Lifestyle'].map((tag) => (
                 <span
@@ -203,6 +216,7 @@ export default async function Home() {
                 </span>
               ))}
             </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
@@ -220,7 +234,7 @@ export default async function Home() {
           }}
         />
 
-        <div className="relative max-w-md mx-auto px-6 text-center">
+        <ScrollReveal className="relative max-w-md mx-auto px-6 text-center">
           <span className="liquid-glass-pill inline-block text-[11px] font-semibold uppercase tracking-[0.3em] px-3 py-1 rounded-full mb-5" style={{ color: 'var(--text-secondary)' }}>
             Contact
           </span>
@@ -249,7 +263,7 @@ export default async function Home() {
               {INSTAGRAM}
             </a>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       {/* ── Footer ───────────────────────────────────── */}

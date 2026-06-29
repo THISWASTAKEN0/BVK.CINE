@@ -72,17 +72,44 @@ export default function CollectionDetailPage({ params }: Props) {
 
   // ── Delete photo ──────────────────────────────────────────────────────────
   const handleDeletePhoto = async (photoId: string) => {
-    // Optimistic remove
     setPhotos((prev) => prev.filter((p) => p.id !== photoId));
-    // If this was the cover, clear it optimistically
     if (collection?.cover_photo_id === photoId) {
       setCollection((prev) => prev ? { ...prev, cover_photo_id: null, cover_photo: null } : prev);
     }
-
+    if (collection?.hover_photo_id === photoId) {
+      setCollection((prev) => prev ? { ...prev, hover_photo_id: null, hover_photo: null } : prev);
+    }
     const res = await fetch(`/api/photos/${photoId}`, { method: 'DELETE' });
-    if (!res.ok) {
-      // Restore on failure
-      fetchData();
+    if (!res.ok) fetchData();
+  };
+
+  // ── Set hover photo ───────────────────────────────────────────────────────
+  const handleSetHoverPhoto = async (photoId: string) => {
+    const photo = photos.find((p) => p.id === photoId);
+    if (!photo) return;
+    setCollection((prev) =>
+      prev ? { ...prev, hover_photo_id: photoId, hover_photo: { id: photo.id, cloudinary_public_id: photo.cloudinary_public_id, cloudinary_url: photo.cloudinary_url } } : prev
+    );
+    await fetch(`/api/collections/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ hover_photo_id: photoId }),
+    }).catch(() => fetchData());
+  };
+
+  // ── Hover focal point ─────────────────────────────────────────────────────
+  const handleHoverFocalPoint = async (position: string): Promise<boolean> => {
+    setCollection((prev) => prev ? { ...prev, hover_photo_position: position } : prev);
+    try {
+      const res = await fetch(`/api/collections/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ hover_photo_position: position }),
+      });
+      if (!res.ok) throw new Error('Server error');
+      return true;
+    } catch {
+      return false;
     }
   };
 
@@ -257,7 +284,7 @@ export default function CollectionDetailPage({ params }: Props) {
           <UploadZone collectionId={id} onUploaded={handleUploaded} />
         </section>
 
-        {/* Focal point picker — only shown when a cover photo is set */}
+        {/* Cover focal point picker */}
         {collection.cover_photo && (
           <section>
             <h2 className="text-[17px] font-semibold text-text-primary mb-4">
@@ -268,6 +295,25 @@ export default function CollectionDetailPage({ params }: Props) {
                 cloudinaryPublicId={collection.cover_photo.cloudinary_public_id}
                 position={collection.cover_photo_position ?? '50% 50%'}
                 onChange={handleFocalPoint}
+              />
+            </div>
+          </section>
+        )}
+
+        {/* Hover photo focal point picker */}
+        {collection.hover_photo && (
+          <section>
+            <h2 className="text-[17px] font-semibold text-text-primary mb-1">
+              Hover Photo Frame
+            </h2>
+            <p className="text-[13px] text-text-secondary mb-4">
+              Drag to set the focal point for the hover reveal.
+            </p>
+            <div className="max-w-sm">
+              <FocalPointPicker
+                cloudinaryPublicId={collection.hover_photo.cloudinary_public_id}
+                position={collection.hover_photo_position ?? '50% 50%'}
+                onChange={handleHoverFocalPoint}
               />
             </div>
           </section>
@@ -286,7 +332,7 @@ export default function CollectionDetailPage({ params }: Props) {
             </h2>
             {photos.length > 0 && (
               <p className="text-[12px] text-text-secondary">
-                Drag to reorder · ★ to set cover · ✕ to delete
+                Drag to reorder · ★ cover · ⊞ hover · ✕ delete
               </p>
             )}
           </div>
@@ -294,9 +340,11 @@ export default function CollectionDetailPage({ params }: Props) {
           <SortablePhotoGrid
             photos={photos}
             coverPhotoId={collection.cover_photo_id}
+            hoverPhotoId={collection.hover_photo_id}
             onReorder={handleReorder}
             onDelete={handleDeletePhoto}
             onSetCover={handleSetCover}
+            onSetHoverPhoto={handleSetHoverPhoto}
           />
         </section>
       </main>

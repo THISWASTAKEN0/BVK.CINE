@@ -29,21 +29,21 @@ export async function GET(request: NextRequest, { params }: Params) {
     }
     if (photoErr) throw photoErr;
 
-    // Attach cover_photo object if cover_photo_id is set
+    // Attach cover_photo and hover_photo objects if their IDs are set
     let cover_photo = null;
     if (collection.cover_photo_id) {
       const found = (photos ?? []).find((p) => p.id === collection.cover_photo_id);
-      if (found) {
-        cover_photo = {
-          id: found.id,
-          cloudinary_public_id: found.cloudinary_public_id,
-          cloudinary_url: found.cloudinary_url,
-        };
-      }
+      if (found) cover_photo = { id: found.id, cloudinary_public_id: found.cloudinary_public_id, cloudinary_url: found.cloudinary_url };
+    }
+
+    let hover_photo = null;
+    if (collection.hover_photo_id) {
+      const found = (photos ?? []).find((p) => p.id === collection.hover_photo_id);
+      if (found) hover_photo = { id: found.id, cloudinary_public_id: found.cloudinary_public_id, cloudinary_url: found.cloudinary_url };
     }
 
     return NextResponse.json({
-      collection: { ...collection, cover_photo },
+      collection: { ...collection, cover_photo, hover_photo },
       photos: photos ?? [],
     });
   } catch (err) {
@@ -68,6 +68,8 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     if ('is_published' in body) update.is_published = body.is_published;
     if ('cover_photo_id' in body) update.cover_photo_id = body.cover_photo_id || null;
     if ('cover_photo_position' in body) update.cover_photo_position = body.cover_photo_position || '50% 50%';
+    if ('hover_photo_id' in body) update.hover_photo_id = body.hover_photo_id || null;
+    if ('hover_photo_position' in body) update.hover_photo_position = body.hover_photo_position || '50% 50%';
     if ('display_order' in body) update.display_order = body.display_order;
 
     const { data, error } = await admin

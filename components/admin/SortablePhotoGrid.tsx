@@ -23,29 +23,32 @@ import type { Photo } from '@/lib/types';
 function SortablePhoto({
   photo,
   isCover,
+  isHoverPhoto,
   onDelete,
   onSetCover,
+  onSetHoverPhoto,
 }: {
   photo: Photo;
   isCover: boolean;
+  isHoverPhoto: boolean;
   onDelete: (id: string) => void;
   onSetCover: (id: string) => void;
+  onSetHoverPhoto: (id: string) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: photo.id });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+  const style = { transform: CSS.Transform.toString(transform), transition };
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       <PhotoCard
         photo={photo}
         isCover={isCover}
+        isHoverPhoto={isHoverPhoto}
         onDelete={onDelete}
         onSetCover={onSetCover}
+        onSetHoverPhoto={onSetHoverPhoto}
         isDragging={isDragging}
       />
     </div>
@@ -55,23 +58,25 @@ function SortablePhoto({
 interface Props {
   photos: Photo[];
   coverPhotoId: string | null;
+  hoverPhotoId: string | null;
   onReorder: (photos: Photo[]) => void;
   onDelete: (id: string) => void;
   onSetCover: (id: string) => void;
+  onSetHoverPhoto: (id: string) => void;
 }
 
 export default function SortablePhotoGrid({
   photos,
   coverPhotoId,
+  hoverPhotoId,
   onReorder,
   onDelete,
   onSetCover,
+  onSetHoverPhoto,
 }: Props) {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -92,11 +97,7 @@ export default function SortablePhotoGrid({
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext items={photos.map((p) => p.id)} strategy={rectSortingStrategy}>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {photos.map((photo) => (
@@ -104,8 +105,10 @@ export default function SortablePhotoGrid({
               key={photo.id}
               photo={photo}
               isCover={photo.id === coverPhotoId}
+              isHoverPhoto={photo.id === hoverPhotoId}
               onDelete={onDelete}
               onSetCover={onSetCover}
+              onSetHoverPhoto={onSetHoverPhoto}
             />
           ))}
         </div>
