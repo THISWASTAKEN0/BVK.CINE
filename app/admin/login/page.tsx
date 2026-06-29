@@ -26,13 +26,13 @@ export default function LoginPage() {
     window.location.href = '/admin/dashboard';
   };
 
-  /* Inputs get a semi-transparent dark background so they read against the blurred aurora */
+  /* Light glass inputs */
   const inputStyle = {
-    background: 'rgba(8, 9, 16, 0.55)',
-    border: '1px solid rgba(255,255,255,0.10)',
-    color: 'var(--text-primary)',
+    background: 'rgba(255,255,255,0.10)',
+    border: '1px solid rgba(255,255,255,0.22)',
+    color: '#ffffff',
   };
-  const inputFocus = { ...inputStyle, borderColor: 'rgba(107,140,255,0.7)' };
+  const inputFocus = { ...inputStyle, borderColor: 'rgba(255,255,255,0.60)', background: 'rgba(255,255,255,0.15)' };
   const inputBase  = 'w-full px-3.5 py-2.5 rounded-xl text-[15px] placeholder:text-text-secondary focus:outline-none transition';
 
   return (
@@ -117,12 +117,12 @@ export default function LoginPage() {
         {/* Glassmorphic card — the aurora shows through the blur */}
         <div
           style={{
-            background: 'rgba(10, 11, 18, 0.30)',
-            backdropFilter: 'blur(48px) saturate(220%) brightness(1.08)',
-            WebkitBackdropFilter: 'blur(48px) saturate(220%) brightness(1.08)',
-            border: '1px solid rgba(255,255,255,0.12)',
+            background: 'rgba(255, 255, 255, 0.13)',
+            backdropFilter: 'blur(48px) saturate(200%) brightness(1.15)',
+            WebkitBackdropFilter: 'blur(48px) saturate(200%) brightness(1.15)',
+            border: '1px solid rgba(255,255,255,0.35)',
             boxShadow:
-              '0 1.5px 0 rgba(255,255,255,0.15) inset, 0 32px 80px rgba(0,0,0,0.45)',
+              '0 1.5px 0 rgba(255,255,255,0.45) inset, 0 32px 80px rgba(0,0,0,0.30)',
             borderRadius: '20px',
             padding: '32px',
           }}
@@ -133,7 +133,7 @@ export default function LoginPage() {
               <label
                 htmlFor="email"
                 className="block text-[13px] font-medium mb-1.5"
-                style={{ color: 'rgba(220,225,255,0.8)' }}
+                style={{ color: 'rgba(255,255,255,0.9)' }}
               >
                 Email
               </label>
@@ -157,7 +157,7 @@ export default function LoginPage() {
               <label
                 htmlFor="password"
                 className="block text-[13px] font-medium mb-1.5"
-                style={{ color: 'rgba(220,225,255,0.8)' }}
+                style={{ color: 'rgba(255,255,255,0.9)' }}
               >
                 Password
               </label>
