@@ -40,6 +40,14 @@ export interface UploadItem {
   photo?: Photo;
 }
 
+export interface VisitorStats {
+  total: number;
+  unique: number;
+  today: number;
+  last7: number;
+  daily: { day: string; views: number }[];
+}
+
 export interface CollectionFormData {
   name: string;
   description: string;

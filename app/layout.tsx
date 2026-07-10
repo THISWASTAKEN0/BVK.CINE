@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import VisitTracker from '@/components/VisitTracker';
 // Satoshi — closest free alternative to Proxima Nova (geometric humanist, same feel)
 
 const inter = Inter({
@@ -42,6 +43,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans bg-bg text-text-primary antialiased">
         {children}
+        <VisitTracker />
       </body>
     </html>
   );
