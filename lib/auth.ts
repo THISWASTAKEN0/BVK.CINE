@@ -1,11 +1,16 @@
-import { type NextRequest } from 'next/server';
+import { createServerClient } from '@/lib/supabase-server';
 
 /**
- * Quick auth check for Route Handlers.
- * Mirrors the middleware approach — looks for the Supabase auth cookie
- * without doing a network round-trip. The middleware already blocks
- * unauthenticated browser requests; this catches direct API calls.
+ * Real auth check for Route Handlers.
+ *
+ * Validates the Supabase session by verifying the JWT against Supabase's
+ * auth server (supabase.auth.getUser()), rather than trusting the mere
+ * presence of a cookie. A forged or expired token fails here.
+ *
+ * Reads the session from cookies via next/headers, so no request arg needed.
  */
-export function isAuthenticated(request: NextRequest): boolean {
-  return request.cookies.getAll().some((c) => c.name.includes('auth-token'));
+export async function isAuthenticated(): Promise<boolean> {
+  const supabase = createServerClient();
+  const { data, error } = await supabase.auth.getUser();
+  return !error && !!data.user;
 }

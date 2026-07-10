@@ -6,7 +6,7 @@ import { cloudinary } from '@/lib/cloudinary';
 type Params = { params: { id: string } };
 
 export async function PATCH(request: NextRequest, { params }: Params) {
-  if (!isAuthenticated(request)) {
+  if (!(await isAuthenticated())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -37,7 +37,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 }
 
 export async function DELETE(request: NextRequest, { params }: Params) {
-  if (!isAuthenticated(request)) {
+  if (!(await isAuthenticated())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

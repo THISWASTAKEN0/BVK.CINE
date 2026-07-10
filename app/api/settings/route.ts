@@ -13,7 +13,7 @@ export async function GET() {
 
 // PATCH /api/settings — auth required, body: { key: string, value: string }
 export async function PATCH(request: NextRequest) {
-  if (!isAuthenticated(request)) {
+  if (!(await isAuthenticated())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   try {

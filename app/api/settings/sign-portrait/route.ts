@@ -3,7 +3,7 @@ import { isAuthenticated } from '@/lib/auth';
 import { cloudinary } from '@/lib/cloudinary';
 
 export async function POST(request: NextRequest) {
-  if (!isAuthenticated(request)) {
+  if (!(await isAuthenticated())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

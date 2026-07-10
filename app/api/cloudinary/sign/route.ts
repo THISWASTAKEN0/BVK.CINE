@@ -3,16 +3,17 @@ import { isAuthenticated } from '@/lib/auth';
 import { cloudinary } from '@/lib/cloudinary';
 
 export async function POST(request: NextRequest) {
-  if (!isAuthenticated(request)) {
+  if (!(await isAuthenticated())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
     const { collection_id } = await request.json();
 
-    if (!collection_id) {
+    const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!collection_id || typeof collection_id !== 'string' || !UUID_RE.test(collection_id)) {
       return NextResponse.json(
-        { error: 'collection_id is required' },
+        { error: 'A valid collection_id is required' },
         { status: 400 }
       );
     }
